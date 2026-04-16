@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useSession } from './contexts/SessionContext'
 import { setAuthToken } from './services/empathyLedgerClient'
@@ -6,18 +6,23 @@ import { setAuthToken } from './services/empathyLedgerClient'
 // Layouts
 import PublicLayout from './layouts/PublicLayout'
 import FamilyLayout from './layouts/FamilyLayout'
+import CommunityLayout from './layouts/CommunityLayout'
 
 // Public pages
 import LandingPage from './pages/LandingPage'
 import JoinPage from './pages/JoinPage'
+import ExplorePage from './pages/ExplorePage'
 
-// Family-scoped pages (reused from existing)
+// Community pages
+import CommunityHomePage from './pages/CommunityHomePage'
+import CommunityFamiliesPage from './pages/CommunityFamiliesPage'
+
+// Family-scoped pages
 import TimelinePage from './pages/TimelinePage'
 import FamilyTreePage from './pages/FamilyTreePage'
 import DreamInboxPage from './pages/DreamInboxPage'
 import PersonPage from './pages/PersonPage'
 
-// Placeholder for family home
 function FamilyHomePage() {
   const { familySession } = useSession()
   return (
@@ -46,29 +51,34 @@ function QuickLink({ to, label, description, color }: { to: string; label: strin
     eucalypt: 'border-eucalypt/20 hover:bg-eucalypt/5',
   }
   return (
-    <a href={to} className={`block p-5 rounded-xl border ${colorMap[color]} transition-colors`}>
+    <Link to={to} className={`block p-5 rounded-xl border ${colorMap[color]} transition-colors`}>
       <h3 className="font-serif text-lg text-ink">{label}</h3>
       <p className="text-xs text-ink/60 mt-1">{description}</p>
-    </a>
+    </Link>
   )
 }
 
-// Placeholder explore page
-function ExplorePage() {
+// Placeholder for community timeline/goals (reuses existing components)
+function CommunityTimelinePlaceholder() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-12 text-center">
-      <h1 className="font-serif text-3xl text-ink mb-4">Explore</h1>
-      <p className="text-ink/60 max-w-2xl mx-auto">
-        Public stories and community timelines will appear here as families share their narratives.
-        This is the truth-telling layer — where Indigenous Australian history becomes visible,
-        on terms set by the communities themselves.
+      <h1 className="font-serif text-2xl text-ink mb-3">Community timeline</h1>
+      <p className="text-ink/60">
+        The combined timeline of all families in this community will appear here,
+        showing shared history alongside each family's individual story.
       </p>
-      <div className="mt-8 p-8 rounded-xl bg-sand/30 border border-ink/5">
-        <div className="text-xs uppercase tracking-widest text-ink/40 mb-2">Coming soon</div>
-        <div className="text-ink/60 text-sm">
-          As families and communities join, their public stories will appear here.
-        </div>
-      </div>
+    </div>
+  )
+}
+
+function CommunityGoalsPlaceholder() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 py-12 text-center">
+      <h1 className="font-serif text-2xl text-ink mb-3">Community goals</h1>
+      <p className="text-ink/60">
+        Community-level aspirations and dreams, alongside individual and family goals.
+        The Dream Inbox connects each goal to mentors and resources.
+      </p>
     </div>
   )
 }
@@ -76,7 +86,6 @@ function ExplorePage() {
 export default function App() {
   const { authToken } = useSession()
 
-  // Sync auth token to API client
   useEffect(() => {
     if (authToken) setAuthToken(authToken)
   }, [authToken])
@@ -100,7 +109,15 @@ export default function App() {
         <Route path="person/:id" element={<PersonPage />} />
       </Route>
 
-      {/* Legacy routes — direct access without family context (Oonchiumpa demo) */}
+      {/* Community shell */}
+      <Route path="/c/:communitySlug" element={<CommunityLayout />}>
+        <Route index element={<CommunityHomePage />} />
+        <Route path="families" element={<CommunityFamiliesPage />} />
+        <Route path="timeline" element={<CommunityTimelinePlaceholder />} />
+        <Route path="goals" element={<CommunityGoalsPlaceholder />} />
+      </Route>
+
+      {/* Legacy routes */}
       <Route element={<PublicLayout />}>
         <Route path="/family" element={<FamilyTreePage />} />
         <Route path="/inbox" element={<DreamInboxPage />} />
