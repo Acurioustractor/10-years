@@ -1,15 +1,21 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useKinship } from '@/hooks/useKinship'
+import { useSession } from '@/contexts/SessionContext'
+import AddPersonPanel from '@/components/AddPersonPanel'
 import type { KinshipEdge, PersonRef } from '@/services/types'
 
 type ViewMode = 'tree' | 'cards'
 
 export default function FamilyTreePage() {
-  const { graph, loading, error, notConfigured } = useKinship()
+  const { graph, loading, error, notConfigured, refetch } = useKinship()
+  const { familySession } = useSession()
   const [viewMode, setViewMode] = useState<ViewMode>('tree')
+  const [showAddPerson, setShowAddPerson] = useState(false)
 
   const families = useMemo(() => clusterFamilies(graph.nodes, graph.edges), [graph])
+
+  const canEdit = familySession && ['elder', 'family_rep'].includes(familySession.member.role)
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-8">
@@ -20,7 +26,17 @@ export default function FamilyTreePage() {
             Elders, aunties, uncles, kids — every story on the timeline sits inside one of these.
           </p>
         </div>
-        <div className="flex items-center gap-1 rounded-full bg-sand/40 p-1">
+        <div className="flex items-center gap-3">
+          {canEdit && (
+            <button
+              type="button"
+              onClick={() => setShowAddPerson(true)}
+              className="px-3 py-1.5 rounded-full text-xs font-medium text-ochre border border-ochre/30 hover:bg-ochre/10 transition-colors"
+            >
+              + Add person
+            </button>
+          )}
+          <div className="flex items-center gap-1 rounded-full bg-sand/40 p-1">
           <button
             type="button"
             onClick={() => setViewMode('tree')}
@@ -36,7 +52,12 @@ export default function FamilyTreePage() {
             Cards
           </button>
         </div>
+        </div>
       </header>
+
+      {showAddPerson && (
+        <AddPersonPanel onClose={() => setShowAddPerson(false)} onAdded={() => refetch()} />
+      )}
 
       {notConfigured && <Notice tone="ochre" title="Not configured yet" body="Add the Empathy Ledger API key to .env.local and restart." />}
       {error && !notConfigured && <Notice tone="red" title="Could not load kinship." body={error.message} />}

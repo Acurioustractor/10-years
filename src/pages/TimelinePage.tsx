@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useTimelineData } from '@/hooks/useTimelineData'
+import { useSession } from '@/contexts/SessionContext'
 import TimelineGrid from '@/components/TimelineGrid'
 import CenturyTimeline from '@/components/CenturyTimeline'
 import ChaptersOverlay from '@/components/ChaptersOverlay'
 import EventPanel from '@/components/EventPanel'
+import AddEventPanel from '@/components/AddEventPanel'
 import type { TimelineEventSummary } from '@/services/types'
 
 type RangePreset = 'century' | 'recent' | 'future'
@@ -16,11 +18,14 @@ const RANGE_PRESETS: Record<RangePreset, { label: string; from: number; to: numb
 }
 
 export default function TimelinePage() {
+  const { familySession } = useSession()
   const [preset, setPreset] = useState<RangePreset>('century')
   const [yearFrom, setYearFrom] = useState(RANGE_PRESETS.century.from)
   const [yearTo, setYearTo] = useState(RANGE_PRESETS.century.to)
   const [selected, setSelected] = useState<TimelineEventSummary | null>(null)
   const [viewMode, setViewMode] = useState<ViewMode>('timeline')
+  const [showAddEvent, setShowAddEvent] = useState(false)
+  const canContribute = familySession && ['elder', 'family_rep', 'contributor'].includes(familySession.member.role)
 
   const applyPreset = (p: RangePreset) => {
     setPreset(p)
@@ -67,6 +72,15 @@ export default function TimelinePage() {
           </p>
         </div>
         <div className="flex items-center gap-3 text-sm">
+          {canContribute && (
+            <button
+              type="button"
+              onClick={() => setShowAddEvent(true)}
+              className="px-3 py-1 rounded-full text-xs font-medium text-eucalypt border border-eucalypt/30 hover:bg-eucalypt/10 transition-colors"
+            >
+              + Add event
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setViewMode('story')}
@@ -127,6 +141,13 @@ export default function TimelinePage() {
       )}
 
       <EventPanel event={selected} onClose={() => setSelected(null)} />
+
+      {showAddEvent && (
+        <AddEventPanel
+          onClose={() => setShowAddEvent(false)}
+          onAdded={() => window.location.reload()}
+        />
+      )}
     </div>
   )
 }
