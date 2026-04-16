@@ -52,7 +52,7 @@ export default function App() {
   const { authToken } = useSession()
 
   useEffect(() => {
-    if (authToken) setAuthToken(authToken)
+    setAuthToken(authToken || '')
   }, [authToken])
 
   return (

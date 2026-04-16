@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useKinship } from '@/hooks/useKinship'
 import { useSession } from '@/contexts/SessionContext'
 import AddPersonPanel from '@/components/AddPersonPanel'
@@ -8,6 +8,7 @@ import type { KinshipEdge, PersonRef } from '@/services/types'
 type ViewMode = 'tree' | 'cards'
 
 export default function FamilyTreePage() {
+  const { familyCode } = useParams<{ familyCode?: string }>()
   const { graph, loading, error, notConfigured, refetch } = useKinship()
   const { familySession } = useSession()
   const [viewMode, setViewMode] = useState<ViewMode>('tree')
@@ -75,13 +76,13 @@ export default function FamilyTreePage() {
       {viewMode === 'tree' ? (
         <div className="space-y-12">
           {families.map((fam, idx) => (
-            <FamilyTreeViz key={idx} family={fam} />
+            <FamilyTreeViz key={idx} family={fam} familyCode={familyCode} />
           ))}
         </div>
       ) : (
         <div className="space-y-10">
           {families.map((fam, idx) => (
-            <FamilyCard key={idx} family={fam} />
+            <FamilyCard key={idx} family={fam} familyCode={familyCode} />
           ))}
         </div>
       )}
@@ -99,7 +100,7 @@ interface TreeNode {
   generation: number
 }
 
-function FamilyTreeViz({ family }: { family: Family }) {
+function FamilyTreeViz({ family, familyCode }: { family: Family; familyCode?: string }) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
@@ -219,7 +220,7 @@ function FamilyTreeViz({ family }: { family: Family }) {
             const isElder = node.person.isElder
             return (
               <g key={node.person.id}>
-                <Link to={`/person/${node.person.id}`}>
+                <Link to={familyCode ? `/f/${familyCode}/person/${node.person.id}` : `/person/${node.person.id}`}>
                   <rect
                     x={node.x}
                     y={node.y}
@@ -376,7 +377,7 @@ function buildTree(family: Family): { nodes: TreeNode[]; totalGenerations: numbe
 
 // ─── Card View (original) ───────────────────────────────────────────────
 
-function FamilyCard({ family }: { family: Family }) {
+function FamilyCard({ family, familyCode }: { family: Family; familyCode?: string }) {
   const elders = family.people.filter(p => p.isElder)
   const rest = family.people.filter(p => !p.isElder)
 
@@ -400,7 +401,15 @@ function FamilyCard({ family }: { family: Family }) {
         <div className="mb-5">
           <div className="text-xs uppercase tracking-widest text-ink/50 mb-2">Elders</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {elders.map(p => <PersonCard key={p.id} person={p} relations={relationsFor(p.id)} elder />)}
+            {elders.map(p => (
+              <PersonCard
+                key={p.id}
+                person={p}
+                relations={relationsFor(p.id)}
+                familyCode={familyCode}
+                elder
+              />
+            ))}
           </div>
         </div>
       )}
@@ -409,7 +418,14 @@ function FamilyCard({ family }: { family: Family }) {
         <div>
           <div className="text-xs uppercase tracking-widest text-ink/50 mb-2">Family members</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {rest.map(p => <PersonCard key={p.id} person={p} relations={relationsFor(p.id)} />)}
+            {rest.map(p => (
+              <PersonCard
+                key={p.id}
+                person={p}
+                relations={relationsFor(p.id)}
+                familyCode={familyCode}
+              />
+            ))}
           </div>
         </div>
       )}
@@ -417,10 +433,20 @@ function FamilyCard({ family }: { family: Family }) {
   )
 }
 
-function PersonCard({ person, relations, elder }: { person: PersonRef; relations: string[]; elder?: boolean }) {
+function PersonCard({
+  person,
+  relations,
+  familyCode,
+  elder,
+}: {
+  person: PersonRef
+  relations: string[]
+  familyCode?: string
+  elder?: boolean
+}) {
   return (
     <Link
-      to={`/person/${person.id}`}
+      to={familyCode ? `/f/${familyCode}/person/${person.id}` : `/person/${person.id}`}
       className={[
         'block p-3 rounded-lg border transition-colors',
         elder ? 'border-ochre/40 bg-ochre/5 hover:bg-ochre/10' : 'border-ink/10 hover:bg-sand/30',

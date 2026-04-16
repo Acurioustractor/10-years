@@ -1,16 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
+  getFamilyFolder,
+  getFamilyFolderTimeline,
   getStorytellers,
   getTimelineEvents,
   isConfigured,
 } from '@/services/empathyLedgerClient'
+import { useSession } from '@/contexts/SessionContext'
 import { useKinship } from '@/hooks/useKinship'
 import { eraForYear } from '@/components/eras'
 import type { Storyteller, TimelineEventSummary, KinshipEdge } from '@/services/types'
 
 export default function PersonPage() {
-  const { id } = useParams<{ id: string }>()
+  const { id, familyCode } = useParams<{ id: string; familyCode?: string }>()
+  const { familySession } = useSession()
   const [person, setPerson] = useState<Storyteller | null>(null)
   const [events, setEvents] = useState<TimelineEventSummary[]>([])
   const [loading, setLoading] = useState(true)
@@ -20,12 +24,37 @@ export default function PersonPage() {
     if (!isConfigured || !id) { setLoading(false); return }
     let cancelled = false
     setLoading(true)
-    Promise.all([
-      getStorytellers(500),
-      getTimelineEvents({ storytellerId: id, limit: 200 }),
-    ])
-      .then(([people, evs]) => {
+
+    const fetchData = familySession
+      ? Promise.all([
+          getFamilyFolder(familySession.folder.id),
+          getFamilyFolderTimeline(familySession.folder.id, { limit: 500 }),
+        ])
+      : Promise.all([
+          getStorytellers(500),
+          getTimelineEvents({ storytellerId: id, limit: 200 }),
+        ])
+
+    fetchData
+      .then(([peopleRes, evs]) => {
         if (cancelled) return
+
+        const people = familySession
+          ? (peopleRes as Awaited<ReturnType<typeof getFamilyFolder>>).members.map(member => ({
+              id: member.storytellerId,
+              displayName: member.displayName,
+              avatarUrl: member.avatarUrl,
+              isElder: member.isElder,
+              bio: null,
+              culturalBackground: null,
+              role: member.role,
+              location: null,
+              isActive: !member.isAncestor,
+              storyCount: 0,
+              createdAt: '',
+            }))
+          : (peopleRes as Storyteller[])
+
         const storyteller = people.find(p => p.id === id)
         if (storyteller) {
           setPerson(storyteller)
@@ -44,11 +73,14 @@ export default function PersonPage() {
             })
           }
         }
-        setEvents(evs.data)
+        const scopedEvents = familySession
+          ? evs.data.filter(event => event.people.some(p => p.id === id))
+          : evs.data
+        setEvents(scopedEvents)
       })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
-  }, [id, graph.nodes])
+  }, [familySession, id, graph.nodes])
 
   const myKinship = useMemo(
     () => graph.edges.filter(e => e.from.id === id),
@@ -83,9 +115,19 @@ export default function PersonPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-8">
       <div className="flex items-center gap-4 text-sm text-ink/50">
-        <Link to="/family" className="hover:text-ink transition-colors">← Family</Link>
+        <Link
+          to={familySession ? `/f/${familyCode || familySession.folder.id}/tree` : '/family'}
+          className="hover:text-ink transition-colors"
+        >
+          ← Family
+        </Link>
         <span className="text-ink/20">·</span>
-        <Link to="/" className="hover:text-ink transition-colors">← Timeline</Link>
+        <Link
+          to={familySession ? `/f/${familyCode || familySession.folder.id}/timeline` : '/'}
+          className="hover:text-ink transition-colors"
+        >
+          ← Timeline
+        </Link>
       </div>
 
       {/* Hero */}

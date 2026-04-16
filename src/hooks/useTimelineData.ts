@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import {
+  getFamilyFolder,
+  getFamilyFolderTimeline,
   getStorytellers,
   getTimelineEvents,
   isConfigured,
 } from '@/services/empathyLedgerClient'
+import { useSession } from '@/contexts/SessionContext'
 import type { Storyteller, TimelineEventSummary } from '@/services/types'
 
 export interface TimelineData {
@@ -15,6 +18,7 @@ export interface TimelineData {
 }
 
 export function useTimelineData(yearFrom: number, yearTo: number): TimelineData {
+  const { familySession } = useSession()
   const [people, setPeople] = useState<Storyteller[]>([])
   const [events, setEvents] = useState<TimelineEventSummary[]>([])
   const [loading, setLoading] = useState(true)
@@ -27,13 +31,38 @@ export function useTimelineData(yearFrom: number, yearTo: number): TimelineData 
     }
     let cancelled = false
     setLoading(true)
-    Promise.all([
-      getStorytellers(200),
-      getTimelineEvents({ yearFrom, yearTo, limit: 500 }),
-    ])
+    const fetchData = familySession
+      ? Promise.all([
+          getFamilyFolder(familySession.folder.id),
+          getFamilyFolderTimeline(familySession.folder.id, { yearFrom, yearTo, limit: 500 }),
+        ])
+      : Promise.all([
+          getStorytellers(200),
+          getTimelineEvents({ yearFrom, yearTo, limit: 500 }),
+        ])
+
+    fetchData
       .then(([p, e]) => {
         if (cancelled) return
-        setPeople(p)
+        if (familySession) {
+          const familyDetail = p as Awaited<ReturnType<typeof getFamilyFolder>>
+          const familyPeople: Storyteller[] = familyDetail.members.map(member => ({
+            id: member.storytellerId,
+            displayName: member.displayName,
+            avatarUrl: member.avatarUrl,
+            isElder: member.isElder,
+            bio: null,
+            culturalBackground: null,
+            role: member.role,
+            location: null,
+            isActive: !member.isAncestor,
+            storyCount: 0,
+            createdAt: '',
+          }))
+          setPeople(familyPeople)
+        } else {
+          setPeople(p as Storyteller[])
+        }
         setEvents(e.data)
       })
       .catch((err) => {
@@ -43,7 +72,7 @@ export function useTimelineData(yearFrom: number, yearTo: number): TimelineData 
         if (!cancelled) setLoading(false)
       })
     return () => { cancelled = true }
-  }, [yearFrom, yearTo])
+  }, [familySession, yearFrom, yearTo])
 
   return { people, events, loading, error, notConfigured: !isConfigured }
 }
