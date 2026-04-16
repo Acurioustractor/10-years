@@ -1,8 +1,11 @@
 /**
- * Empathy Ledger v2 API client — read-only for the 10-years app.
+ * Empathy Ledger v2 API client.
  *
- * Uses the Oonchiumpa org-scoped key; API returns only rows where
- * at least one subject-person is in the org.
+ * Supports two auth modes:
+ * - Org API key (from env vars) — original read-only mode
+ * - Family session token (from SessionContext) — code-based auth with read/write
+ *
+ * The auth token is set dynamically via setAuthToken().
  */
 
 import type {
@@ -15,14 +18,36 @@ import type {
 } from './types'
 
 const BASE_URL = import.meta.env.VITE_EMPATHY_LEDGER_URL || ''
-const API_KEY = import.meta.env.VITE_EMPATHY_LEDGER_API_KEY || ''
+const DEFAULT_API_KEY = import.meta.env.VITE_EMPATHY_LEDGER_API_KEY || ''
 
-export const isConfigured = Boolean(BASE_URL && API_KEY)
+// Mutable auth token — set by SessionProvider on mount/login
+let _authToken: string = DEFAULT_API_KEY
+
+export function setAuthToken(token: string) {
+  _authToken = token
+}
+
+export const isConfigured = Boolean(BASE_URL)
 
 async function get<T>(path: string): Promise<T> {
-  if (!isConfigured) throw new Error('Empathy Ledger is not configured')
+  if (!isConfigured || !_authToken) throw new Error('Empathy Ledger is not configured')
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'X-API-Key': API_KEY, 'Accept': 'application/json' },
+    headers: { 'X-API-Key': _authToken, 'Accept': 'application/json' },
+  })
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText} — ${path}`)
+  return res.json() as Promise<T>
+}
+
+async function post<T>(path: string, body: unknown): Promise<T> {
+  if (!isConfigured || !_authToken) throw new Error('Empathy Ledger is not configured')
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: 'POST',
+    headers: {
+      'X-API-Key': _authToken,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
   })
   if (!res.ok) throw new Error(`${res.status} ${res.statusText} — ${path}`)
   return res.json() as Promise<T>
@@ -47,6 +72,7 @@ export interface TimelineEventFilters {
   storytellerId?: string
   parentEventId?: string
   domain?: string
+  goalScope?: string
 }
 
 export async function getTimelineEvents(filters: TimelineEventFilters = {}): Promise<Paginated<TimelineEventSummary>> {
@@ -84,4 +110,116 @@ export async function getConnections(filters: ConnectionFilters = {}): Promise<P
 
 export async function getTimelineEvent(id: string): Promise<TimelineEventDetail> {
   return get<TimelineEventDetail>(`/api/v2/timeline-events/${id}`)
+}
+
+// ─── Family Folders ──────────────────────────────────────────────────────
+
+export async function getFamilyFolders(): Promise<Paginated<{
+  id: string
+  name: string
+  slug: string
+  location: string | null
+  memberCount: number
+}>> {
+  return get('/api/v2/family-folders')
+}
+
+export async function getFamilyFolder(id: string): Promise<{
+  folder: { id: string; name: string; slug: string; location: string | null }
+  members: Array<{
+    id: string
+    storytellerId: string
+    displayName: string
+    avatarUrl: string | null
+    isElder: boolean
+    isAncestor: boolean
+    role: string
+  }>
+  stats: { memberCount: number; eventCount: number; kinshipEdgeCount: number }
+}> {
+  return get(`/api/v2/family-folders/${id}`)
+}
+
+export async function getFamilyFolderKinship(folderId: string): Promise<KinshipGraph> {
+  return get(`/api/v2/family-folders/${folderId}/kinship`)
+}
+
+export async function getFamilyFolderTimeline(
+  folderId: string,
+  filters: TimelineEventFilters = {}
+): Promise<Paginated<TimelineEventSummary>> {
+  const params = new URLSearchParams()
+  for (const [k, v] of Object.entries(filters)) {
+    if (v !== undefined && v !== null && v !== '') params.set(k, String(v))
+  }
+  return get(`/api/v2/family-folders/${folderId}/timeline?${params.toString()}`)
+}
+
+export async function createFamilyFolder(data: {
+  name: string
+  location?: string
+  description?: string
+  adminDisplayName?: string
+}): Promise<{ id: string; name: string; slug: string; accessCode: string }> {
+  return post('/api/v2/family-folders', data)
+}
+
+// ─── Communities ─────────────────────────────────────────────────────────
+
+export async function getCommunities(): Promise<Paginated<{
+  id: string
+  name: string
+  traditionalName: string | null
+  slug: string
+  location: string | null
+  region: string | null
+  familyCount: number
+  memberCount: number
+}>> {
+  return get('/api/v2/communities')
+}
+
+export async function getCommunity(id: string): Promise<{
+  community: {
+    id: string
+    name: string
+    traditionalName: string | null
+    slug: string
+    location: string | null
+    region: string | null
+  }
+  families: Array<{ id: string; name: string; slug: string; memberCount: number }>
+  stats: { familyCount: number; totalPeople: number }
+}> {
+  return get(`/api/v2/communities/${id}`)
+}
+
+// ─── Write operations ───────────────────────────────────────────────────
+
+export async function createTimelineEvent(
+  folderId: string,
+  event: {
+    title: string
+    kind: string
+    eventYear?: number
+    eventDate?: string
+    description?: string
+    domain?: string[]
+    goalScope?: string
+    people?: Array<{ storytellerId: string; role?: string }>
+  }
+): Promise<{ id: string }> {
+  return post(`/api/v2/family-folders/${folderId}/timeline`, event)
+}
+
+export async function addFamilyMember(
+  folderId: string,
+  member: {
+    displayName: string
+    storytellerId?: string
+    role?: string
+    isAncestor?: boolean
+  }
+): Promise<{ member: { id: string; storytellerId: string; role: string } }> {
+  return post(`/api/v2/family-folders/${folderId}/members`, member)
 }

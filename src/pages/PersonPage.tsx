@@ -26,12 +26,29 @@ export default function PersonPage() {
     ])
       .then(([people, evs]) => {
         if (cancelled) return
-        setPerson(people.find(p => p.id === id) || null)
+        const storyteller = people.find(p => p.id === id)
+        if (storyteller) {
+          setPerson(storyteller)
+        } else {
+          const kinNode = graph.nodes.find(n => n.id === id)
+          if (kinNode) {
+            setPerson({
+              ...kinNode,
+              bio: null,
+              culturalBackground: null,
+              role: null,
+              location: null,
+              isActive: false,
+              storyCount: 0,
+              createdAt: '',
+            })
+          }
+        }
         setEvents(evs.data)
       })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
-  }, [id])
+  }, [id, graph.nodes])
 
   const myKinship = useMemo(
     () => graph.edges.filter(e => e.from.id === id),
@@ -60,12 +77,16 @@ export default function PersonPage() {
   if (!person) return <Shell><p className="text-ink/60">Person not found.</p></Shell>
 
   const familyByCategory = groupKinship(myKinship)
+  const currentYear = new Date().getFullYear()
+  const isAncestor = !person.isActive && lifespan && lifespan.latest < currentYear - 20
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-8">
-      <Link to="/family" className="text-sm text-ink/50 hover:text-ink transition-colors">
-        ← Family
-      </Link>
+      <div className="flex items-center gap-4 text-sm text-ink/50">
+        <Link to="/family" className="hover:text-ink transition-colors">← Family</Link>
+        <span className="text-ink/20">·</span>
+        <Link to="/" className="hover:text-ink transition-colors">← Timeline</Link>
+      </div>
 
       {/* Hero */}
       <header className="mt-6 mb-10">
@@ -74,19 +95,29 @@ export default function PersonPage() {
             <img
               src={person.avatarUrl}
               alt=""
-              className="h-24 w-24 rounded-2xl object-cover ring-1 ring-ink/10 shadow-sm"
+              className="h-28 w-28 rounded-2xl object-cover ring-1 ring-ink/10 shadow-md"
             />
           ) : (
-            <div className="h-24 w-24 rounded-2xl bg-sand flex items-center justify-center text-2xl font-serif text-desert">
+            <div className={`h-28 w-28 rounded-2xl flex items-center justify-center text-2xl font-serif shadow-inner ${isAncestor ? 'bg-desert/10 text-desert/60' : 'bg-sand text-desert'}`}>
               {person.displayName.slice(0, 2)}
             </div>
           )}
           <div className="flex-1 min-w-0">
             <h1 className="font-serif text-4xl text-ink leading-tight">{person.displayName}</h1>
-            <div className="flex items-center gap-3 mt-2 text-sm text-ink/60 flex-wrap">
+            <div className="flex items-center gap-2.5 mt-2 text-sm text-ink/60 flex-wrap">
               {person.isElder && (
                 <span className="text-ochre uppercase tracking-wider text-xs font-medium px-2 py-0.5 rounded-full bg-ochre/10">
                   Elder
+                </span>
+              )}
+              {isAncestor && (
+                <span className="text-desert uppercase tracking-wider text-xs font-medium px-2 py-0.5 rounded-full bg-desert/10">
+                  Ancestor
+                </span>
+              )}
+              {!isAncestor && person.isActive && (
+                <span className="text-eucalypt uppercase tracking-wider text-xs font-medium px-2 py-0.5 rounded-full bg-eucalypt/10">
+                  Living
                 </span>
               )}
               {lifespan && (
@@ -94,8 +125,8 @@ export default function PersonPage() {
                   {lifespan.earliest}{lifespan.latest !== lifespan.earliest ? ` – ${lifespan.latest}` : ''}
                 </span>
               )}
-              {person.location && <span>{person.location}</span>}
-              {person.role && <span>{person.role}</span>}
+              {person.location && <span className="flex items-center gap-1"><span className="text-ink/30">·</span> {person.location}</span>}
+              {person.role && <span className="flex items-center gap-1"><span className="text-ink/30">·</span> {person.role}</span>}
             </div>
           </div>
         </div>

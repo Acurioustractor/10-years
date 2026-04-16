@@ -45,6 +45,7 @@ export default function TimelinePage() {
   if (viewMode === 'story') {
     return (
       <ChaptersOverlay
+        events={events}
         onChapterChange={(_from, _to) => {
           // chapters auto-advance — no zoom in story mode
         }}

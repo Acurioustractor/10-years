@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { ERAS, type Era } from './eras'
+import type { TimelineEventSummary } from '@/services/types'
 
 interface Chapter {
   era: Era
@@ -41,14 +43,22 @@ const CHAPTERS: Chapter[] = [
 ]
 
 interface Props {
+  events?: TimelineEventSummary[]
   onChapterChange?: (from: number, to: number) => void
   onExit?: () => void
 }
 
-export default function ChaptersOverlay({ onChapterChange, onExit }: Props) {
+export default function ChaptersOverlay({ events = [], onChapterChange, onExit }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(true)
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  const eventsForChapter = useCallback((chapter: Chapter) => {
+    return events.filter(ev => {
+      const year = ev.eventYear ?? (ev.eventDate ? new Date(ev.eventDate).getFullYear() : null)
+      return year && year >= chapter.era.from && year <= chapter.era.to
+    }).sort((a, b) => (a.eventYear ?? 0) - (b.eventYear ?? 0))
+  }, [events])
 
   const handleScroll = useCallback(() => {
     const scrollY = window.scrollY + window.innerHeight * 0.4
@@ -87,7 +97,7 @@ export default function ChaptersOverlay({ onChapterChange, onExit }: Props) {
       </div>
 
       {/* Chapter navigation dots */}
-      <nav className="fixed right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
+      <nav className="fixed right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
         {CHAPTERS.map((ch, i) => (
           <button
             key={ch.era.id}
@@ -121,32 +131,116 @@ export default function ChaptersOverlay({ onChapterChange, onExit }: Props) {
       </nav>
 
       {/* Chapters */}
-      <div className="space-y-[50vh] pt-[20vh] pb-[40vh]">
-        {CHAPTERS.map((ch, i) => (
-          <div
-            key={ch.era.id}
-            ref={el => { chapterRefs.current[i] = el }}
-            className={`
-              max-w-2xl mx-auto px-8 py-12
-              transition-opacity duration-700
-              ${Math.abs(i - activeIndex) <= 1 ? 'opacity-100' : 'opacity-30'}
-            `}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <span className={`text-xs font-medium tabular-nums ${ch.era.color} opacity-60`}>
-                {ch.era.from}–{ch.era.to}
-              </span>
-              <span className={`text-[10px] uppercase tracking-widest ${ch.era.color} opacity-40`}>
-                {ch.era.label}
-              </span>
+      <div className="space-y-[40vh] pt-[15vh] pb-[40vh]">
+        {CHAPTERS.map((ch, i) => {
+          const chapterEvents = eventsForChapter(ch)
+          const isActive = i === activeIndex
+          const isNear = Math.abs(i - activeIndex) <= 1
+
+          return (
+            <div
+              key={ch.era.id}
+              ref={el => { chapterRefs.current[i] = el }}
+              className={`
+                max-w-5xl mx-auto px-4 md:px-8
+                transition-opacity duration-700
+                ${isNear ? 'opacity-100' : 'opacity-20'}
+              `}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
+                {/* Narrative column */}
+                <div className="py-8 md:py-12">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className={`text-xs font-medium tabular-nums ${ch.era.color} opacity-60`}>
+                      {ch.era.from}–{ch.era.to}
+                    </span>
+                    <span className={`text-[10px] uppercase tracking-widest ${ch.era.color} opacity-40`}>
+                      {ch.era.label}
+                    </span>
+                  </div>
+                  <h2 className="font-serif text-3xl md:text-4xl text-ink mb-5 leading-tight">{ch.title}</h2>
+                  <p className="text-ink/70 text-[17px] leading-relaxed">{ch.body}</p>
+                  <div className="mt-4 text-xs text-ink/30">
+                    Chapter {i + 1} of {CHAPTERS.length}
+                  </div>
+                </div>
+
+                {/* Events sidebar — visible on larger screens */}
+                {chapterEvents.length > 0 && (
+                  <aside className={`
+                    hidden lg:block transition-all duration-500
+                    ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
+                  `}>
+                    <div className="sticky top-16 bg-sand/30 rounded-xl p-4 border border-ink/5">
+                      <div className="text-[10px] uppercase tracking-widest text-ink/40 mb-3">
+                        Events in this era
+                      </div>
+                      <div className="space-y-2.5 max-h-[60vh] overflow-y-auto">
+                        {chapterEvents.slice(0, 8).map(ev => (
+                          <div key={ev.id} className="flex items-start gap-2.5">
+                            <span className={`mt-1.5 shrink-0 h-2 w-2 rounded-full ${
+                              ev.kind === 'milestone' ? 'bg-ochre' :
+                              ev.kind === 'aspiration' ? 'border border-dashed border-eucalypt' :
+                              'bg-desert/50'
+                            }`} />
+                            <div className="min-w-0">
+                              <div className="text-xs text-ink/80 leading-snug">{ev.title}</div>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                {ev.eventYear && (
+                                  <span className="text-[10px] tabular-nums text-ink/40">
+                                    {ev.dateIsApproximate ? '~' : ''}{ev.eventYear}
+                                  </span>
+                                )}
+                                {ev.people.length > 0 && (
+                                  <div className="flex -space-x-1">
+                                    {ev.people.slice(0, 3).map(p => (
+                                      <Link
+                                        key={p.id}
+                                        to={`/person/${p.id}`}
+                                        className="h-4 w-4 rounded-full bg-sand border border-cream text-[6px] flex items-center justify-center font-medium text-desert hover:scale-110 transition-transform"
+                                        title={p.displayName}
+                                      >
+                                        {p.displayName.slice(0, 1)}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        {chapterEvents.length > 8 && (
+                          <div className="text-[10px] text-ink/30 pt-1">
+                            + {chapterEvents.length - 8} more
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </aside>
+                )}
+              </div>
+
+              {/* Mobile: compact event list below narrative */}
+              {chapterEvents.length > 0 && isActive && (
+                <div className="lg:hidden mt-4 bg-sand/30 rounded-xl p-4 border border-ink/5">
+                  <div className="text-[10px] uppercase tracking-widest text-ink/40 mb-2">
+                    {chapterEvents.length} event{chapterEvents.length !== 1 ? 's' : ''} in this era
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {chapterEvents.slice(0, 5).map(ev => (
+                      <span key={ev.id} className="text-xs px-2 py-1 rounded-full bg-sand text-desert">
+                        {ev.title.length > 30 ? ev.title.slice(0, 30) + '…' : ev.title}
+                      </span>
+                    ))}
+                    {chapterEvents.length > 5 && (
+                      <span className="text-xs text-ink/30 self-center">+{chapterEvents.length - 5}</span>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
-            <h2 className="font-serif text-3xl text-ink mb-4 leading-tight">{ch.title}</h2>
-            <p className="text-ink/70 text-[17px] leading-relaxed">{ch.body}</p>
-            <div className="mt-4 text-xs text-ink/30">
-              Chapter {i + 1} of {CHAPTERS.length}
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
