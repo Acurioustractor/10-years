@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useSession } from './contexts/SessionContext'
-import { setAuthToken } from './services/empathyLedgerClient'
+import { setAuthToken } from '@/services/empathyLedgerClient'
 
 // Layouts
 import PublicLayout from './layouts/PublicLayout'

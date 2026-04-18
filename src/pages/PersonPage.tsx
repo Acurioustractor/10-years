@@ -12,6 +12,13 @@ import { useKinship } from '@/hooks/useKinship'
 import { eraForYear } from '@/components/eras'
 import type { Storyteller, TimelineEventSummary, KinshipEdge } from '@/services/types'
 
+type PersonKinshipLink = {
+  id: string
+  person: KinshipEdge['to']
+  category: string
+  label: string
+}
+
 export default function PersonPage() {
   const { id, familyCode } = useParams<{ id: string; familyCode?: string }>()
   const { familySession } = useSession()
@@ -83,7 +90,7 @@ export default function PersonPage() {
   }, [familySession, id, graph.nodes])
 
   const myKinship = useMemo(
-    () => graph.edges.filter(e => e.from.id === id),
+    () => normalizeKinshipForPerson(graph.edges, id),
     [graph, id]
   )
 
@@ -111,6 +118,9 @@ export default function PersonPage() {
   const familyByCategory = groupKinship(myKinship)
   const currentYear = new Date().getFullYear()
   const isAncestor = !person.isActive && lifespan && lifespan.latest < currentYear - 20
+  const personRouteBase = familySession
+    ? `/f/${familyCode || familySession.folder.id}/person`
+    : '/person'
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-8">
@@ -226,20 +236,20 @@ export default function PersonPage() {
                       {edges.map(e => (
                         <Link
                           key={e.id}
-                          to={`/person/${e.to.id}`}
+                          to={`${personRouteBase}/${e.person.id}`}
                           className="flex items-center gap-3 p-2 -mx-2 rounded-lg hover:bg-sand/30 transition-colors"
                         >
-                          {e.to.avatarUrl ? (
-                            <img src={e.to.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+                          {e.person.avatarUrl ? (
+                            <img src={e.person.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
                           ) : (
                             <div className="h-8 w-8 rounded-full bg-sand flex items-center justify-center text-[10px] font-medium text-desert">
-                              {e.to.displayName.slice(0, 2).toUpperCase()}
+                              {e.person.displayName.slice(0, 2).toUpperCase()}
                             </div>
                           )}
                           <div className="min-w-0">
-                            <div className="text-sm text-ink truncate">{e.to.displayName}</div>
+                            <div className="text-sm text-ink truncate">{e.person.displayName}</div>
                             <div className="text-xs text-ink/50">
-                              {e.vocabulary.label || e.relationType}
+                              {e.label}
                             </div>
                           </div>
                         </Link>
@@ -378,16 +388,44 @@ function Shell({ children }: { children: React.ReactNode }) {
   return <div className="max-w-5xl mx-auto px-6 py-20 text-center">{children}</div>
 }
 
-function groupKinship(edges: KinshipEdge[]): Record<string, KinshipEdge[]> {
+function normalizeKinshipForPerson(edges: KinshipEdge[], personId?: string): PersonKinshipLink[] {
+  if (!personId) return []
+
+  const byKey = new Map<string, PersonKinshipLink>()
+
+  for (const edge of edges) {
+    const outgoing = edge.from.id === personId
+    const incoming = edge.to.id === personId
+    if (!outgoing && !incoming) continue
+
+    const counterpart = outgoing ? edge.to : edge.from
+    const baseCategory = normalizeCategory(edge.vocabulary.category || edge.relationType)
+    const perspectiveCategory = outgoing ? invertCategory(baseCategory) : baseCategory
+    const label = relationLabelForCategory(perspectiveCategory, edge.vocabulary.label || edge.relationType)
+    const key = `${counterpart.id}:${perspectiveCategory}`
+
+    if (!byKey.has(key)) {
+      byKey.set(key, {
+        id: `${edge.id}:${key}`,
+        person: counterpart,
+        category: perspectiveCategory,
+        label,
+      })
+    }
+  }
+
+  return [...byKey.values()]
+}
+
+function groupKinship(edges: PersonKinshipLink[]): Record<string, PersonKinshipLink[]> {
   const order = ['partner', 'parent', 'child', 'sibling', 'grandparent', 'grandchild', 'extended', 'ceremonial', 'mentor', 'chosen_family', 'other']
-  const groups: Record<string, KinshipEdge[]> = {}
+  const groups: Record<string, PersonKinshipLink[]> = {}
   for (const e of edges) {
-    const cat = e.vocabulary.category || 'other'
-    const label = categoryLabel(cat)
+    const label = categoryLabel(e.category)
     if (!groups[label]) groups[label] = []
     groups[label].push(e)
   }
-  const sorted: Record<string, KinshipEdge[]> = {}
+  const sorted: Record<string, PersonKinshipLink[]> = {}
   for (const cat of order) {
     const label = categoryLabel(cat)
     if (groups[label]) sorted[label] = groups[label]
@@ -396,6 +434,36 @@ function groupKinship(edges: KinshipEdge[]): Record<string, KinshipEdge[]> {
     if (!sorted[k]) sorted[k] = v
   }
   return sorted
+}
+
+function normalizeCategory(raw: string): string {
+  const cat = (raw || 'other').toLowerCase()
+  if (cat === 'spouse' || cat === 'husband' || cat === 'wife' || cat === 'de_facto') return 'partner'
+  if (cat === 'parent' || cat === 'child' || cat === 'sibling' || cat === 'grandparent' || cat === 'grandchild' || cat === 'extended' || cat === 'partner' || cat === 'chosen_family' || cat === 'ceremonial' || cat === 'mentor') {
+    return cat
+  }
+  return 'other'
+}
+
+function invertCategory(category: string): string {
+  if (category === 'parent') return 'child'
+  if (category === 'child') return 'parent'
+  if (category === 'grandparent') return 'grandchild'
+  if (category === 'grandchild') return 'grandparent'
+  return category
+}
+
+function relationLabelForCategory(category: string, fallback: string): string {
+  const relation = (fallback || '').toLowerCase()
+
+  if (category === 'parent') return 'parent'
+  if (category === 'child') return 'child'
+  if (category === 'grandparent') return 'grandparent'
+  if (category === 'grandchild') return 'grandchild'
+  if (category === 'sibling') return 'sibling'
+  if (category === 'partner') return relation === 'spouse' ? 'partner' : (fallback || 'partner')
+
+  return fallback || category
 }
 
 function categoryLabel(cat: string): string {

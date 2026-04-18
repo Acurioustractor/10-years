@@ -9,6 +9,7 @@
  */
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { setAuthToken } from '@/services/empathyLedgerClient'
 
 export interface FamilySession {
   sessionToken: string
@@ -71,6 +72,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     }
     setLoading(false)
   }, [])
+
+  // Keep API client auth token in sync with current mode/session.
+  useEffect(() => {
+    setAuthToken(familySession?.sessionToken || ORG_API_KEY || '')
+  }, [familySession])
 
   const login = useCallback(async (accessCode: string, displayName: string) => {
     try {
