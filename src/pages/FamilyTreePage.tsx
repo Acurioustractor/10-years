@@ -100,6 +100,19 @@ interface TreeNode {
   generation: number
 }
 
+function isPartnerEdge(edge: KinshipEdge): boolean {
+  const category = edge.vocabulary.category || edge.relationType
+  const relation = (edge.relationType || '').toLowerCase()
+  return (
+    category === 'partner' ||
+    relation === 'partner' ||
+    relation === 'spouse' ||
+    relation === 'wife' ||
+    relation === 'husband' ||
+    relation === 'de_facto'
+  )
+}
+
 function FamilyTreeViz({ family, familyCode }: { family: Family; familyCode?: string }) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 })
@@ -177,6 +190,34 @@ function FamilyTreeViz({ family, familyCode }: { family: Family; familyCode?: st
     return result
   }, [positioned])
 
+  const partnerLines = useMemo(() => {
+    const posMap = new Map(positioned.map(p => [p.person.id, p]))
+    const seen = new Set<string>()
+    const result: Array<{ x1: number; y1: number; x2: number; y2: number }> = []
+
+    for (const edge of family.edges) {
+      if (!isPartnerEdge(edge)) continue
+      const a = edge.from.id
+      const b = edge.to.id
+      const key = a < b ? `${a}|${b}` : `${b}|${a}`
+      if (seen.has(key)) continue
+      seen.add(key)
+
+      const p1 = posMap.get(a)
+      const p2 = posMap.get(b)
+      if (!p1 || !p2) continue
+
+      result.push({
+        x1: p1.x + nodeWidth / 2,
+        y1: p1.y + nodeHeight / 2,
+        x2: p2.x + nodeWidth / 2,
+        y2: p2.y + nodeHeight / 2,
+      })
+    }
+
+    return result
+  }, [family.edges, positioned])
+
   const anchorLabel = family.people.find(p => p.isElder)?.displayName || family.people[0]?.displayName || 'Family'
   const svgWidth = Math.max(dimensions.width, positioned.reduce((max, p) => Math.max(max, p.x + nodeWidth + padding), 0))
   const svgHeight = Math.max(dimensions.height, positioned.reduce((max, p) => Math.max(max, p.y + nodeHeight + padding), 0))
@@ -199,6 +240,21 @@ function FamilyTreeViz({ family, familyCode }: { family: Family; familyCode?: st
           height={svgHeight}
           className="block"
         >
+          {/* Partner/spouse links */}
+          {partnerLines.map((l, i) => (
+            <line
+              key={`partner-${i}`}
+              x1={l.x1}
+              y1={l.y1}
+              x2={l.x2}
+              y2={l.y2}
+              stroke="#b15427"
+              strokeOpacity={0.35}
+              strokeWidth={1.5}
+              strokeDasharray="4 3"
+            />
+          ))}
+
           {/* Connection lines */}
           {lines.map((l, i) => {
             const midY = (l.y1 + l.y2) / 2
@@ -312,67 +368,147 @@ function FamilyTreeViz({ family, familyCode }: { family: Family; familyCode?: st
 }
 
 function buildTree(family: Family): { nodes: TreeNode[]; totalGenerations: number } {
-  const parentEdges = family.edges.filter(e =>
-    e.vocabulary.category === 'parent' || e.relationType === 'parent'
-  )
-  const childEdges = family.edges.filter(e =>
-    e.vocabulary.category === 'child' || e.relationType === 'child'
-  )
-
   const childrenOf = new Map<string, Set<string>>()
-  for (const e of childEdges) {
-    const set = childrenOf.get(e.from.id) || new Set()
-    set.add(e.to.id)
-    childrenOf.set(e.from.id, set)
-  }
-  for (const e of parentEdges) {
-    const set = childrenOf.get(e.to.id) || new Set()
-    set.add(e.from.id)
-    childrenOf.set(e.to.id, set)
-  }
+  const parentsOf = new Map<string, Set<string>>()
 
-  const hasParent = new Set<string>()
-  for (const e of parentEdges) hasParent.add(e.from.id)
-  for (const e of childEdges) hasParent.add(e.to.id)
+  // API semantics:
+  // - relationType/category "parent": from is parent of to
+  // - relationType/category "child": from is child of to
+  // Normalize both into parent -> child edges for tree layout.
+  for (const e of family.edges) {
+    const category = normalizeTreeCategory(e.vocabulary.category || e.relationType)
+    let parentId: string | null = null
+    let childId: string | null = null
 
-  const roots = family.people.filter(p => !hasParent.has(p.id))
-  if (roots.length === 0 && family.people.length > 0) {
-    const elders = family.people.filter(p => p.isElder)
-    roots.push(...(elders.length > 0 ? elders : [family.people[0]]))
+    if (category === 'parent') {
+      parentId = e.from.id
+      childId = e.to.id
+    } else if (category === 'child') {
+      parentId = e.to.id
+      childId = e.from.id
+    } else {
+      continue
+    }
+
+    const set = childrenOf.get(parentId) || new Set<string>()
+    set.add(childId)
+    childrenOf.set(parentId, set)
+
+    const parentSet = parentsOf.get(childId) || new Set<string>()
+    parentSet.add(parentId)
+    parentsOf.set(childId, parentSet)
+
   }
 
   const personMap = new Map(family.people.map(p => [p.id, p]))
-  const visited = new Set<string>()
 
-  function buildNode(person: PersonRef, gen: number): TreeNode {
-    visited.add(person.id)
-    const kids = childrenOf.get(person.id) || new Set()
+  // Deterministic generation assignment:
+  // generation(person) = 0 for roots, else 1 + max(generation(parent))
+  const generationMemo = new Map<string, number>()
+  function generationOf(personId: string, path = new Set<string>()): number {
+    const memo = generationMemo.get(personId)
+    if (memo !== undefined) return memo
+
+    if (path.has(personId)) {
+      // Defensive cycle break for bad data.
+      return 0
+    }
+
+    const parents = parentsOf.get(personId)
+    if (!parents || parents.size === 0) {
+      generationMemo.set(personId, 0)
+      return 0
+    }
+
+    path.add(personId)
+    let maxParentGen = 0
+    for (const parentId of parents) {
+      maxParentGen = Math.max(maxParentGen, generationOf(parentId, path))
+    }
+    path.delete(personId)
+
+    const gen = maxParentGen + 1
+    generationMemo.set(personId, gen)
+    return gen
+  }
+
+  const generationById = new Map<string, number>()
+  for (const person of family.people) {
+    generationById.set(person.id, generationOf(person.id))
+  }
+
+  // Keep partner/spouse nodes in the same generation to avoid split couples.
+  // We align a partner cluster to its highest generation so descendants stay below.
+  const partnerParent = new Map<string, string>()
+  const partnerFind = (id: string): string => {
+    const root = partnerParent.get(id)
+    if (!root || root === id) return id
+    const next = partnerFind(root)
+    partnerParent.set(id, next)
+    return next
+  }
+  const partnerUnion = (a: string, b: string) => {
+    const ra = partnerFind(a)
+    const rb = partnerFind(b)
+    if (ra !== rb) partnerParent.set(ra, rb)
+  }
+
+  for (const person of family.people) partnerParent.set(person.id, person.id)
+  for (const edge of family.edges) {
+    if (isPartnerEdge(edge)) partnerUnion(edge.from.id, edge.to.id)
+  }
+
+  const partnerGroups = new Map<string, string[]>()
+  for (const person of family.people) {
+    const root = partnerFind(person.id)
+    const group = partnerGroups.get(root) || []
+    group.push(person.id)
+    partnerGroups.set(root, group)
+  }
+
+  for (const ids of partnerGroups.values()) {
+    if (ids.length < 2) continue
+    const targetGeneration = ids.reduce(
+      (max, id) => Math.max(max, generationById.get(id) ?? 0),
+      0
+    )
+    for (const id of ids) generationById.set(id, targetGeneration)
+  }
+
+  const nodes: TreeNode[] = family.people.map(person => {
+    const kids = childrenOf.get(person.id) || new Set<string>()
     const childNodes: TreeNode[] = []
     for (const kidId of kids) {
-      if (visited.has(kidId)) continue
       const kidPerson = personMap.get(kidId)
-      if (kidPerson) childNodes.push(buildNode(kidPerson, gen + 1))
+      if (!kidPerson) continue
+      childNodes.push({
+        person: kidPerson,
+        children: [],
+        x: 0,
+        y: 0,
+        generation: generationById.get(kidId) ?? 0,
+      })
     }
-    return { person, children: childNodes, x: 0, y: 0, generation: gen }
-  }
-
-  const treeRoots = roots.map(r => buildNode(r, 0))
-
-  // Add unvisited people as gen-0
-  for (const p of family.people) {
-    if (!visited.has(p.id)) {
-      treeRoots.push(buildNode(p, 0))
+    return {
+      person,
+      children: childNodes,
+      x: 0,
+      y: 0,
+      generation: generationById.get(person.id) ?? 0,
     }
+  })
+
+  const maxGen = nodes.reduce((max, n) => Math.max(max, n.generation), 0)
+  return { nodes, totalGenerations: maxGen + 1 }
+}
+
+function normalizeTreeCategory(raw: string): string {
+  const category = (raw || '').toLowerCase()
+  if (category === 'spouse' || category === 'husband' || category === 'wife' || category === 'de_facto') {
+    return 'partner'
   }
-
-  function flatten(node: TreeNode): TreeNode[] {
-    return [node, ...node.children.flatMap(flatten)]
-  }
-
-  const allNodes = treeRoots.flatMap(flatten)
-  const maxGen = allNodes.reduce((max, n) => Math.max(max, n.generation), 0)
-
-  return { nodes: allNodes, totalGenerations: maxGen + 1 }
+  if (category === 'parent' || category === 'child') return category
+  return category
 }
 
 // ─── Card View (original) ───────────────────────────────────────────────

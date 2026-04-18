@@ -400,7 +400,9 @@ function normalizeKinshipForPerson(edges: KinshipEdge[], personId?: string): Per
 
     const counterpart = outgoing ? edge.to : edge.from
     const baseCategory = normalizeCategory(edge.vocabulary.category || edge.relationType)
-    const perspectiveCategory = outgoing ? invertCategory(baseCategory) : baseCategory
+    // Edge semantics are directed: category describes `from -> to`.
+    // Keep category for the source person; invert for the destination person.
+    const perspectiveCategory = outgoing ? baseCategory : invertCategory(baseCategory)
     const label = relationLabelForCategory(perspectiveCategory, edge.vocabulary.label || edge.relationType)
     const key = `${counterpart.id}:${perspectiveCategory}`
 
