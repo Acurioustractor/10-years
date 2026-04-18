@@ -29,21 +29,45 @@ export function setAuthToken(token: string) {
 
 export const isConfigured = Boolean(BASE_URL)
 
+function resolveAuthToken(): string {
+  // Prefer live family-session token from localStorage when running in browser.
+  // This avoids race conditions where module-level auth state lags behind session updates.
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('10years_family_session')
+      if (stored) {
+        const session = JSON.parse(stored) as { sessionToken?: string; expiresAt?: string }
+        if (
+          session?.sessionToken &&
+          (!session.expiresAt || new Date(session.expiresAt) > new Date())
+        ) {
+          return session.sessionToken
+        }
+      }
+    } catch {
+      // Ignore malformed localStorage and fall back to in-memory token.
+    }
+  }
+  return _authToken
+}
+
 async function get<T>(path: string): Promise<T> {
-  if (!isConfigured || !_authToken) throw new Error('Empathy Ledger is not configured')
+  const token = resolveAuthToken()
+  if (!isConfigured || !token) throw new Error('Empathy Ledger is not configured')
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'X-API-Key': _authToken, 'Accept': 'application/json' },
+    headers: { 'X-API-Key': token, 'Accept': 'application/json' },
   })
   if (!res.ok) throw new Error(`${res.status} ${res.statusText} — ${path}`)
   return res.json() as Promise<T>
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
-  if (!isConfigured || !_authToken) throw new Error('Empathy Ledger is not configured')
+  const token = resolveAuthToken()
+  if (!isConfigured || !token) throw new Error('Empathy Ledger is not configured')
   const res = await fetch(`${BASE_URL}${path}`, {
     method: 'POST',
     headers: {
-      'X-API-Key': _authToken,
+      'X-API-Key': token,
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
