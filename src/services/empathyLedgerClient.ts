@@ -250,9 +250,25 @@ export async function getFamilyFolder(id: string): Promise<{
     isAncestor: boolean
     role: string
     joinedAt: string
+    storyCount?: number
+    transcriptCount?: number
+    bio?: string | null
+    birthYear?: number | null
+    deathYear?: number | null
+    birthPlace?: string | null
+    location?: string | null
+    culturalBackground?: string[]
+    tags?: string[]
+    historicalSources?: unknown
   }>
   communityLinks: CommunityFamilyLink[]
-  stats: { memberCount: number; eventCount: number; kinshipEdgeCount: number }
+  stats: {
+    memberCount: number
+    eventCount: number
+    kinshipEdgeCount: number
+    storyCount?: number
+    transcriptCount?: number
+  }
 }> {
   return get(`/api/v2/family-folders/${id}`)
 }

@@ -1,26 +1,32 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import {
+  buildLedgerStorytellerEditUrl,
   getFamilyFolder,
   getFamilyFolderTimeline,
   getStorytellers,
   getTimelineEvents,
   isConfigured,
 } from '@/services/empathyLedgerClient'
+import {
+  getKinshipPerspectiveForPerson,
+  kinshipCategoryLabel,
+  relationLabelForCategory,
+} from '@/services/kinship'
 import { useSession } from '@/contexts/SessionContext'
 import { useKinship } from '@/hooks/useKinship'
 import { eraForYear } from '@/components/eras'
-import type { Storyteller, TimelineEventSummary, KinshipEdge } from '@/services/types'
+import type { Storyteller, TimelineEventSummary, KinshipCategory, KinshipEdge } from '@/services/types'
 
 type PersonKinshipLink = {
   id: string
   person: KinshipEdge['to']
-  category: string
+  category: KinshipCategory
   label: string
 }
 
 export default function PersonPage() {
-  const { id, familyCode } = useParams<{ id: string; familyCode?: string }>()
+  const { id, familySlug } = useParams<{ id: string; familySlug?: string }>()
   const { familySession } = useSession()
   const [person, setPerson] = useState<Storyteller | null>(null)
   const [events, setEvents] = useState<TimelineEventSummary[]>([])
@@ -57,7 +63,7 @@ export default function PersonPage() {
               role: member.role,
               location: null,
               isActive: !member.isAncestor,
-              storyCount: 0,
+              storyCount: member.storyCount ?? 0,
               createdAt: '',
             }))
           : (peopleRes as Storyteller[])
@@ -111,6 +117,10 @@ export default function PersonPage() {
     return { earliest: Math.min(...years), latest: Math.max(...years) }
   }, [events, id])
 
+  if (familySession && !familySlug && id) {
+    return <Navigate to={`/f/${familySession.folder.slug}/person/${id}`} replace />
+  }
+
   if (!isConfigured) return <Shell><p className="text-ink/60">Not configured. Add the API key to .env.local.</p></Shell>
   if (loading) return <Shell><p className="text-ink/50">Loading…</p></Shell>
   if (!person) return <Shell><p className="text-ink/60">Person not found.</p></Shell>
@@ -119,21 +129,25 @@ export default function PersonPage() {
   const currentYear = new Date().getFullYear()
   const isAncestor = !person.isActive && lifespan && lifespan.latest < currentYear - 20
   const personRouteBase = familySession
-    ? `/f/${familyCode || familySession.folder.id}/person`
+    ? `/f/${familySlug || familySession.folder.slug}/person`
     : '/person'
+  const folderAccessRole = familySession && person.role && person.role !== 'relative'
+    ? formatFolderAccessRole(person.role)
+    : null
+  const storytellerEditUrl = buildLedgerStorytellerEditUrl(person.id)
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-8">
       <div className="flex items-center gap-4 text-sm text-ink/50">
         <Link
-          to={familySession ? `/f/${familyCode || familySession.folder.id}/tree` : '/family'}
+          to={familySession ? `/f/${familySlug || familySession.folder.slug}/tree` : '/family'}
           className="hover:text-ink transition-colors"
         >
           ← Family
         </Link>
         <span className="text-ink/20">·</span>
         <Link
-          to={familySession ? `/f/${familyCode || familySession.folder.id}/timeline` : '/'}
+          to={familySession ? `/f/${familySlug || familySession.folder.slug}/timeline` : '/'}
           className="hover:text-ink transition-colors"
         >
           ← Timeline
@@ -178,7 +192,11 @@ export default function PersonPage() {
                 </span>
               )}
               {person.location && <span className="flex items-center gap-1"><span className="text-ink/30">·</span> {person.location}</span>}
-              {person.role && <span className="flex items-center gap-1"><span className="text-ink/30">·</span> {person.role}</span>}
+              {folderAccessRole && (
+                <span className="flex items-center gap-1">
+                  <span className="text-ink/30">·</span> Folder access: {folderAccessRole}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -187,6 +205,26 @@ export default function PersonPage() {
           <p className="mt-6 text-ink/80 leading-relaxed max-w-3xl text-[15px]">
             {person.bio}
           </p>
+        )}
+
+        {familySession && (
+          <div className="mt-6 rounded-xl border border-ink/8 bg-sand/20 px-4 py-3 text-sm text-ink/65 leading-relaxed">
+            Viewing this person inside <span className="text-ink font-medium">{familySession.folder.name}</span>.
+            This page shows lineage and timeline context. Folder access roles are separate from family relationships and do not place someone into the tree by themselves.
+          </div>
+        )}
+
+        {storytellerEditUrl && (
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a
+              href={storytellerEditUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center rounded-full border border-ink/15 px-4 py-2 text-sm text-ink/70 hover:bg-sand/30 transition-colors"
+            >
+              Edit storyteller in Empathy Ledger
+            </a>
+          </div>
         )}
       </header>
 
@@ -315,17 +353,28 @@ export default function PersonPage() {
   )
 }
 
+function formatFolderAccessRole(role: string) {
+  if (role === 'family_rep') return 'family rep'
+  return role.replace(/_/g, ' ')
+}
+
 function DreamCard({ event }: { event: TimelineEventSummary }) {
+  const register = registerForGoalScope(event.goalScope)
   return (
     <div className="border-2 border-dashed border-eucalypt/30 rounded-xl p-5 bg-eucalypt/[0.03]">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
+          {register && (
+            <div className="mb-2">
+              <RegisterPill register={register} />
+            </div>
+          )}
           <h3 className="font-serif text-lg text-ink leading-tight">{event.title}</h3>
           {event.description && (
-            <p className="text-sm text-ink/60 mt-1">{event.description}</p>
+            <p className="text-sm text-ink/70 mt-2 leading-relaxed whitespace-pre-line">{event.description}</p>
           )}
           {event.subGoalCount > 0 && (
-            <div className="text-xs text-eucalypt mt-2">
+            <div className="text-xs text-eucalypt mt-3">
               {event.subGoalCount} step{event.subGoalCount > 1 ? 's' : ''} planned
             </div>
           )}
@@ -341,6 +390,37 @@ function DreamCard({ event }: { event: TimelineEventSummary }) {
         {event.status.replace(/_/g, ' ')}
       </div>
     </div>
+  )
+}
+
+// M3 register tags — colour-code dreams by goal_scope so a PersonPage
+// with 5+ dreams reads as a cluster, not a list. Same vocabulary as the
+// seed_data.json goal_scope field; visual palette matches Editorial
+// Warmth (desert / eucalypt / ochre / ink).
+type DreamRegister = {
+  label: string
+  pillClass: string
+}
+
+function registerForGoalScope(goalScope: string | null | undefined): DreamRegister | null {
+  if (!goalScope) return null
+  switch (goalScope) {
+    case 'family':
+      return { label: 'Family dream', pillClass: 'bg-desert/10 text-desert border-desert/20' }
+    case 'community':
+      return { label: 'Community dream', pillClass: 'bg-eucalypt/10 text-eucalypt border-eucalypt/30' }
+    case 'individual':
+      return { label: 'Personal dream', pillClass: 'bg-ochre/10 text-ochre border-ochre/25' }
+    default:
+      return { label: goalScope.replace(/_/g, ' '), pillClass: 'bg-sand/40 text-ink/60 border-ink/10' }
+  }
+}
+
+function RegisterPill({ register }: { register: DreamRegister }) {
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider ${register.pillClass}`}>
+      {register.label}
+    </span>
   )
 }
 
@@ -394,23 +474,17 @@ function normalizeKinshipForPerson(edges: KinshipEdge[], personId?: string): Per
   const byKey = new Map<string, PersonKinshipLink>()
 
   for (const edge of edges) {
-    const outgoing = edge.from.id === personId
-    const incoming = edge.to.id === personId
-    if (!outgoing && !incoming) continue
+    const perspective = getKinshipPerspectiveForPerson(edge, personId)
+    if (!perspective) continue
 
-    const counterpart = outgoing ? edge.to : edge.from
-    const baseCategory = normalizeCategory(edge.vocabulary.category || edge.relationType)
-    // Edge semantics are directed: category describes `from -> to`.
-    // Keep category for the source person; invert for the destination person.
-    const perspectiveCategory = outgoing ? baseCategory : invertCategory(baseCategory)
-    const label = relationLabelForCategory(perspectiveCategory, edge.vocabulary.label || edge.relationType)
-    const key = `${counterpart.id}:${perspectiveCategory}`
+    const label = relationLabelForCategory(perspective.category, edge.vocabulary.label || edge.relationType)
+    const key = `${perspective.counterpart.id}:${perspective.category}`
 
     if (!byKey.has(key)) {
       byKey.set(key, {
         id: `${edge.id}:${key}`,
-        person: counterpart,
-        category: perspectiveCategory,
+        person: perspective.counterpart,
+        category: perspective.category,
         label,
       })
     }
@@ -420,69 +494,22 @@ function normalizeKinshipForPerson(edges: KinshipEdge[], personId?: string): Per
 }
 
 function groupKinship(edges: PersonKinshipLink[]): Record<string, PersonKinshipLink[]> {
-  const order = ['partner', 'parent', 'child', 'sibling', 'grandparent', 'grandchild', 'extended', 'ceremonial', 'mentor', 'chosen_family', 'other']
+  const order: KinshipCategory[] = ['partner', 'parent', 'child', 'sibling', 'grandparent', 'grandchild', 'extended', 'ceremonial', 'mentor', 'chosen_family', 'other']
   const groups: Record<string, PersonKinshipLink[]> = {}
   for (const e of edges) {
-    const label = categoryLabel(e.category)
+    const label = kinshipCategoryLabel(e.category)
     if (!groups[label]) groups[label] = []
     groups[label].push(e)
   }
   const sorted: Record<string, PersonKinshipLink[]> = {}
   for (const cat of order) {
-    const label = categoryLabel(cat)
+    const label = kinshipCategoryLabel(cat)
     if (groups[label]) sorted[label] = groups[label]
   }
   for (const [k, v] of Object.entries(groups)) {
     if (!sorted[k]) sorted[k] = v
   }
   return sorted
-}
-
-function normalizeCategory(raw: string): string {
-  const cat = (raw || 'other').toLowerCase()
-  if (cat === 'spouse' || cat === 'husband' || cat === 'wife' || cat === 'de_facto') return 'partner'
-  if (cat === 'parent' || cat === 'child' || cat === 'sibling' || cat === 'grandparent' || cat === 'grandchild' || cat === 'extended' || cat === 'partner' || cat === 'chosen_family' || cat === 'ceremonial' || cat === 'mentor') {
-    return cat
-  }
-  return 'other'
-}
-
-function invertCategory(category: string): string {
-  if (category === 'parent') return 'child'
-  if (category === 'child') return 'parent'
-  if (category === 'grandparent') return 'grandchild'
-  if (category === 'grandchild') return 'grandparent'
-  return category
-}
-
-function relationLabelForCategory(category: string, fallback: string): string {
-  const relation = (fallback || '').toLowerCase()
-
-  if (category === 'parent') return 'parent'
-  if (category === 'child') return 'child'
-  if (category === 'grandparent') return 'grandparent'
-  if (category === 'grandchild') return 'grandchild'
-  if (category === 'sibling') return 'sibling'
-  if (category === 'partner') return relation === 'spouse' ? 'partner' : (fallback || 'partner')
-
-  return fallback || category
-}
-
-function categoryLabel(cat: string): string {
-  const labels: Record<string, string> = {
-    partner: 'Partners',
-    parent: 'Parents',
-    child: 'Children',
-    sibling: 'Siblings',
-    grandparent: 'Grandparents',
-    grandchild: 'Grandchildren',
-    extended: 'Extended family',
-    ceremonial: 'Ceremonial',
-    mentor: 'Mentors',
-    chosen_family: 'Chosen family',
-    other: 'Other',
-  }
-  return labels[cat] || cat
 }
 
 function byYearAsc(a: TimelineEventSummary, b: TimelineEventSummary) {

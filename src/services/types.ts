@@ -46,6 +46,7 @@ export interface TimelineEventSummary {
   parentEventId: string | null
   domain: string[]
   location: string | null
+  goalScope?: string | null
   visibility: Visibility
   culturalSensitivityLevel: CulturalSensitivity
   celebratedAt: string | null
@@ -56,6 +57,18 @@ export interface TimelineEventSummary {
   mediaCount: number
   storyCount: number
   subGoalCount: number
+  heroImage?: {
+    id: string
+    title: string | null
+    altText: string | null
+    thumbnailUrl: string | null
+    largeUrl: string | null
+    url: string | null
+    attributionText: string | null
+    sourceUrl: string | null
+    culturalSensitivityLevel: string | null
+    caption: string | null
+  } | null
   createdAt: string
   updatedAt: string
 }
@@ -905,6 +918,9 @@ export interface CommunityFamilyLink {
   decisionNotes: string | null
   status: 'pending' | 'active' | 'rejected' | 'revoked'
   joinedAt: string
+  memberCount?: number
+  featuredAvatarUrl?: string | null
+  featuredDisplayName?: string | null
 }
 
 export type ConnectionStatus =

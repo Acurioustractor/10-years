@@ -1,18 +1,18 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import CrossAppGuideCard from '@/components/CrossAppGuideCard'
 import { useKinship } from '@/hooks/useKinship'
 import { useSession } from '@/contexts/SessionContext'
-import AddPersonPanel from '@/components/AddPersonPanel'
+import { getParentChildDirection, isPartnerKinshipEdge } from '@/services/kinship'
 import type { KinshipEdge, PersonRef } from '@/services/types'
 
 type ViewMode = 'tree' | 'cards'
 
 export default function FamilyTreePage() {
-  const { familyCode } = useParams<{ familyCode?: string }>()
-  const { graph, loading, error, notConfigured, refetch } = useKinship()
+  const { familySlug } = useParams<{ familySlug?: string }>()
+  const { graph, loading, error, notConfigured } = useKinship()
   const { familySession } = useSession()
   const [viewMode, setViewMode] = useState<ViewMode>('tree')
-  const [showAddPerson, setShowAddPerson] = useState(false)
 
   const families = useMemo(() => clusterFamilies(graph.nodes, graph.edges), [graph])
 
@@ -22,20 +22,19 @@ export default function FamilyTreePage() {
     <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-8">
       <header className="mb-8 flex items-end justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-serif text-3xl text-ink">Family</h1>
+          <h1 className="font-serif text-3xl text-ink">Family tree</h1>
           <p className="text-ink/60 mt-1 max-w-2xl">
-            Elders, aunties, uncles, kids — every story on the timeline sits inside one of these.
+            This view only shows kinship-connected family people. Folder access and governance are managed separately.
           </p>
         </div>
         <div className="flex items-center gap-3">
           {canEdit && (
-            <button
-              type="button"
-              onClick={() => setShowAddPerson(true)}
+            <Link
+              to={`/f/${familySession?.folder.slug || familySlug || ''}/settings`}
               className="px-3 py-1.5 rounded-full text-xs font-medium text-ochre border border-ochre/30 hover:bg-ochre/10 transition-colors"
             >
-              + Add person
-            </button>
+              Manage access
+            </Link>
           )}
           <div className="flex items-center gap-1 rounded-full bg-sand/40 p-1">
           <button
@@ -56,8 +55,27 @@ export default function FamilyTreePage() {
         </div>
       </header>
 
-      {showAddPerson && (
-        <AddPersonPanel onClose={() => setShowAddPerson(false)} onAdded={() => refetch()} />
+      <div className="mb-8">
+        <CrossAppGuideCard
+          title="Edit storyteller records there. Read lineage here."
+          description="The family tree is the lineage view, not the source-record editor. Use Empathy Ledger to change storyteller records, transcripts, stories, or photos. Use 10 Years to read the approved family tree and move into governance when family truth changes."
+          editingItems={[
+            'Storyteller records, transcript evidence, stories, and photos belong in Empathy Ledger.',
+            'If the source record is wrong, fix it there before treating it as family truth here.',
+          ]}
+          engagementItems={[
+            'Read the approved family lineage here.',
+            'Move into family governance when kinship or community-handshake decisions need review.',
+          ]}
+          ledgerPath="/admin/storytellers"
+          ledgerLabel="Open storyteller records in Empathy Ledger"
+        />
+      </div>
+
+      {!loading && !error && (
+        <div className="mb-6 rounded-xl border border-ink/8 bg-sand/20 px-4 py-3 text-sm text-ink/65">
+          People appear here when kinship is recorded. Folder access is managed separately in family settings and does not place someone into the lineage tree by itself.
+        </div>
       )}
 
       {notConfigured && <Notice tone="ochre" title="Not configured yet" body="Add the Empathy Ledger API key to .env.local and restart." />}
@@ -76,13 +94,13 @@ export default function FamilyTreePage() {
       {viewMode === 'tree' ? (
         <div className="space-y-12">
           {families.map((fam, idx) => (
-            <FamilyTreeViz key={idx} family={fam} familyCode={familyCode} />
+            <FamilyTreeViz key={idx} family={fam} familySlug={familySlug} />
           ))}
         </div>
       ) : (
         <div className="space-y-10">
           {families.map((fam, idx) => (
-            <FamilyCard key={idx} family={fam} familyCode={familyCode} />
+            <FamilyCard key={idx} family={fam} familySlug={familySlug} />
           ))}
         </div>
       )}
@@ -101,19 +119,10 @@ interface TreeNode {
 }
 
 function isPartnerEdge(edge: KinshipEdge): boolean {
-  const category = edge.vocabulary.category || edge.relationType
-  const relation = (edge.relationType || '').toLowerCase()
-  return (
-    category === 'partner' ||
-    relation === 'partner' ||
-    relation === 'spouse' ||
-    relation === 'wife' ||
-    relation === 'husband' ||
-    relation === 'de_facto'
-  )
+  return isPartnerKinshipEdge(edge)
 }
 
-function FamilyTreeViz({ family, familyCode }: { family: Family; familyCode?: string }) {
+function FamilyTreeViz({ family, familySlug }: { family: Family; familySlug?: string }) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
@@ -276,7 +285,7 @@ function FamilyTreeViz({ family, familyCode }: { family: Family; familyCode?: st
             const isElder = node.person.isElder
             return (
               <g key={node.person.id}>
-                <Link to={familyCode ? `/f/${familyCode}/person/${node.person.id}` : `/person/${node.person.id}`}>
+                <Link to={familySlug ? `/f/${familySlug}/person/${node.person.id}` : `/person/${node.person.id}`}>
                   <rect
                     x={node.x}
                     y={node.y}
@@ -376,19 +385,10 @@ function buildTree(family: Family): { nodes: TreeNode[]; totalGenerations: numbe
   // - relationType/category "child": from is child of to
   // Normalize both into parent -> child edges for tree layout.
   for (const e of family.edges) {
-    const category = normalizeTreeCategory(e.vocabulary.category || e.relationType)
-    let parentId: string | null = null
-    let childId: string | null = null
+    const direction = getParentChildDirection(e)
+    if (!direction) continue
 
-    if (category === 'parent') {
-      parentId = e.from.id
-      childId = e.to.id
-    } else if (category === 'child') {
-      parentId = e.to.id
-      childId = e.from.id
-    } else {
-      continue
-    }
+    const { parentId, childId } = direction
 
     const set = childrenOf.get(parentId) || new Set<string>()
     set.add(childId)
@@ -502,18 +502,9 @@ function buildTree(family: Family): { nodes: TreeNode[]; totalGenerations: numbe
   return { nodes, totalGenerations: maxGen + 1 }
 }
 
-function normalizeTreeCategory(raw: string): string {
-  const category = (raw || '').toLowerCase()
-  if (category === 'spouse' || category === 'husband' || category === 'wife' || category === 'de_facto') {
-    return 'partner'
-  }
-  if (category === 'parent' || category === 'child') return category
-  return category
-}
-
 // ─── Card View (original) ───────────────────────────────────────────────
 
-function FamilyCard({ family, familyCode }: { family: Family; familyCode?: string }) {
+function FamilyCard({ family, familySlug }: { family: Family; familySlug?: string }) {
   const elders = family.people.filter(p => p.isElder)
   const rest = family.people.filter(p => !p.isElder)
 
@@ -542,7 +533,7 @@ function FamilyCard({ family, familyCode }: { family: Family; familyCode?: strin
                 key={p.id}
                 person={p}
                 relations={relationsFor(p.id)}
-                familyCode={familyCode}
+                familySlug={familySlug}
                 elder
               />
             ))}
@@ -552,14 +543,14 @@ function FamilyCard({ family, familyCode }: { family: Family; familyCode?: strin
 
       {rest.length > 0 && (
         <div>
-          <div className="text-xs uppercase tracking-widest text-ink/50 mb-2">Family members</div>
+          <div className="text-xs uppercase tracking-widest text-ink/50 mb-2">Family people</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {rest.map(p => (
               <PersonCard
                 key={p.id}
                 person={p}
                 relations={relationsFor(p.id)}
-                familyCode={familyCode}
+                familySlug={familySlug}
               />
             ))}
           </div>
@@ -572,17 +563,17 @@ function FamilyCard({ family, familyCode }: { family: Family; familyCode?: strin
 function PersonCard({
   person,
   relations,
-  familyCode,
+  familySlug,
   elder,
 }: {
   person: PersonRef
   relations: string[]
-  familyCode?: string
+  familySlug?: string
   elder?: boolean
 }) {
   return (
     <Link
-      to={familyCode ? `/f/${familyCode}/person/${person.id}` : `/person/${person.id}`}
+      to={familySlug ? `/f/${familySlug}/person/${person.id}` : `/person/${person.id}`}
       className={[
         'block p-3 rounded-lg border transition-colors',
         elder ? 'border-ochre/40 bg-ochre/5 hover:bg-ochre/10' : 'border-ink/10 hover:bg-sand/30',

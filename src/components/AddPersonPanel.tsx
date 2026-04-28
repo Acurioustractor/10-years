@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSession } from '@/contexts/SessionContext'
-import { addFamilyMember } from '@/services/empathyLedgerClient'
+import { addFamilyAccessMember } from '@/services/empathyLedgerClient'
 
 interface Props {
   onClose: () => void
@@ -11,7 +11,6 @@ export default function AddPersonPanel({ onClose, onAdded }: Props) {
   const { familySession } = useSession()
   const [name, setName] = useState('')
   const [role, setRole] = useState('contributor')
-  const [isAncestor, setIsAncestor] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -24,15 +23,14 @@ export default function AddPersonPanel({ onClose, onAdded }: Props) {
     setError(null)
 
     try {
-      await addFamilyMember(familySession.folder.id, {
+      await addFamilyAccessMember(familySession.folder.id, {
         displayName: name.trim(),
-        role: isAncestor ? 'viewer' : role,
-        isAncestor,
+        role,
       })
       onAdded()
       onClose()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add person')
+      setError(err instanceof Error ? err.message : 'Failed to grant access')
     }
     setLoading(false)
   }
@@ -44,9 +42,14 @@ export default function AddPersonPanel({ onClose, onAdded }: Props) {
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-serif text-xl text-ink">Add a person</h2>
+          <h2 className="font-serif text-xl text-ink">Grant family-folder access</h2>
           <button onClick={onClose} className="text-ink/40 hover:text-ink text-lg">&times;</button>
         </div>
+
+        <p className="text-sm text-ink/60 mb-4 leading-relaxed">
+          This adds someone to the folder access list so they can sign in or help manage the family space.
+          People appear in the family tree once kinship is recorded, not just because they have folder access.
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -55,39 +58,27 @@ export default function AddPersonPanel({ onClose, onAdded }: Props) {
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
-              placeholder="As the family knows them"
+              placeholder="Name used for folder access"
               className="w-full px-4 py-2.5 rounded-lg border border-ink/15 bg-cream text-ink placeholder:text-ink/30 focus:outline-none focus:ring-2 focus:ring-ochre/30"
               autoFocus
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isAncestor}
-                onChange={e => setIsAncestor(e.target.checked)}
-                className="rounded border-ink/30"
-              />
-              <span className="text-sm text-ink/70">This is an ancestor (historical figure)</span>
-            </label>
+          <div className="rounded-lg border border-ink/8 bg-sand/25 px-3 py-3 text-sm text-ink/65">
+            Use this for family access and governance only. Historical ancestors and lineage-only people should be connected through kinship, not added as folder-access members.
           </div>
 
-          {!isAncestor && (
-            <div>
-              <label className="block text-xs uppercase tracking-widest text-ink/50 mb-1.5">Role</label>
-              <select
-                value={role}
-                onChange={e => setRole(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg border border-ink/15 bg-cream text-ink focus:outline-none focus:ring-2 focus:ring-ochre/30"
-              >
-                <option value="contributor">Contributor (can add stories)</option>
-                <option value="viewer">Viewer (read only)</option>
-                <option value="family_rep">Family rep (can manage tree)</option>
-                <option value="elder">Elder (full governance)</option>
-              </select>
-            </div>
-          )}
+          <div>
+            <label className="block text-xs uppercase tracking-widest text-ink/50 mb-1.5">Access role</label>
+            <select
+              value={role}
+              onChange={e => setRole(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-lg border border-ink/15 bg-cream text-ink focus:outline-none focus:ring-2 focus:ring-ochre/30"
+            >
+              <option value="contributor">Contributor (can add stories)</option>
+              <option value="viewer">Viewer (read only)</option>
+            </select>
+          </div>
 
           {error && (
             <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
@@ -108,7 +99,7 @@ export default function AddPersonPanel({ onClose, onAdded }: Props) {
               disabled={loading || !name.trim()}
               className="flex-1 py-2.5 rounded-lg bg-ochre text-cream text-sm font-medium hover:bg-ochre/90 transition-colors disabled:opacity-50"
             >
-              {loading ? 'Adding...' : 'Add person'}
+              {loading ? 'Granting...' : 'Grant access'}
             </button>
           </div>
         </form>
