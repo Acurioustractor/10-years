@@ -227,7 +227,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
     name: ['Palmer', 'Burns', 'Obah'],
     subtitle: 'Three families on Palm Island, one Warrongo line. From Lucy at Blencoe Falls in the 1880s, to the children at Bwgcolman School today.',
     countryName: 'Warrongo',
-    countryDescription: 'Mt Garnet to the Upper Herbert River. Closely related to Gudjal and Gugu Badhun. Tin was discovered there in the 1880s. The mining brought the violence.',
+    countryDescription: 'Mt Garnet to the Upper Herbert River. Closely related to Gudjal and Gugu Badhun. Tin was discovered in the Wild river area in 1880. The mining brought the violence. At Blencoe Falls a group of Warrongo were driven off the cliffs to plunge into the gorge — Lucy among them. Documented by Tasaku Tsunoda, A Grammar of Warrongo (Mouton de Gruyter, 2012), p. 39.',
     countryFooter: 'The Palmer line walks from this Country to Palm Island',
     palette: { ink: '#1A2418', cream: '#F4EDE0', ochre: '#C9824B', amber: '#E8C496', sand: '#E8DCC4', sacred: '#0E0F0D', quoteSection: '#2A3D26' },
     heroBg: BG.mtGarnet1901,
@@ -258,7 +258,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
     sacredAncestorMatch: 'Lucy',
     bridge: {
       title: 'Marjoyie and Winifred are cousins',
-      body: "Through Alf Palmer. He was Marjoyie's grandfather and Winifred's grand-uncle (her grandmother's brother). Alf's mother Lucy was killed at Blencoe Falls. His granddaughter Rachel Cummins led the Warrongo language revival from 2002. The Palmer line carries one of the documented Indigenous lineages of Palm Island.",
+      body: "Through Alf Palmer. He was Marjoyie's grandfather and Winifred's grand-uncle (her grandmother's brother). Alf's mother Lucy was killed at Blencoe Falls — her death documented in Tasaku Tsunoda's grammar of Warrongo (Mouton de Gruyter, 2012, p. 39). His granddaughter Rachel Cummins led the Warrongo language revival from 2002. The Palmer line carries one of the documented Indigenous lineages of Palm Island.",
       avatarMatches: ['Marjoyie', 'Winifred'],
     },
     chapters: [
@@ -537,7 +537,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Mother',
         heading: 'Bajabala Station, near Blencoe Falls',
-        body: "Allan's mother is Giribau (likely Jirrbal). Her grandmother is named Baja Balanar. Her people lived at the station that was first called Kunawara, then Kirama, then Bajabala — 'two rivers meet'. The station is near Blencoe Falls, in Warrongo Country. The same Blencoe Falls where Lucy, Alf Palmer's mother, was killed in the 1880s. Allan's maternal line and the Palmer/Burns/Obah cluster trace to the same Country. For elder review.",
+        body: "Allan's mother is Giribau (likely Jirrbal). Her grandmother is named Baja Balanar. Her people lived at the station that was first called Kunawara, then Kirama, then Bajabala — 'two rivers meet'. The station is near Blencoe Falls, in Warrongo Country. The same Blencoe Falls where Lucy, Alf Palmer's mother, was killed — documented by Tsunoda 2012, p. 39 — in the post-1880 frontier era after tin was discovered in the Wild river area. Allan's maternal line and the Palmer/Burns/Obah cluster trace to the same Country. For elder review.",
         pullquote: "My mother, my mother's dad, grandmother, grandmother, she said that Baja Balanar changed it to Kirama Station, changing to Bajabala Station, which means 'two rivers meet'. And it's almost not far from where the Blinko Falls are. They went up there, Mount Garnet area, that side. That's where the Blinko Falls, that's where Warrung Country.",
         attribution: 'Allan Palm Island · Uncle Alan Interview',
         bg: BG.blencoeFalls2022,
