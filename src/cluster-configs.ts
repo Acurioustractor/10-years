@@ -626,8 +626,8 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
     ],
   },
 
-  'landers-anderson': {
-    slug: 'landers-anderson',
+  'anderson': {
+    slug: 'anderson',
     name: ['Anderson'],
     subtitle: "Brought to Palm Island in 1945. The oldest in the elders group. He lived through the 1957 Magnificent Seven strike at age seventeen.",
     countryName: 'Ingham · Innisfail',
