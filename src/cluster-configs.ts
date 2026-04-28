@@ -148,7 +148,7 @@ const BG = {
   },
   walterSkipper: {
     url: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/084f851c-72e0-41fb-b5ba-f3088f44862d/walter-skipper-palm-island.jpg',
-    title: 'Walter Palm Island ("Skipper") · Allan\'s elder brother', year: '',
+    title: 'Walter Palm Island ("Skipper") · Allan\'s father', year: '',
     source: 'Palm Island family collection', license: 'Family-held',
   },
   allanPainting14: {
@@ -243,11 +243,11 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       'Marjoyie': 'My grandparents Alf Palmer and Granny Lizzie Palmer.',
       'Winifred': "I felt the ancestor spirit. It's like they were around us because my back went funny. I felt like there was spikes on my back, like my hair was standing.",
     },
-    ancestorOrder: ['Alf Palmer', 'Lizzie', 'Allison Ober'],
+    ancestorOrder: ['Alf Palmer', 'Lizzie', 'Allison Obah'],
     ancestorBgs: {
       'Alf Palmer': BG.stGeorgesChurch1931,
       'Lizzie': BG.dancers1931,
-      'Allison Ober': BG.palmIsland1928,
+      'Allison Obah': BG.palmIsland1928,
     },
     ancestorQuotes: {
       'Alf Palmer': {
@@ -337,7 +337,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Framing',
         heading: 'Hansen\'s disease, not the L word',
-        body: "Winifred's parents lived through Fantome Island, the leprosarium off Palm. Her eldest sister was born and died there. Winifred has named how the family wants this part of their history spoken. Use Hansen's disease. Never use the other word. This is her instruction, not a softening.",
+        body: "Winifred's parents lived through Fantome Island, the Hansen's-disease quarantine settlement off Palm. Her eldest sister was born and died there. Winifred has named how the family wants this part of their history spoken. Use Hansen's disease. Never use the other word. This is her instruction, not a softening.",
         pullquote: "They had Hansen's disease. I remember to say the other word, because this is disease to me. Because when other people come along and they ask, oh, that L word, you know? And I said, no, it's Hansen's disease.",
         attribution: 'Winifred Obah · Elders Trip Interview',
         bg: BG.palmIsland1928,
@@ -414,7 +414,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
   'allan-palm-island': {
     slug: 'allan-palm-island',
     name: ['Allan Palm Island'],
-    subtitle: "Manbarra Traditional Owner. Painter. Son of Walter ('Skipper') Palm Island, the family boat captain. Born into a family of four brothers and five sisters. Welcomes people to Bwgcolman in his own language.",
+    subtitle: "Manbarra Traditional Owner. Painter. Son of Walter ('Skipper') Palm Island, the family boat-maker. Born into a family of four brothers and five sisters. Welcomes people to Bwgcolman in his own language.",
     countryName: 'Manbarra · Wulgurukaba',
     countryDescription: "Magnetic Island, the Palm Islands, and the mainland west of Townsville. Allan's skin name is Nakawaraka. His language is Mulkal. The people call themselves Nakarawaraka Burbanbara, or Kunu people. The Wulgurukaba (Rukurrukaba) country is the umbrella that covers many sub-groups: Banyan (Hinchinbrook), Nywaigi (Waihingum), Bindal, and others. The boundary of Great Palm — Bougamambara — runs along the Mingina Mingina Ranges, taking the form of a Mandaray. The shield in his hand is Bukal. The surrounding islands are Daru Maru. The Manbarra were forcibly moved off the islands in the 1890s, before the 1914 reserve gazetting. The Gabul Snake creation story links Palm Islands to Magnetic Island via the Carpacini Creek (Gabul Snake Creek) between Barbara Bay and Osho Bay, then up to Ross River. Allan's mother is Giribau (likely Jirrbal). Her mother's people lived at Bajabala Station (formerly Kirama, formerly Kunawara) near Blencoe Falls in Warrongo Country — the same Country where Lucy was killed in the 1880s. Allan's uncle Rich, his dad's brother, held the Gobble Dreaming and Sister Rocks stories. Allan's father Walter ('Skipper') gave him charcoal and paper as a young boy and taught him to draw.",
     countryFooter: 'Allan represents the original Traditional Owners',
@@ -466,7 +466,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
     },
     bridge: {
       title: 'The line through Walter',
-      body: "Allan's father, Walter Palm Island, was known as 'Skipper'. Family memory holds Walter as the main boat operator between Palm Island and the mainland, the one who saved people in his boat. Walter taught Allan to draw with charcoal and paper as a young boy, and made boats himself. Walter named one of his sons Walter Jr after himself, who along with eldest brother Reg walked ahead of Allan. The grandfather is held in the surviving photograph. Specific name on the grandfather is for the elders to confirm.",
+      body: "Allan's father, Walter Palm Island, was known as 'Skipper'. Allan's transcripts confirm Walter as boat-maker — 'Dad always made boats.' Family memory also holds him as the one who saved people in his boat, an operator between Palm Island and the mainland; the captain framing is family memory, held alongside the maker on transcript. Walter taught Allan to draw with charcoal and paper as a young boy. He named one of his sons Walter Jr after himself, who along with eldest brother Reg walked ahead of Allan. The grandfather is held in the surviving photograph. Specific name on the grandfather is for the elders to confirm.",
       avatarMatches: ['Allan'],
     },
     chapters: [
@@ -528,9 +528,9 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       },
       {
         eyebrow: 'Skipper',
-        heading: 'Walter the boat captain',
-        body: "Walter Palm Island, Allan's father, was the family boat captain. Family memory holds that he saved people in his boat and was one of the main operators between Palm Island and the mainland. He named one of his sons Walter Jr after himself. The two elder brothers Allan followed were Reg and Walter Jr.",
-        pullquote: "Reg and Walter, my elder brother. And whenever they go, I follow behind. They'd say, no, you can't come, you've got to go back. But I always go, and I learn things from them.",
+        heading: 'Dad always made boats',
+        body: "Walter Palm Island, Allan's father. Allan's transcripts confirm Walter as boat-maker. Family memory also holds him as the operator who saved people in his boat between Palm Island and the mainland; that captain framing is family memory, alongside the maker on transcript. Walter named one of his sons Walter Jr after himself. The two elder brothers Allan followed were Reg and Walter Jr.",
+        pullquote: "Dad always made boats and, sometime he, he, he unfinished work, so go away and then we all start doing the same things over again.",
         attribution: 'Allan Palm Island · Elders Trip Interview',
         bg: BG.walterSkipper,
       },
