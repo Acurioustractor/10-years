@@ -19,6 +19,7 @@ import {
   type LivingElderPin,
 } from '@/palm-history-timeline'
 import { CLUSTER_CONFIGS } from '@/cluster-configs'
+import { getJourneysForElder } from '@/palm-journeys'
 import Lightbox from '@/components/Lightbox'
 
 const P = RIBBON_PALETTE
@@ -92,6 +93,7 @@ export default function ElderProfilePage() {
 
   const quotes = useMemo(() => (elder ? collectVoiceQuotes(elder) : []), [elder])
   const events = useMemo(() => (elder ? getEventsForElder(elder.storytellerSlug) : []), [elder])
+  const journeys = useMemo(() => (elder ? getJourneysForElder(elder.storytellerSlug) : []), [elder])
 
   if (!elder) {
     return (
@@ -247,6 +249,58 @@ export default function ElderProfilePage() {
                   </div>
                   <h3 className="font-serif text-2xl leading-tight mb-2">{ev.heading}</h3>
                   <div className="text-xs tracking-widest uppercase opacity-50">Open in the timeline →</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Journeys */}
+      {journeys.length > 0 && (
+        <section className="py-24 px-6" style={{ background: P.cream }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="text-[11px] tracking-[0.3em] uppercase mb-4" style={{ color: P.ochre }}>
+                Journeys
+              </div>
+              <h2 className="font-serif font-light leading-[1.05]" style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}>
+                Walking back to Country
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {journeys.map((j) => (
+                <Link
+                  key={j.slug}
+                  to={`/journeys/${j.slug}`}
+                  className="group flex flex-col"
+                >
+                  <div
+                    className="aspect-[16/10] mb-5 overflow-hidden relative"
+                    style={{ background: hexToRgba(P.ochre, 0.08) }}
+                  >
+                    <img
+                      src={j.hero.url}
+                      alt={j.hero.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                      style={{ filter: 'sepia(0.25) brightness(0.7)' }}
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{ background: `linear-gradient(180deg, transparent 0%, ${hexToRgba(P.ink, 0.5)} 100%)` }}
+                    />
+                    <div className="absolute bottom-3 left-3 text-[10px] tracking-[0.3em] uppercase" style={{ color: P.cream }}>
+                      {j.yearLabel} · {j.status === 'past' ? 'walked' : j.status === 'planned' ? 'planned' : 'held open'}
+                    </div>
+                  </div>
+                  <h3 className="font-serif text-2xl leading-tight mb-2">{j.title}</h3>
+                  <p className="font-serif italic text-sm leading-relaxed opacity-75 mb-3">{j.subtitle}</p>
+                  <div
+                    className="text-xs tracking-widest uppercase opacity-60 group-hover:opacity-100 mt-auto"
+                    style={{ color: P.ochre }}
+                  >
+                    Open the journey →
+                  </div>
                 </Link>
               ))}
             </div>

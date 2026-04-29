@@ -27,6 +27,7 @@ import {
   type TodayPortalCard,
 } from '@/palm-history-timeline'
 import Lightbox from '@/components/Lightbox'
+import { getJourneysForEvent } from '@/palm-journeys'
 
 /** First name (after stripping Uncle/Aunty) — used for the initial-circle fallback. */
 function nameInitial(displayName: string): string {
@@ -433,6 +434,31 @@ function EventPanel({
             </div>
           </div>
         )}
+
+        {/* Cross-link to journeys (the elders walking back to this place) */}
+        {(() => {
+          const journeys = getJourneysForEvent(event.id)
+          if (journeys.length === 0) return null
+          return (
+            <div className="mt-8 pt-8 border-t" style={{ borderColor: hexToRgba(P.cream, 0.15) }}>
+              <div className="text-[10px] tracking-[0.3em] uppercase opacity-50 mb-4">
+                The elders walked back here
+              </div>
+              <div className="flex flex-col gap-2">
+                {journeys.map((j) => (
+                  <Link
+                    key={j.slug}
+                    to={`/journeys/${j.slug}`}
+                    className="text-sm font-serif italic underline-offset-4 hover:underline"
+                    style={{ color: P.amber }}
+                  >
+                    {j.title} · {j.yearLabel} →
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
       </div>
       <ImageCaption bg={event.bg} />
       <ExpandHint onClick={onOpenPhoto} />
