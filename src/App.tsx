@@ -13,6 +13,8 @@ import LandingPage from './pages/LandingPage'
 import JoinPage from './pages/JoinPage'
 import ExplorePage from './pages/ExplorePage'
 import HistoryPage from './pages/HistoryPage'
+import EldersIndexPage from './pages/EldersIndexPage'
+import ElderProfilePage from './pages/ElderProfilePage'
 
 // Community pages
 import CommunityHomePage from './pages/CommunityHomePage'
@@ -53,6 +55,8 @@ export default function App() {
 
       {/* Full-bleed standalone — escapes PublicLayout chrome */}
       <Route path="/history" element={<HistoryPage />} />
+      <Route path="/elders" element={<EldersIndexPage />} />
+      <Route path="/elders/:slug" element={<ElderProfilePage />} />
 
       {/* Family shell */}
       <Route path="/f/:familySlug" element={<FamilyLayout />}>

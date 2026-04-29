@@ -10,11 +10,12 @@
  * Visual language: matches ClusterShowcase.tsx (sepia photos, ink overlay,
  * Lora serif, ochre accent, tracking-widest uppercase eyebrows).
  */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   buildSpine,
   EVENT_SLOTS,
+  findElderInAttribution,
   LIVING_ELDER_PINS,
   RIBBON_PALETTE,
   TODAY_GALLERY,
@@ -22,7 +23,16 @@ import {
   type DecadeBackdrop,
   type EventSlot,
   type LivingElderPin,
+  type RibbonImage,
+  type TodayPortalCard,
 } from '@/palm-history-timeline'
+import Lightbox from '@/components/Lightbox'
+
+/** First name (after stripping Uncle/Aunty) — used for the initial-circle fallback. */
+function nameInitial(displayName: string): string {
+  const stripped = displayName.replace(/^(Uncle|Aunty)\s+/, '').split(' ')[0] || displayName
+  return stripped.charAt(0)
+}
 
 const P = RIBBON_PALETTE
 
@@ -37,7 +47,17 @@ function hexToRgba(hex: string, alpha: number) {
 export default function TimelineRibbon() {
   const spine = buildSpine()
   const [activeYear, setActiveYear] = useState<number>(YEAR_MARKERS[0]!.year)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const panelRefs = useRef<Record<string, HTMLElement | null>>({})
+
+  // All panel hero photos in scroll order — drives Lightbox prev/next.
+  // Hero panel uses EVENT_SLOTS[0].bg, then spine (decades + events) in order.
+  const allPhotos: RibbonImage[] = useMemo(() => {
+    const out: RibbonImage[] = []
+    out.push(EVENT_SLOTS[0]!.bg) // hero panel uses first event's bg
+    for (const node of spine) out.push(node.data.bg)
+    return out
+  }, [spine])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -71,19 +91,26 @@ export default function TimelineRibbon() {
         className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 md:pl-32 overflow-hidden"
         style={{ color: P.cream }}
       >
-        <img
-          src={EVENT_SLOTS[0]!.bg.url}
-          alt={EVENT_SLOTS[0]!.bg.title}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: 'sepia(0.45) brightness(0.4) contrast(1.05)' }}
-        />
+        <button
+          type="button"
+          onClick={() => setLightboxIndex(0)}
+          aria-label={`Open photo: ${EVENT_SLOTS[0]!.bg.title}`}
+          className="absolute inset-0 w-full h-full cursor-zoom-in group"
+        >
+          <img
+            src={EVENT_SLOTS[0]!.bg.url}
+            alt={EVENT_SLOTS[0]!.bg.title}
+            className="w-full h-full object-cover"
+            style={{ filter: 'sepia(0.45) brightness(0.4) contrast(1.05)' }}
+          />
+        </button>
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background: `linear-gradient(180deg, ${hexToRgba(P.ink, 0.55)} 0%, ${hexToRgba(P.ink, 0.9)} 100%)`,
           }}
         />
-        <div className="relative z-10 max-w-5xl mx-auto w-full">
+        <div className="relative z-10 max-w-5xl mx-auto w-full pointer-events-none">
           <div className="text-[11px] tracking-[0.3em] uppercase opacity-60 mb-8">
             Palm Island · Bwgcolman Community
           </div>
@@ -97,16 +124,19 @@ export default function TimelineRibbon() {
           </p>
           <div className="mt-12 text-xs opacity-50 tracking-widest uppercase">↓ Scroll</div>
         </div>
+        <ExpandHint onClick={() => setLightboxIndex(0)} />
       </section>
 
       {/* ── Spine: decade backdrops + event panels interleaved ────────── */}
-      {spine.map((node) => {
+      {spine.map((node, i) => {
+        const photoIndex = i + 1 // hero is index 0; spine[i] is i+1
         if (node.kind === 'decade') {
           return (
             <DecadePanel
               key={`d-${node.data.id}`}
               decade={node.data}
               elders={LIVING_ELDER_PINS.filter((e) => e.birthDecade === node.data.decadeStart)}
+              onOpenPhoto={() => setLightboxIndex(photoIndex)}
               registerRef={(el) => {
                 panelRefs.current[`d-${node.data.id}`] = el
               }}
@@ -117,6 +147,7 @@ export default function TimelineRibbon() {
           <EventPanel
             key={`e-${node.data.id}`}
             event={node.data}
+            onOpenPhoto={() => setLightboxIndex(photoIndex)}
             registerRef={(el) => {
               panelRefs.current[`e-${node.data.id}`] = el
             }}
@@ -125,10 +156,43 @@ export default function TimelineRibbon() {
       })}
 
       {/* ── Today Gallery (portal cards into family folders) ───────────── */}
-      <TodayGallery registerRef={(el) => {
-        panelRefs.current['today'] = el
-      }} />
+      <TodayGallery
+        cards={TODAY_GALLERY}
+        registerRef={(el) => {
+          panelRefs.current['today'] = el
+        }}
+      />
+
+      {/* ── Lightbox (full-screen photo viewer) ─────────────────────── */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={allPhotos}
+          index={lightboxIndex}
+          onIndexChange={setLightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
+  )
+}
+
+/** Small "expand" button in bottom-right of a panel — makes lightbox hint obvious. */
+function ExpandHint({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Open photo full-screen"
+      className="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-20 w-10 h-10 flex items-center justify-center rounded-full text-white/70 hover:text-white transition-colors"
+      style={{ background: hexToRgba(P.ink, 0.5), border: `1px solid ${hexToRgba(P.cream, 0.2)}` }}
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="15 3 21 3 21 9" />
+        <polyline points="9 21 3 21 3 15" />
+        <line x1="21" y1="3" x2="14" y2="10" />
+        <line x1="3" y1="21" x2="10" y2="14" />
+      </svg>
+    </button>
   )
 }
 
@@ -191,10 +255,12 @@ function YearRibbon({ activeYear }: { activeYear: number }) {
 function DecadePanel({
   decade,
   elders,
+  onOpenPhoto,
   registerRef,
 }: {
   decade: DecadeBackdrop
   elders: LivingElderPin[]
+  onOpenPhoto: () => void
   registerRef: (el: HTMLElement | null) => void
 }) {
   return (
@@ -204,14 +270,21 @@ function DecadePanel({
       className="relative min-h-screen flex items-center justify-center px-6 md:pl-32 overflow-hidden"
       style={{ color: P.cream }}
     >
-      <img
-        src={decade.bg.url}
-        alt={decade.bg.title}
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ filter: 'sepia(0.5) brightness(0.4) contrast(1.05)' }}
-      />
+      <button
+        type="button"
+        onClick={onOpenPhoto}
+        aria-label={`Open photo: ${decade.bg.title}`}
+        className="absolute inset-0 w-full h-full cursor-zoom-in"
+      >
+        <img
+          src={decade.bg.url}
+          alt={decade.bg.title}
+          className="w-full h-full object-cover"
+          style={{ filter: 'sepia(0.5) brightness(0.4) contrast(1.05)' }}
+        />
+      </button>
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           background: `linear-gradient(180deg, ${hexToRgba(P.ink, 0.55)} 0%, ${hexToRgba(P.ink, 0.85)} 100%)`,
         }}
@@ -231,36 +304,48 @@ function DecadePanel({
         {elders.length > 0 && (
           <div className="mt-16 pt-10 border-t" style={{ borderColor: hexToRgba(P.cream, 0.15) }}>
             <div className="text-[10px] tracking-[0.3em] uppercase opacity-50 mb-6">
-              Living elders born around this time
+              Living elders of this era
             </div>
             <div className="flex flex-wrap items-start justify-center gap-6 md:gap-10">
-              {elders.map((e) => (
-                <Link
-                  key={e.storytellerSlug}
-                  to={`/f/${e.clusterSlug}`}
-                  className="group flex flex-col items-center max-w-[140px] hover:opacity-90 transition-opacity"
-                >
-                  <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center font-serif text-xl mb-3"
-                    style={{
-                      background: hexToRgba(P.cream, 0.1),
-                      border: `1px solid ${hexToRgba(P.cream, 0.4)}`,
-                      color: P.amber,
-                    }}
+              {elders.map((e) => {
+                return (
+                  <Link
+                    key={e.storytellerSlug}
+                    to={`/elders/${e.storytellerSlug}`}
+                    className="group flex flex-col items-center max-w-[140px] hover:opacity-90 transition-opacity"
                   >
-                    {e.displayName.replace(/^(Uncle|Aunty)\s+/, '').charAt(0)}
-                  </div>
-                  <div className="text-sm font-serif leading-tight text-center">{e.displayName}</div>
-                  <div className="text-[10px] opacity-50 tracking-wide mt-1 text-center">
-                    {e.birthDecadeLabel}
-                  </div>
-                </Link>
-              ))}
+                    {e.avatarUrl ? (
+                      <img
+                        src={e.avatarUrl}
+                        alt={e.displayName}
+                        className="w-16 h-16 rounded-full object-cover mb-3"
+                        style={{ border: `1px solid ${hexToRgba(P.cream, 0.4)}` }}
+                      />
+                    ) : (
+                      <div
+                        className="w-16 h-16 rounded-full flex items-center justify-center font-serif text-xl mb-3"
+                        style={{
+                          background: hexToRgba(P.cream, 0.1),
+                          border: `1px solid ${hexToRgba(P.cream, 0.4)}`,
+                          color: P.amber,
+                        }}
+                      >
+                        {nameInitial(e.displayName)}
+                      </div>
+                    )}
+                    <div className="text-sm font-serif leading-tight text-center">{e.displayName}</div>
+                    <div className="text-[10px] opacity-50 tracking-wide mt-1 text-center">
+                      {e.birthDecadeLabel}
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         )}
       </div>
       <ImageCaption bg={decade.bg} />
+      <ExpandHint onClick={onOpenPhoto} />
     </section>
   )
 }
@@ -269,9 +354,11 @@ function DecadePanel({
 
 function EventPanel({
   event,
+  onOpenPhoto,
   registerRef,
 }: {
   event: EventSlot
+  onOpenPhoto: () => void
   registerRef: (el: HTMLElement | null) => void
 }) {
   return (
@@ -281,14 +368,21 @@ function EventPanel({
       className="relative min-h-screen flex items-center justify-center px-6 md:pl-32 py-20 overflow-hidden"
       style={{ color: P.cream }}
     >
-      <img
-        src={event.bg.url}
-        alt={event.bg.title}
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ filter: 'sepia(0.45) brightness(0.35) contrast(1.05)' }}
-      />
+      <button
+        type="button"
+        onClick={onOpenPhoto}
+        aria-label={`Open photo: ${event.bg.title}`}
+        className="absolute inset-0 w-full h-full cursor-zoom-in"
+      >
+        <img
+          src={event.bg.url}
+          alt={event.bg.title}
+          className="w-full h-full object-cover"
+          style={{ filter: 'sepia(0.45) brightness(0.35) contrast(1.05)' }}
+        />
+      </button>
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           background: `linear-gradient(180deg, ${hexToRgba(P.ink, 0.7)} 0%, ${hexToRgba(P.ink, 0.92)} 100%)`,
         }}
@@ -312,11 +406,7 @@ function EventPanel({
             >
               "{event.pullquote}"
             </blockquote>
-            {event.attribution && (
-              <figcaption className="text-xs tracking-wider uppercase opacity-60 mt-4">
-                {event.attribution}
-              </figcaption>
-            )}
+            {event.attribution && <EventAttribution attribution={event.attribution} />}
           </figure>
         )}
 
@@ -345,13 +435,20 @@ function EventPanel({
         )}
       </div>
       <ImageCaption bg={event.bg} />
+      <ExpandHint onClick={onOpenPhoto} />
     </section>
   )
 }
 
 // ─────────────────────  Today Gallery  ────────────────────────────────────────
 
-function TodayGallery({ registerRef }: { registerRef: (el: HTMLElement | null) => void }) {
+function TodayGallery({
+  cards,
+  registerRef,
+}: {
+  cards: TodayPortalCard[]
+  registerRef: (el: HTMLElement | null) => void
+}) {
   return (
     <section
       ref={registerRef}
@@ -377,26 +474,35 @@ function TodayGallery({ registerRef }: { registerRef: (el: HTMLElement | null) =
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TODAY_GALLERY.map((card) => (
+          {cards.map((card) => (
             <Link
               key={card.storytellerSlug}
-              to={`/f/${card.clusterSlug}`}
+              to={`/elders/${card.storytellerSlug}`}
               className="group flex flex-col p-8 rounded-sm transition-all hover:shadow-lg"
               style={{
                 background: hexToRgba(P.ink, 0.04),
                 border: `1px solid ${hexToRgba(P.ink, 0.1)}`,
               }}
             >
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center font-serif text-2xl mb-5"
-                style={{
-                  background: hexToRgba(P.ochre, 0.15),
-                  color: P.ochre,
-                  border: `1px solid ${hexToRgba(P.ochre, 0.3)}`,
-                }}
-              >
-                {card.displayName.replace(/^(Uncle|Aunty)\s+/, '').charAt(0)}
-              </div>
+              {card.avatarUrl ? (
+                <img
+                  src={card.avatarUrl}
+                  alt={card.displayName}
+                  className="w-16 h-16 rounded-full object-cover mb-5"
+                  style={{ border: `1px solid ${hexToRgba(P.ochre, 0.3)}` }}
+                />
+              ) : (
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center font-serif text-2xl mb-5"
+                  style={{
+                    background: hexToRgba(P.ochre, 0.15),
+                    color: P.ochre,
+                    border: `1px solid ${hexToRgba(P.ochre, 0.3)}`,
+                  }}
+                >
+                  {nameInitial(card.displayName)}
+                </div>
+              )}
               <div className="font-serif text-2xl leading-tight mb-2">{card.displayName}</div>
               <div className="text-[10px] tracking-[0.2em] uppercase opacity-50 mb-4">{card.clusterLabel}</div>
               <p className="font-serif italic text-sm leading-relaxed opacity-80 mb-6">{card.oneLine}</p>
@@ -420,6 +526,33 @@ function TodayGallery({ registerRef }: { registerRef: (el: HTMLElement | null) =
         </div>
       </div>
     </section>
+  )
+}
+
+// ─────────────────────  Event attribution (avatar + tree link)  ─────────────
+
+function EventAttribution({ attribution }: { attribution: string }) {
+  const elder = findElderInAttribution(attribution)
+  if (!elder) {
+    return <figcaption className="text-xs tracking-wider uppercase opacity-60 mt-4">{attribution}</figcaption>
+  }
+  return (
+    <Link
+      to={`/f/${elder.clusterSlug}/tree`}
+      className="mt-4 inline-flex items-center gap-3 hover:opacity-90 transition-opacity"
+    >
+      {elder.avatarUrl && (
+        <img
+          src={elder.avatarUrl}
+          alt={elder.displayName}
+          className="w-8 h-8 rounded-full object-cover"
+          style={{ border: `1px solid ${hexToRgba(P.cream, 0.4)}` }}
+        />
+      )}
+      <span className="text-xs tracking-wider uppercase opacity-70" style={{ color: P.amber }}>
+        {attribution}
+      </span>
+    </Link>
   )
 }
 

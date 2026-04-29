@@ -9,6 +9,9 @@ import { Link } from 'react-router-dom'
 import { useSession } from '@/contexts/SessionContext'
 import { getCommunityFamilyLinks, getFamilyFolder } from '@/services/empathyLedgerClient'
 import type { BgSource, ClusterConfig } from '@/cluster-configs'
+import { findElderInAttribution } from '@/palm-history-timeline'
+import Lightbox from '@/components/Lightbox'
+import PhotoStrip from '@/components/PhotoStrip'
 
 const PALM_ISLAND_COMMUNITY_ID = 'c0a20002-0000-0000-0000-000000000001'
 
@@ -240,10 +243,43 @@ function ChapterPanel({ chapter, ink, cream, ochre }: { chapter: NonNullable<Clu
         <blockquote className="font-serif italic font-light leading-[1.25] mx-auto" style={{ fontSize: 'clamp(24px, 3.2vw, 40px)' }}>
           &ldquo;{chapter.pullquote}&rdquo;
         </blockquote>
-        <div className="mt-8 text-xs tracking-widest uppercase opacity-60">{chapter.attribution}</div>
+        <ElderAttribution attribution={chapter.attribution} cream={cream} ochre={ochre} />
       </div>
       {chapter.bg && <ImageCaption bg={chapter.bg} cream={cream} />}
     </section>
+  )
+}
+
+/**
+ * Renders an attribution line. If the attribution names a living elder, the
+ * line becomes a tap target into that elder's family tree, with their
+ * portrait inline. Otherwise renders plain text (current behaviour).
+ */
+function ElderAttribution({ attribution, cream, ochre }: { attribution: string; cream: string; ochre: string }) {
+  const elder = findElderInAttribution(attribution)
+  if (!elder) {
+    return <div className="mt-8 text-xs tracking-widest uppercase opacity-60">{attribution}</div>
+  }
+  return (
+    <Link
+      to={`/f/${elder.clusterSlug}/tree`}
+      className="mt-8 inline-flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+    >
+      {elder.avatarUrl && (
+        <img
+          src={elder.avatarUrl}
+          alt={elder.displayName}
+          className="w-9 h-9 rounded-full object-cover"
+          style={{ border: `1px solid ${hexToRgba(cream, 0.4)}` }}
+        />
+      )}
+      <span
+        className="text-xs tracking-widest uppercase underline-offset-4 group-hover:underline"
+        style={{ color: ochre }}
+      >
+        {attribution}
+      </span>
+    </Link>
   )
 }
 
@@ -315,16 +351,28 @@ function AncestorPanel({ ancestor, quote, quoteAttribution, quoterAvatarUrl, cre
         {quote && (
           <figure className="mt-16 max-w-2xl mx-auto">
             <blockquote className="font-serif italic font-light leading-[1.3]" style={{ fontSize: 'clamp(24px, 3vw, 40px)', color: accent }}>“{quote}”</blockquote>
-            {quoteAttribution && (
-              <figcaption className="mt-6 flex items-center justify-center gap-3 text-xs tracking-widest uppercase opacity-60">
-                {quoterAvatarUrl ? (
-                  <img src={quoterAvatarUrl} alt="" className="w-8 h-8 rounded-full object-cover" />
-                ) : (
-                  <span className="w-8 h-8 rounded-full inline-flex items-center justify-center font-serif text-sm" style={{ background: 'rgba(255,255,255,0.08)', border: `1px solid ${accent}40`, color: accent }}>{ancestor.displayName.split(/[\s(]/)[0].charAt(0)}</span>
-                )}
-                <span>{quoteAttribution}</span>
-              </figcaption>
-            )}
+            {quoteAttribution && (() => {
+              const elder = findElderInAttribution(quoteAttribution)
+              const inner = (
+                <>
+                  {quoterAvatarUrl || elder?.avatarUrl ? (
+                    <img src={quoterAvatarUrl || elder?.avatarUrl || ''} alt="" className="w-8 h-8 rounded-full object-cover" />
+                  ) : (
+                    <span className="w-8 h-8 rounded-full inline-flex items-center justify-center font-serif text-sm" style={{ background: 'rgba(255,255,255,0.08)', border: `1px solid ${accent}40`, color: accent }}>{ancestor.displayName.split(/[\s(]/)[0].charAt(0)}</span>
+                  )}
+                  <span>{quoteAttribution}</span>
+                </>
+              )
+              return elder ? (
+                <Link to={`/f/${elder.clusterSlug}/tree`} className="mt-6 flex items-center justify-center gap-3 text-xs tracking-widest uppercase opacity-60 hover:opacity-90 transition-opacity">
+                  {inner}
+                </Link>
+              ) : (
+                <figcaption className="mt-6 flex items-center justify-center gap-3 text-xs tracking-widest uppercase opacity-60">
+                  {inner}
+                </figcaption>
+              )
+            })()}
           </figure>
         )}
         <div className="text-center mt-20 text-[11px] opacity-30 tracking-widest">· · ·</div>
@@ -384,57 +432,8 @@ function ImageCaption({ bg, cream }: { bg: BgSource; cream: string }) {
         <div className="text-[10px] opacity-45 mt-2 leading-relaxed">{bg.source} · {bg.license}</div>
         <button type="button" onClick={() => setOpen(true)} className="mt-3 text-[11px] tracking-[0.18em] uppercase opacity-60 hover:opacity-100 transition-opacity border-t border-white/10 pt-2 w-full text-left cursor-pointer" style={{ color: cream }}>View full ↗</button>
       </div>
-      {open && <Lightbox bg={bg} onClose={() => setOpen(false)} />}
+      {open && <Lightbox images={[bg]} index={0} onClose={() => setOpen(false)} />}
     </>
-  )
-}
-
-// ─────────────────────────  Lightbox  ──────────────────────────────────────
-function Lightbox({ bg, onClose }: { bg: BgSource; onClose: () => void }) {
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
-  }, [onClose])
-  return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-6" onClick={onClose}>
-      <button type="button" onClick={onClose} aria-label="Close" className="absolute top-6 right-6 text-white/60 hover:text-white text-3xl font-light w-10 h-10 flex items-center justify-center">×</button>
-      <div className="max-w-7xl w-full flex-1 flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-        <img src={bg.url} alt={bg.title} className="max-w-full max-h-[80vh] object-contain" />
-      </div>
-      <div className="mt-6 max-w-2xl text-center text-white/85" onClick={(e) => e.stopPropagation()}>
-        <div className="font-serif italic text-xl leading-snug">{bg.title}</div>
-        <div className="text-sm opacity-70 mt-2">{bg.year} · {bg.source} · {bg.license}</div>
-        <a href={bg.url} target="_blank" rel="noreferrer" className="inline-block mt-4 text-xs tracking-widest uppercase opacity-60 hover:opacity-100 border-b border-white/30">Open original ↗</a>
-      </div>
-    </div>
-  )
-}
-
-// ─────────────────────────  PhotoStrip  ────────────────────────────────────
-function PhotoStrip({ images, cream, ink }: { images: BgSource[]; cream: string; ink: string }) {
-  const [active, setActive] = useState<BgSource | null>(null)
-  if (images.length === 0) return null
-  return (
-    <section className="px-6 py-24" style={{ background: cream, color: ink }}>
-      <div className="max-w-6xl mx-auto">
-        <div className="text-[11px] tracking-[0.3em] uppercase opacity-50 mb-2">All photographs on this page</div>
-        <h2 className="font-serif font-light mb-12" style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}>The visual record</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {images.map((bg, i) => (
-            <button key={i} type="button" onClick={() => setActive(bg)} className="group text-left flex flex-col gap-2 cursor-pointer">
-              <div className="aspect-[4/3] overflow-hidden bg-ink/10">
-                <img src={bg.url} alt={bg.title} className="w-full h-full object-cover transition-transform group-hover:scale-[1.02]" style={{ filter: 'sepia(0.15)' }} />
-              </div>
-              <div className="font-serif italic text-sm leading-snug opacity-90">{bg.title}</div>
-              <div className="text-[11px] opacity-50">{bg.year} · {bg.source.split('·')[0].trim()}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-      {active && <Lightbox bg={active} onClose={() => setActive(null)} />}
-    </section>
   )
 }
 

@@ -45,7 +45,7 @@ export type DecadeBackdrop = {
 }
 
 export type LivingElderPin = {
-  storytellerSlug: string       // for /c/palm-island/research/people/<slug>
+  storytellerSlug: string       // for /elders/<slug>
   displayName: string           // "Frank Anderson"
   cultural: string              // "Bwgcolman · Mamu"
   clusterSlug: string           // for "see in cluster room" CTA
@@ -53,6 +53,8 @@ export type LivingElderPin = {
   birthDecade: number           // always given (1930s = 1930)
   birthDecadeLabel: string      // "born around 1939", "born late 1940s"
   oneLine: string               // appears on portal card
+  bio: string                   // 1-2 sentences for the profile page
+  country?: string              // "Warrongo · Mt Garnet to Upper Herbert" — optional Country detail
   avatarUrl?: string            // optional, falls back to initial
 }
 
@@ -320,6 +322,12 @@ export const EVENT_SLOTS: EventSlot[] = [
 // All nine PICC living elders surfaced in the wiki are pinned. Six were named
 // in the proposal; the cluster set has grown to nine since.
 
+// Real portrait URLs sourced from storytellers.public_avatar_url on
+// 2026-04-30. Hard-coded rather than fetched at runtime because the
+// /api/v2/communities/.../family-links endpoint is org-scoped and returns
+// zero rows for any non-PICC API key. Refresh via the seed script if a
+// portrait gets re-uploaded.
+
 export const LIVING_ELDER_PINS: LivingElderPin[] = [
   {
     storytellerSlug: 'allan-palm-island',
@@ -329,6 +337,9 @@ export const LIVING_ELDER_PINS: LivingElderPin[] = [
     birthDecade: 1950,
     birthDecadeLabel: 'born around the 1950s',
     oneLine: 'Manbarra Traditional Owner. Painter. PICC inaugural Traditional Owner Director.',
+    bio: 'Manbarra Traditional Owner and PICC inaugural Traditional Owner Director. Painter — uncle-allan and painting series carry law and Country in pigment. His father Walter Skipper was the boat-maker. The Tambo repatriation in 1994 and the elders\' return to Mission Beach in 2024 sit inside his living arc.',
+    country: 'Manbarra · Magnetic Island and Greater Palm Island',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775114118938_20251216-1E5A8879.jpg',
   },
   {
     storytellerSlug: 'frank-anderson',
@@ -336,9 +347,15 @@ export const LIVING_ELDER_PINS: LivingElderPin[] = [
     cultural: 'Bwgcolman',
     clusterSlug: 'anderson',
     birthYear: 1939,
-    birthDecade: 1930,
+    // Born 1939 but came of age in the 40s/50s — pinned on the dormitory-era
+    // panel since that's where his witness sits narratively. Birth year is
+    // preserved in the label.
+    birthDecade: 1940,
     birthDecadeLabel: 'born 1939',
     oneLine: 'Seventeen on Palm in 1957. Witnessed the dawn raids on the Magnificent Seven.',
+    bio: 'Born 1939. Grew up under the seven-am bell, the wages held in trust, the Aboriginals Protection Act. Seventeen on Palm in 1957 when the dawn raids took the Magnificent Seven — leg irons, families forcibly removed. He saw it from his own street. Carries the dormitory era and the strike in living memory.',
+    country: 'Bwgcolman',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775115444540_20251216-1E5A8934.jpg',
   },
   {
     storytellerSlug: 'marjoyie-burns',
@@ -348,6 +365,9 @@ export const LIVING_ELDER_PINS: LivingElderPin[] = [
     birthDecade: 1950,
     birthDecadeLabel: 'born around the 1950s',
     oneLine: "Granddaughter of Alf Palmer, the last native speaker of Warrongo.",
+    bio: 'Granddaughter of Alf Palmer (Jinbilnggay), the last native speaker of Warrongo. Cousin to Winifred Obah through Alf. Returned to Warrongo Country — Mt Garnet to the Upper Herbert — for the first time as an adult on the elders\' trip. Felt the spirit before the mind caught up.',
+    country: 'Warrongo · Mt Garnet to Upper Herbert River',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775115408529_20251216-1E5A8907.jpg',
   },
   {
     storytellerSlug: 'winifred-obah',
@@ -357,24 +377,33 @@ export const LIVING_ELDER_PINS: LivingElderPin[] = [
     birthDecade: 1950,
     birthDecadeLabel: 'born around the 1950s',
     oneLine: "Carries the verbal handing-down: \"It's verbally spoken where you tell your story.\"",
+    bio: 'Carries the verbal handing-down of the Palmer / Burns / Obah line. Cousin to Marjoyie through Alf Palmer (her grandmother\'s brother). Her grandfather is probably Allison Obah, witness at the 1930 Hoffman trial. Pending Tindale and AIATSIS confirmation.',
+    country: 'Warrongo · Durru · Warra · Gungandji · Djiru',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775115466337_20251216-1E5A8891.jpg',
   },
   {
     storytellerSlug: 'aunty-ethel-robertson',
-    displayName: 'Aunty Ethel Robertson',
+    displayName: 'Aunty Ethel Taylor Robertson',
     cultural: 'South Sea Islander · Bwgcolman',
     clusterSlug: 'ethel-iris-family',
     birthDecade: 1940,
     birthDecadeLabel: 'born around the 1940s',
     oneLine: "Managed the Palm Island pub after the Aboriginals Protection Act lifted.",
+    bio: 'Eldest of seventeen children, fourteen who lived. After the Protection Act lifted in 1971 she managed the Palm Island pub — among the first Aboriginal women to hold that role on the island. Sister to Aunty Iris May Whitey. South Sea Islander heritage running back through Halifax Camp.',
+    country: 'South Sea Islander · Bwgcolman · Halifax Camp',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775115007139_20251216-1E5A8914.jpg',
   },
   {
     storytellerSlug: 'aunty-iris-whitey',
-    displayName: 'Aunty Iris Whitey',
+    displayName: 'Aunty Iris May Whitey',
     cultural: 'South Sea Islander · Bwgcolman',
     clusterSlug: 'ethel-iris-family',
     birthDecade: 1940,
     birthDecadeLabel: 'born around the 1940s',
     oneLine: 'Robertson and Whitey families. The Halifax Camp era is in living memory.',
+    bio: 'Sister to Aunty Ethel. Robertson and Whitey families on Palm. The Halifax Camp era — South Sea Islander labour, sugar mills, the Hinchinbrook line — sits in living memory and is held in her witness.',
+    country: 'South Sea Islander · Bwgcolman · Halifax / Hinchinbrook',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/profile-images/storytellers/aunty_iris_may_whitey.jpg',
   },
   {
     storytellerSlug: 'elsa-watson',
@@ -384,6 +413,9 @@ export const LIVING_ELDER_PINS: LivingElderPin[] = [
     birthDecade: 1950,
     birthDecadeLabel: 'born around the 1950s',
     oneLine: "Daughter of Doreen Morton, who came to Palm at ten in the 1930s removal wave.",
+    bio: 'Daughter of Doreen Morton, who was removed to Palm at ten years old in the 1930s wave from the Atherton Tablelands. Mamu people. Carries the removal generation\'s testimony into the living elder line. Cousin link to Winifred Obah pending elder review.',
+    country: 'Mamu · Atherton Tablelands · Millaa Millaa',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775115312323_20251216-1E5A8943.jpg',
   },
   {
     storytellerSlug: 'cyndel-pryor',
@@ -393,15 +425,21 @@ export const LIVING_ELDER_PINS: LivingElderPin[] = [
     birthDecade: 1960,
     birthDecadeLabel: 'born around the 1960s',
     oneLine: "Carries the Pryor line. The 1930 Hoffman trial sits in family memory.",
+    bio: 'Carries the Pryor line on Palm. Birri-gubba and Bwgcolman. The 1930 Hoffman trial — her ancestor Peter Pryor (probable) shot Curry; Justice Douglas ruled the community\'s defence justifiable — sits in family memory. Brear / Pryor name-variant question pending elder review.',
+    country: 'Birri-gubba · Bowen / Bwgcolman',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775115278246_20251216-1E5A8955.jpg',
   },
   {
     storytellerSlug: 'gurtrude-richardson',
-    displayName: 'Gurtrude Richardson',
+    displayName: 'Gurtrude Grace Richardson',
     cultural: 'Bwgcolman',
     clusterSlug: 'richardson',
     birthDecade: 1950,
     birthDecadeLabel: 'born around the 1950s',
     oneLine: 'Richardson family. Three transcript-confirmed chapters; more pending elder review.',
+    bio: 'Richardson family on Palm. Three transcript-confirmed chapters surfaced to public; further detail (parent names, Country) pending an elder-review re-listen pass before public publish.',
+    country: 'Bwgcolman',
+    avatarUrl: 'https://yvnuayzslukamizrlhwb.supabase.co/storage/v1/object/public/media/d0a162d2-282e-4653-9d12-aa934c9dfa4e/1775115335268_20251216-1E5A8927.jpg',
   },
 ]
 
@@ -418,6 +456,62 @@ export const TODAY_GALLERY: TodayPortalCard[] = LIVING_ELDER_PINS.map((p) => ({
   oneLine: p.oneLine,
   avatarUrl: p.avatarUrl,
 }))
+
+// ─────────────────────  Attribution-string elder lookup  ────────────────────
+//
+// Used by ClusterShowcase chapter attributions, history-ribbon event panels,
+// and anywhere else an elder voice is named. Returns the matching pin so the
+// caller can render an avatar + tree link instead of plain text.
+
+const NAME_TOKENS = LIVING_ELDER_PINS.map((pin) => {
+  // First name after stripping Uncle/Aunty (e.g. "Ethel", "Frank", "Marjoyie").
+  const stripped = pin.displayName.replace(/^(Uncle|Aunty)\s+/i, '')
+  const first = stripped.split(' ')[0] || stripped
+  return { pin, token: first.toLowerCase() }
+})
+
+export function findElderInAttribution(text: string): LivingElderPin | null {
+  if (!text) return null
+  const lower = text.toLowerCase()
+  // Walk in registry order; first names are unique within the 9-elder set.
+  for (const { pin, token } of NAME_TOKENS) {
+    // Word-boundary check so "Allan" doesn't match a word containing "all".
+    const re = new RegExp(`\\b${token}\\b`, 'i')
+    if (re.test(lower)) return pin
+  }
+  return null
+}
+
+// ─────────────────────  Per-elder data collection  ──────────────────────────
+//
+// Lookup by slug + auto-collect quotes/events attributed to a specific elder.
+// Used by ElderProfilePage at /elders/<slug>.
+
+export function findElderBySlug(slug: string): LivingElderPin | undefined {
+  return LIVING_ELDER_PINS.find((p) => p.storytellerSlug === slug)
+}
+
+export type ElderEventReference = {
+  eventId: string
+  year: number
+  yearLabel: string
+  heading: string
+  eyebrow: string
+}
+
+/**
+ * Returns history events that this elder is named in (via connectedElders).
+ * Used to render "Events that hold this elder's voice" on the profile page.
+ */
+export function getEventsForElder(elderSlug: string): ElderEventReference[] {
+  return EVENT_SLOTS.filter((e) => e.connectedElders?.includes(elderSlug)).map((e) => ({
+    eventId: e.id,
+    year: e.year,
+    yearLabel: e.yearLabel,
+    heading: e.heading,
+    eyebrow: e.eyebrow,
+  }))
+}
 
 // ─────────────────────  Sorted scroll-order spine  ──────────────────────────
 
