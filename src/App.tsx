@@ -12,6 +12,7 @@ import CommunityLayout from './layouts/CommunityLayout'
 import LandingPage from './pages/LandingPage'
 import JoinPage from './pages/JoinPage'
 import ExplorePage from './pages/ExplorePage'
+import HistoryPage from './pages/HistoryPage'
 
 // Community pages
 import CommunityHomePage from './pages/CommunityHomePage'
@@ -49,6 +50,9 @@ export default function App() {
         <Route path="/join" element={<JoinPage />} />
         <Route path="/explore" element={<ExplorePage />} />
       </Route>
+
+      {/* Full-bleed standalone — escapes PublicLayout chrome */}
+      <Route path="/history" element={<HistoryPage />} />
 
       {/* Family shell */}
       <Route path="/f/:familySlug" element={<FamilyLayout />}>
