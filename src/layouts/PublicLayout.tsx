@@ -11,9 +11,24 @@ export default function PublicLayout() {
               A living story map
             </div>
           </NavLink>
-          <nav className="flex items-center gap-4 text-sm">
-            <NavLink to="/explore" className={({ isActive }) =>
+          <nav className="flex items-center gap-3 md:gap-5 text-sm">
+            <NavLink to="/history" className={({ isActive }) =>
+              `hidden sm:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              History
+            </NavLink>
+            <NavLink to="/elders" className={({ isActive }) =>
               `transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Elders
+            </NavLink>
+            <NavLink to="/journeys" className={({ isActive }) =>
+              `hidden sm:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Journeys
+            </NavLink>
+            <NavLink to="/explore" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
             }>
               Explore
             </NavLink>
