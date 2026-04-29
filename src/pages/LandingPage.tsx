@@ -81,13 +81,16 @@ const VOICE_CARDS: VoiceCard[] = [
 
 // ─────────────────────  Photo strip across decades  ──────────────────────────
 
+// Photo strip — chronological walk across 150 years.
+// Pulls from the timeline data + journey hero so the strip stays in sync
+// when those data files are updated.
 const STRIP_PHOTOS: RibbonImage[] = [
-  EVENT_SLOTS[0]!.bg,                       // 1880s frontier — Blencoe
-  EVENT_SLOTS[1]!.bg,                       // 1918 — Hinchinbrook
-  EVENT_SLOTS[2]!.bg,                       // 1928 — Palm Island
-  EVENT_SLOTS[3]!.bg,                       // 1935 — Victoria Mill Ingham
-  EVENT_SLOTS[4]!.bg,                       // 1954 — Atherton
-  EVENT_SLOTS[5]!.bg,                       // — Magnetic Island
+  EVENT_SLOTS[0]!.bg,                       // 1880s — Blencoe Falls
+  EVENT_SLOTS[1]!.bg,                       // 1918 — Innisfail cyclone
+  EVENT_SLOTS[2]!.bg,                       // 1930 — Curry rampage / Palm 1928
+  EVENT_SLOTS[3]!.bg,                       // 1957 — Victoria Mill Ingham
+  EVENT_SLOTS[4]!.bg,                       // 1971 — Atherton Tableland
+  EVENT_SLOTS[5]!.bg,                       // 1994 — Magnetic Island
 ]
 
 // ─────────────────────  Component  ───────────────────────────────────────────

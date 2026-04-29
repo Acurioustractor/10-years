@@ -79,6 +79,15 @@ export type RibbonPalette = {
 
 // ─────────────────────  Photo sources (recycled from cluster-configs)  ──────
 
+// Photos held back pending elder review (cultural protocol — identifiable
+// individuals in QSA Wikimedia uploads, default-deny until sign-off):
+//   - QSA 5813 boys' dormitory June 1931
+//   - QSA 5814 girls' dormitory June 1931
+//   - QSA 5795 / 5799 / 5802 residents June 1931
+//   - Henry Stone + unnamed Aboriginal man 1873
+// These sit in thoughts/shared/picc/photo-research/wikimedia-sweep-2026-04-30.md
+// and should be added here only after explicit elder consent.
+
 const IMG = {
   mtGarnet1901: {
     url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/StateLibQld_1_49744_Construction_of_Return_Creek_Railway_Bridge%2C_Mount_Garnet%2C_Queensland%2C_ca._1901.jpg/1920px-StateLibQld_1_49744_Construction_of_Return_Creek_Railway_Bridge%2C_Mount_Garnet%2C_Queensland%2C_ca._1901.jpg',
@@ -155,6 +164,47 @@ const IMG = {
     title: 'Bowen, Birri-gubba Country', year: '2007',
     source: 'Wikimedia Commons', license: 'CC BY-SA 3.0',
   },
+  // ─────────────────────  Ingested 2026-04-30 from research sweep  ────────────
+  innisfailCyclone1918: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Innisfail%27s_Downfall%2C_damage_from_the_cyclone%2C_1918.jpg',
+    title: "Innisfail's Downfall — cyclone damage", year: '1918',
+    source: 'Wikimedia Commons', license: 'PD-Australia',
+  },
+  innisfailAuctionMart1918: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/AUCTION_MART_AT_INNISFAIL_DESTROYED_BY_CYCLONE_-_1918_-_Flickr_-_Aussie~mobs.jpg',
+    title: 'Auction Mart at Innisfail destroyed by cyclone', year: '1918',
+    source: 'Wikimedia Commons · Aussie~mobs Flickr', license: 'PD-Australia',
+  },
+  palmIsland1931Wide: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Queensland_State_Archives_917_Palm_Island_North_Queensland_c_1931.png',
+    title: 'Palm Island, North Queensland (wide settlement view)', year: 'ca. 1931',
+    source: 'Queensland State Archives · Wikimedia Commons', license: 'Public domain',
+  },
+  hinchinbrookHunting1908: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/8/81/FMIB_36019_Hunting_grounds_at_Northeast_Bay%2C_Hinchinbrook_Island%2C_June_28%2C_1908_This_is_typical_of_the_country_prevalent_in_the_Prince.jpeg',
+    title: 'Hunting grounds, Northeast Bay, Hinchinbrook Island', year: 'June 1908',
+    source: 'FMIB · Wikimedia Commons', license: 'PD (US-no-renewal)',
+  },
+  hinchinbrookFromSea1908: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/9/9e/FMIB_34701_Hinchinbrook_Island%2C_from_the_Sea.jpeg',
+    title: 'Hinchinbrook Island, from the sea', year: '1908',
+    source: 'FMIB · Wikimedia Commons', license: 'PD (US-no-renewal)',
+  },
+  brookIsland1920: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Brook_Island_off_the_Queensland_coast%2C_north_of_Ingham%2C_ca._1920.jpg',
+    title: 'Brook Island, off the Queensland coast north of Ingham', year: 'ca. 1920',
+    source: 'State Library of Queensland · Wikimedia Commons', license: 'Public domain',
+  },
+  townsvilleFlindersSt1873: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/StateLibQld_1_88200_Lower_Flinders_Street%2C_Townsville%2C_ca._1873.jpg',
+    title: 'Lower Flinders Street, Townsville', year: 'ca. 1873',
+    source: 'State Library of Queensland · Wikimedia Commons', license: 'Public domain',
+  },
+  tourBoatPalm1931: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Queensland_State_Archives_1202_Tourist_Boat_off_Palm_Island_c_1931.png',
+    title: 'Tourist Boat off Palm Island', year: 'ca. 1931',
+    source: 'Queensland State Archives · Wikimedia Commons', license: 'Public domain',
+  },
 } satisfies Record<string, RibbonImage>
 
 // ─────────────────────  Palette (PICC-neutral earth-tone)  ──────────────────
@@ -205,7 +255,7 @@ export const DECADE_BACKDROPS: DecadeBackdrop[] = [
     decadeStart: 1920,
     label: 'The settlement years',
     caption: 'After 1918, Palm Island became the place where many were sent. Brass bands, dormitories, the Aboriginals Protection Act.',
-    bg: IMG.palmIsland1928,
+    bg: IMG.palmIsland1931Wide,
   },
   {
     id: 'midcentury',
@@ -256,7 +306,7 @@ export const EVENT_SLOTS: EventSlot[] = [
     body: 'The cyclone destroyed the Hull River Aboriginal Settlement. Survivors — Aboriginal people removed there from across the Far North coast and Tablelands — were transported to Palm Island in the months that followed. The Brisbane Courier reported the relocation complete on 6 June 1918. This is the moment Palm Island formally became Bwgcolman, the place where many were sent.',
     pullquote: 'The worst part of it was when Leonte hit it back in 1918. So people were devastated.',
     attribution: 'Allan Palm Island · Uncle Alan Interview',
-    bg: IMG.hinchinbrookChannel1935,
+    bg: IMG.innisfailCyclone1918,
     connectedClusters: ['allan-palm-island', 'mortoa-watson', 'palmer-burns-obah'],
     connectedElders: ['allan-palm-island', 'elsa-watson', 'winifred-obah'],
     wikiSource: 'wiki/events/1918-hull-river-cyclone-leonte.md',

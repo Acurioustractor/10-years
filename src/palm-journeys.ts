@@ -54,6 +54,32 @@ export type Journey = {
 // ─────────────────────  Photo sources (recycled)  ──────────────────────────
 
 const IMG = {
+  // ─────────────────────  Ingested 2026-04-30 from research sweep  ────────────
+  innisfailCyclone1918: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Innisfail%27s_Downfall%2C_damage_from_the_cyclone%2C_1918.jpg',
+    title: "Innisfail's Downfall — cyclone damage", year: '1918',
+    source: 'Wikimedia Commons', license: 'PD-Australia',
+  },
+  innisfailAuctionMart1918: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/AUCTION_MART_AT_INNISFAIL_DESTROYED_BY_CYCLONE_-_1918_-_Flickr_-_Aussie~mobs.jpg',
+    title: 'Auction Mart at Innisfail destroyed by cyclone', year: '1918',
+    source: 'Wikimedia Commons · Aussie~mobs Flickr', license: 'PD-Australia',
+  },
+  hinchinbrookHunting1908: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/8/81/FMIB_36019_Hunting_grounds_at_Northeast_Bay%2C_Hinchinbrook_Island%2C_June_28%2C_1908_This_is_typical_of_the_country_prevalent_in_the_Prince.jpeg',
+    title: 'Hunting grounds, Northeast Bay, Hinchinbrook Island', year: 'June 1908',
+    source: 'FMIB · Wikimedia Commons', license: 'PD (US-no-renewal)',
+  },
+  hinchinbrookFromSea1908: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/9/9e/FMIB_34701_Hinchinbrook_Island%2C_from_the_Sea.jpeg',
+    title: 'Hinchinbrook Island, from the sea', year: '1908',
+    source: 'FMIB · Wikimedia Commons', license: 'PD (US-no-renewal)',
+  },
+  brookIsland1920: {
+    url: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Brook_Island_off_the_Queensland_coast%2C_north_of_Ingham%2C_ca._1920.jpg',
+    title: 'Brook Island, off the Queensland coast north of Ingham', year: 'ca. 1920',
+    source: 'State Library of Queensland · Wikimedia Commons', license: 'Public domain',
+  },
   hinchinbrookWetlands2022: {
     url: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Wide_expanses_of_estuarine_wetlands._Hinchinbrook_Island_Lookout%2C_Bemerside%2C_2022.jpg',
     title: 'Coastal wetlands, North Queensland', year: '2022',
@@ -102,7 +128,7 @@ export const JOURNEYS: Journey[] = [
     date: '2024',
     yearLabel: '2024',
     location: 'Mission Beach · Djiru Country',
-    hero: IMG.hinchinbrookWetlands2022,
+    hero: IMG.innisfailCyclone1918,
     whyThisPlace: "In 1918 the cyclone Leonte destroyed the Hull River Aboriginal Settlement at Mission Beach. The Aboriginal people removed there from across the Far North coast and the Tablelands were transported to Palm Island in the months that followed. This is the moment Palm Island became Bwgcolman, the place where many were sent. In 2024 the PICC elders returned to Mission Beach together. Not nostalgia. A return to the place where ancestors suffered.",
     elderSlugs: ['allan-palm-island', 'winifred-obah'],
     chapters: [
@@ -112,7 +138,7 @@ export const JOURNEYS: Journey[] = [
         body: "Allan named the trip in his own voice. Not a visit. An uncovering. To stand where the ancestors stood, to feel for himself the pain that had been passed down as story.",
         pullquote: "We are on our way up to Mission Beach to uncover a scenery that would happen back in 1918. To uncover that, to see for myself and actually feel their pain and suffering. It's like passing on a message and follow that message where it will lead you to.",
         attribution: 'Allan Palm Island · Lucinda Interview',
-        bg: IMG.hinchinbrookWetlands2022,
+        bg: IMG.hinchinbrookHunting1908,
       },
       {
         eyebrow: 'The reserve',
@@ -128,7 +154,7 @@ export const JOURNEYS: Journey[] = [
         body: 'The cyclone hit on the night of 10 March 1918. The settlement was destroyed. Survivors — the people who had been removed there from across the Far North coast and Tablelands — were transported to Palm in the months that followed.',
         pullquote: "The worst part of it was when Leonte hit it back in 1918. So people were devastated.",
         attribution: 'Allan Palm Island · Uncle Alan Interview',
-        bg: IMG.hinchinbrookChannel1935,
+        bg: IMG.innisfailAuctionMart1918,
       },
       {
         eyebrow: 'The Obah line',
@@ -136,7 +162,7 @@ export const JOURNEYS: Journey[] = [
         body: "Winifred names the family path directly: her people were at the whole Hull River Mission, then dispersed to Mission Beach. The 1918 cyclone is part of her line too, and the 100-year corroboree on Palm in 2018 was hers as much as anyone's.",
         pullquote: "We had our hundred year anniversary, it was in 2018. You know, when they did all the corroboree in there for five minutes nonstop.",
         attribution: 'Winifred Obah · Elders Trip Interview',
-        bg: IMG.hinchinbrookWetlands2022,
+        bg: IMG.brookIsland1920,
       },
     ],
     closingReflection: {
@@ -145,7 +171,7 @@ export const JOURNEYS: Journey[] = [
       attribution: 'Allan Palm Island',
     },
     connectedEventIds: ['1918-hull-river-cyclone'],
-    notes: 'Drafted from existing transcripts. Photo is a stand-in; sourcing pass needed for Mission Beach / Hull River specific imagery (QSA records, Trove 1918 coverage).',
+    notes: 'Drafted from Allan + Winifred transcripts. Hero is the 1918 Innisfail cyclone damage (the same Leonte that destroyed Hull River — era-correct). Chapters draw on 1908 Hinchinbrook Country, 1935 channel, 1918 Innisfail, 1920 Brook Island. Mission Beach 2024 trip-day photos still pending: Ben + PICC photographer hold these family-side.',
   },
   {
     slug: 'atherton-tablelands-2026',
