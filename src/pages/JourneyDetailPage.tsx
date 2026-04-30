@@ -11,6 +11,8 @@ import { EVENT_SLOTS, LIVING_ELDER_PINS, RIBBON_PALETTE } from '@/palm-history-t
 import Lightbox, { type LightboxImage } from '@/components/Lightbox'
 import VideoHero from '@/components/VideoHero'
 import MediaGallery, { type GalleryItem } from '@/components/MediaGallery'
+import VideoQuoteSection from '@/components/VideoQuoteSection'
+import TripMap from '@/components/TripMap'
 
 const P = RIBBON_PALETTE
 
@@ -171,6 +173,21 @@ export default function JourneyDetailPage() {
         </div>
       </section>
 
+      {/* Trip map — stylised SVG of route */}
+      {journey.tripMap && (
+        <TripMap
+          locations={journey.tripMap.locations}
+          routes={journey.tripMap.routes}
+          cream={P.cream}
+          ink={P.ink}
+          ochre={P.ochre}
+          amber={P.amber}
+          eyebrow={journey.tripMap.eyebrow}
+          heading={journey.tripMap.heading}
+          caption={journey.tripMap.caption}
+        />
+      )}
+
       {/* Descript embed — produced documentary */}
       {journey.descriptEmbedUrl && (
         <section className="py-16 px-6" style={{ background: P.ink }}>
@@ -257,6 +274,27 @@ export default function JourneyDetailPage() {
         </section>
       ))}
 
+      {/* Video-quote panels — full-screen cinematic pullquotes */}
+      {journey.videoQuotes && journey.videoQuotes.length > 0 &&
+        journey.videoQuotes.map((vq, i) => {
+          const elderPin = vq.attributionElderSlug
+            ? LIVING_ELDER_PINS.find((e) => e.storytellerSlug === vq.attributionElderSlug)
+            : undefined
+          return (
+            <VideoQuoteSection
+              key={`vq-${i}`}
+              videoSrc={vq.videoSrc}
+              poster={vq.poster}
+              quote={vq.quote}
+              attribution={vq.attribution}
+              cream={P.cream}
+              ink={P.ink}
+              amber={P.amber}
+              attributionAvatarUrl={elderPin?.avatarUrl}
+            />
+          )
+        })}
+
       {/* Per-elder voices from this trip */}
       {journey.elderQuotes && journey.elderQuotes.length > 0 && (
         <section className="py-24 px-6" style={{ background: P.cream }}>
@@ -337,6 +375,102 @@ export default function JourneyDetailPage() {
           eyebrow="Trip media"
           heading="The visual record"
         />
+      )}
+
+      {/* Planning notes — for planned/dreaming trips */}
+      {journey.planningNotes && journey.planningNotes.length > 0 && (
+        <section className="px-6 py-24" style={{ background: hexToRgba(P.ochre, 0.06) }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="text-[11px] tracking-[0.3em] uppercase mb-4" style={{ color: P.ochre }}>
+                Planning notes
+              </div>
+              <h2 className="font-serif font-light leading-[1.05]" style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}>
+                What we know going in
+              </h2>
+            </div>
+            <div className="space-y-6">
+              {journey.planningNotes.map((note, i) => (
+                <div
+                  key={i}
+                  className="p-6 md:p-8"
+                  style={{ background: P.cream, border: `1px solid ${hexToRgba(P.ink, 0.08)}` }}
+                >
+                  <div className="flex items-baseline justify-between gap-4 mb-3 flex-wrap">
+                    <h3 className="font-serif text-xl md:text-2xl leading-tight">{note.heading}</h3>
+                    {note.status && (
+                      <div
+                        className="text-[10px] tracking-widest uppercase px-2 py-0.5"
+                        style={{
+                          background: note.status === 'confirmed' ? hexToRgba(P.ochre, 0.15) : hexToRgba(P.amber, 0.18),
+                          color: P.ochre,
+                        }}
+                      >
+                        {note.status}
+                      </div>
+                    )}
+                  </div>
+                  <p className="font-serif italic text-base md:text-lg leading-[1.7] opacity-85">
+                    {note.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* People to visit — for planned/dreaming trips */}
+      {journey.peopleToVisit && journey.peopleToVisit.length > 0 && (
+        <section className="px-6 py-24">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="text-[11px] tracking-[0.3em] uppercase mb-4" style={{ color: P.ochre }}>
+                Who we want to visit
+              </div>
+              <h2 className="font-serif font-light leading-[1.05]" style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}>
+                Reaching out across Country
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {journey.peopleToVisit.map((p, i) => (
+                <div
+                  key={i}
+                  className="p-6"
+                  style={{ background: hexToRgba(P.ochre, 0.05), border: `1px solid ${hexToRgba(P.ink, 0.08)}` }}
+                >
+                  <div className="flex items-baseline justify-between gap-4 mb-3 flex-wrap">
+                    <h3 className="font-serif text-lg leading-tight">{p.name}</h3>
+                    <div
+                      className="text-[10px] tracking-widest uppercase px-2 py-0.5"
+                      style={{
+                        background:
+                          p.status === 'arranged'
+                            ? hexToRgba(P.ochre, 0.2)
+                            : p.status === 'reaching-out'
+                              ? hexToRgba(P.amber, 0.18)
+                              : hexToRgba(P.ink, 0.06),
+                        color: P.ochre,
+                      }}
+                    >
+                      {p.status === 'reaching-out' ? 'reaching out' : p.status}
+                    </div>
+                  </div>
+                  <p className="font-serif italic text-sm leading-relaxed opacity-80 mb-3">{p.why}</p>
+                  {p.country && (
+                    <Link
+                      to={`/places/${p.country}`}
+                      className="text-[10px] tracking-widest uppercase underline-offset-4 hover:underline"
+                      style={{ color: P.ochre }}
+                    >
+                      {p.country.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} →
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
       {/* Closing reflection */}

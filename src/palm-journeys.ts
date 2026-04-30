@@ -49,6 +49,52 @@ export type ElderQuote = {
   pendingReview?: boolean                     // true until elder approves public surface
 }
 
+export type VideoQuote = {
+  videoSrc: string                            // /media/clips/<file>.mp4
+  poster?: string
+  quote: string
+  attribution: string
+  attributionElderSlug?: string               // for portrait avatar lookup in LIVING_ELDER_PINS
+}
+
+export type PlanningNote = {
+  heading: string
+  body: string
+  status?: 'confirmed' | 'proposed' | 'dreaming'
+}
+
+export type PersonToVisit = {
+  name: string                                // "Doreen Morton's family" or "Yidinji elders, Atherton"
+  why: string                                 // one-line — the connection
+  country?: string                            // optional Country slug → /places
+  status: 'arranged' | 'reaching-out' | 'aspiring'
+}
+
+export type TripMapLocation = {
+  id: string
+  x: number
+  y: number
+  label: string
+  sublabel?: string
+  isOrigin?: boolean
+  isPlanned?: boolean
+}
+
+export type TripMapRoute = {
+  fromId: string
+  toId: string
+  curve?: { x: number; y: number }
+  status: 'past' | 'planned'
+}
+
+export type TripMapConfig = {
+  locations: TripMapLocation[]
+  routes: TripMapRoute[]
+  caption?: string
+  heading?: string
+  eyebrow?: string
+}
+
 export type Journey = {
   slug: string
   title: string
@@ -65,7 +111,11 @@ export type Journey = {
   elderSlugs: string[]                        // /elders/<slug> — who went / is going
   notGoingNote?: string                       // editorial note when an elder is conspicuously absent (e.g. Aunty Iris)
   chapters: JourneyChapter[]
-  elderQuotes?: ElderQuote[]                  // per-elder voice from this trip
+  elderQuotes?: ElderQuote[]                  // per-elder voice from this trip — past trips only
+  videoQuotes?: VideoQuote[]                  // full-screen video panels with overlaid quotes
+  tripMap?: TripMapConfig                     // stylised SVG map of the trip route
+  planningNotes?: PlanningNote[]              // for planned/dreaming trips
+  peopleToVisit?: PersonToVisit[]             // for planned/dreaming trips
   gallery?: JourneyGalleryItem[]              // mixed stills + clips, appears between chapters and closing
   closingReflection?: {
     body: string
@@ -194,6 +244,47 @@ export const JOURNEYS: Journey[] = [
       'gurtrude-richardson',
     ],
     notGoingNote: 'Aunty Iris May Whitey did not travel on this trip — held at home with family. Her sister Aunty Ethel went and brought back the witness.',
+    videoQuotes: [
+      {
+        videoSrc: '/media/clips/country-waterfall.mp4',
+        poster: '/media/stills/waterfall.jpg',
+        quote: "We are on our way up to Mission Beach to uncover a scenery that would happen back in 1918. To uncover that, to see for myself.",
+        attribution: 'Allan Palm Island · Lucinda Interview',
+        attributionElderSlug: 'allan-palm-island',
+      },
+      {
+        videoSrc: '/media/clips/palm-island-aerial.mp4',
+        poster: '/media/stills/jetty-aerial.jpg',
+        quote: "It's verbal, it's verbally spoken where you tell your story and you're handing it down.",
+        attribution: 'Winifred Obah · Elders Trip Interview',
+        attributionElderSlug: 'winifred-obah',
+      },
+      {
+        videoSrc: '/media/clips/palm-island-sunset.mp4',
+        poster: '/media/stills/palm-sunset-pier.jpg',
+        quote: "It's like passing on a message and follow that message where it will lead you to.",
+        attribution: 'Allan Palm Island · Lucinda Interview',
+        attributionElderSlug: 'allan-palm-island',
+      },
+    ],
+    tripMap: {
+      eyebrow: 'The route',
+      heading: 'Palm to Mission Beach, October 2025',
+      caption: 'Three days walking back to where the families were taken from. Hover any point for the family connection.',
+      locations: [
+        { id: 'palm-island', x: 78, y: 50, label: 'Palm Island', sublabel: 'Bwgcolman · the elders\' home', isOrigin: true },
+        { id: 'townsville', x: 73, y: 53, label: 'Townsville', sublabel: 'Departure point', },
+        { id: 'halifax', x: 65, y: 41, label: 'Halifax', sublabel: 'Aunty Ethel + Iris\'s family ground' },
+        { id: 'tully', x: 53, y: 33, label: 'Tully', sublabel: 'Madge Thaiday\'s Country (Girramay)' },
+        { id: 'mission-beach', x: 56, y: 30, label: 'Mission Beach', sublabel: 'The Hull River reserve site' },
+      ],
+      routes: [
+        { fromId: 'palm-island', toId: 'townsville', status: 'past', curve: { x: 76, y: 52 } },
+        { fromId: 'townsville', toId: 'halifax', status: 'past', curve: { x: 67, y: 45 } },
+        { fromId: 'halifax', toId: 'tully', status: 'past', curve: { x: 57, y: 35 } },
+        { fromId: 'tully', toId: 'mission-beach', status: 'past', curve: { x: 54, y: 31 } },
+      ],
+    },
     chapters: [
       {
         eyebrow: 'Why we went',
@@ -320,50 +411,141 @@ export const JOURNEYS: Journey[] = [
     chapters: [
       {
         eyebrow: 'The Country',
-        heading: 'Mamu, Warrongo, Jirrbal',
-        body: "Three connected language groups across the Tablelands. The 1880s tin rush brought violence to Warrongo. The 1918 cyclone pushed survivors south. By the 1930s the removal pipeline was sweeping ten-year-olds like Doreen Morton onto the Palm boats. Marjoyie's grandmother Lizzie Palmer, Alf's sister, walked this Country. Allan's mother's family worked stations here.",
-        pullquote: "Where I come from, I got my mother, my mother is a Giribau. My mother and grandmother, they all worked at the station. They worked at a station called Kunawara.",
-        attribution: 'Allan Palm Island · Painting Interview',
+        heading: 'Mamu, Warrongo, Yidinji',
+        body: "Three connected Country threads across the Tablelands. The 1880s tin rush brought violence to Warrongo. The 1918 cyclone pushed survivors south. By the 1930s the removal pipeline was sweeping ten-year-olds like Doreen Morton onto the Palm boats. Yidinji is the Country Atherton itself sits on. The trip walks each in turn — not as separate visits but as one continuous arc.",
         bg: IMG.mtGarnet1901,
       },
       {
-        eyebrow: 'What Country does',
-        heading: "The body knows before the mind does",
-        body: "The elders who have already returned to Country describe the same thing — a body recognition that arrives before the mind catches up. Marjoyie returning to Warrongo Country, Winifred to ancestors. The Atherton trip will hold this same threshold for Elsa returning to Mamu Country, for the others walking forward into where the ancestors were taken from.",
-        pullquote: "I'm very happy to be here standing on Jirrbal Country from my grandmother. Just walking in, in on country there like, for me to think. It's very emotional, you know.",
-        attribution: 'Marjoyie Burns · Elders Trip Interview',
+        eyebrow: 'What we walk back toward',
+        heading: "Returning before the trip",
+        body: "Several PICC elders have already returned to Country in earlier years — Marjoyie to Warrongo, Winifred to her ancestor places. They describe a body recognition that arrives before the mind catches up. Atherton 2026 holds this same threshold for Elsa returning to Mamu Country, for the others walking forward into where the ancestors were taken from. The voice from those earlier returns is held on the Mission Beach 2024 page; this trip will record its own.",
         bg: IMG.blencoeFalls2022,
       },
       {
-        eyebrow: 'Spirit',
-        heading: "I felt the ancestor spirit",
-        body: "Winifred's words from a previous return apply forward. The trip into Country is not metaphor. The elders describe a physical presence of the line, a body memory that returns when the foot meets the ground.",
-        pullquote: "I felt the ancestor spirit. It's like they were around us because my back went funny. I felt like there was spikes on my back, like my hair was standing.",
-        attribution: 'Winifred Obah · Elders Trip Interview',
+        eyebrow: 'Names the elders carry',
+        heading: 'Doreen, Alf, Lizzie, Baja',
+        body: "Names walking with the elders into the Tablelands. Doreen Morton — Elsa's mother — taken to Palm at ten. Alf Palmer (Jinbilnggay) — Marjoyie's grandfather, the last native speaker of Warrongo. Lizzie Palmer — Alf's sister, Marjoyie's other line. Baja Balanar — Allan's mother's grandmother, the Kunawara station era. Madge Thaiday — Aunty Dulcie's mother, Girramay from Tully. Each name a line into Country.",
         bg: IMG.millaaMillaaFalls,
       },
       {
         eyebrow: 'What we hope to find',
-        heading: 'Doreen, Alf, Lizzie, Baja',
-        body: "Names the elders carry into Country. Doreen Morton — Elsa's mother — taken to Palm at ten. Alf Palmer (Jinbilnggay) — Marjoyie's grandfather, the last native speaker of Warrongo. Lizzie Palmer — Alf's sister, Marjoyie's other line. Baja Balanar — Allan's mother's grandmother, station era. Four names walking with the elders into the Tablelands.",
+        heading: 'Country first, voice second',
+        body: 'The elders walk in to feel the ground before they tell its story. Welcome-to-Country protocols at Atherton, sacred protocols at Blencoe Falls (the Lucy site, family-held), permission protocols on Mt Garnet station Country. Voice gets recorded only after the welcome.',
         bg: IMG.athertonTableland1954,
       },
       {
         eyebrow: 'The 20-year arc',
         heading: 'A permanent archive of community voice',
         body: "The Atherton trip sits inside PICC's 20-year vision — the next two decades of community-controlled infrastructure for every Palm Islander. Aged care on Palm by 2028. Delegated Authority expanded into health and justice by 2030. The voice capture sprint that this journey contributes to is the foundation: a permanent archive that grows stronger every year. The elders walking into Country are recording so the children can keep correcting.",
-        pullquote: "Decisions about Palm Island children now being made by Palm Island people.",
-        attribution: 'PICC 2024-25 Annual Report · Bwgcolman Way',
         bg: IMG.athertonTableland1954,
       },
     ],
+    videoQuotes: [
+      {
+        videoSrc: '/media/clips/mountain-panorama.mp4',
+        poster: '/media/stills/mountain-valley.jpg',
+        quote: "The body knows before the mind does. Country recognition arrives before language for it.",
+        attribution: 'PICC framing · Atherton 2026 pre-trip',
+      },
+    ],
+    tripMap: {
+      eyebrow: 'The planned route',
+      heading: 'Palm to the Tablelands, late 2026',
+      caption: 'Dashed lines show planned legs — final route locked once the elders confirm. Hover any point for the family connection.',
+      locations: [
+        { id: 'palm-island', x: 78, y: 50, label: 'Palm Island', sublabel: 'Bwgcolman · the elders\' home', isOrigin: true },
+        { id: 'townsville', x: 73, y: 53, label: 'Townsville', sublabel: 'Departure point' },
+        { id: 'cairns', x: 50, y: 18, label: 'Cairns', sublabel: 'Yidinji Country · arrival', isPlanned: true },
+        { id: 'atherton', x: 38, y: 22, label: 'Atherton', sublabel: 'Yidinji · Tablelands base', isPlanned: true },
+        { id: 'millaa-millaa', x: 38, y: 28, label: 'Millaa Millaa', sublabel: 'Mamu · Doreen Morton taken from here', isPlanned: true },
+        { id: 'tully', x: 53, y: 33, label: 'Tully', sublabel: 'Girramay · Madge Thaiday + Cyndel\'s mother\'s line', isPlanned: true },
+        { id: 'mt-garnet', x: 22, y: 26, label: 'Mt Garnet', sublabel: 'Warrongo · Alf Palmer + Allan\'s mother\'s station', isPlanned: true },
+      ],
+      routes: [
+        { fromId: 'palm-island', toId: 'townsville', status: 'past', curve: { x: 76, y: 52 } },
+        { fromId: 'townsville', toId: 'cairns', status: 'planned', curve: { x: 60, y: 35 } },
+        { fromId: 'cairns', toId: 'atherton', status: 'planned', curve: { x: 44, y: 18 } },
+        { fromId: 'atherton', toId: 'millaa-millaa', status: 'planned' },
+        { fromId: 'millaa-millaa', toId: 'mt-garnet', status: 'planned', curve: { x: 28, y: 30 } },
+        { fromId: 'mt-garnet', toId: 'tully', status: 'planned', curve: { x: 38, y: 32 } },
+      ],
+    },
+    planningNotes: [
+      {
+        heading: 'The voice-capture sprint',
+        body: 'Atherton 2026 sits inside the 20-year Launchpad as part of E1 / E5 — the voice capture sprint targeting 60 voices by the celebration. The trip is one of three primary capture moments alongside the celebration ceremony and the Bwgcolman Way case study interviews.',
+        status: 'confirmed',
+      },
+      {
+        heading: 'Three Country layers, one trip',
+        body: 'The Tablelands hold three connected Country threads: Mamu (Doreen Morton, Elsa\'s line), Warrongo (Alf Palmer, Marjoyie\'s line), Yidinji (Atherton itself). The trip walks each in turn — not as separate visits but as a single continuous arc.',
+        status: 'confirmed',
+      },
+      {
+        heading: 'Date — to be locked',
+        body: 'Late 2026 — exact dates pending Rachel\'s next workshop output (~late May 2026). Likely September–November window to align with dry-season access to Mt Garnet station country.',
+        status: 'proposed',
+      },
+      {
+        heading: 'The crew',
+        body: 'All 9 PICC living elders currently participating in planning. Final attendance per elder confirmed closer to date — Aunty Iris pending health check at the time.',
+        status: 'proposed',
+      },
+      {
+        heading: 'Cultural protocol',
+        body: 'Welcome-to-Country from Yidinji elders required at Atherton arrival. Sacred protocols at Blencoe Falls (Lucy site) — Marjoyie + Winifred lead the family-held framing. Mt Garnet station access TBD with current pastoral lessees.',
+        status: 'proposed',
+      },
+      {
+        heading: 'What gets captured',
+        body: 'Per-elder return-to-Country voice (transcripts) + landscape footage + family-held imagery (with consent). After the trip, this Atherton page rewrites from elder voice the way Mission Beach 2024 already has.',
+        status: 'confirmed',
+      },
+    ],
+    peopleToVisit: [
+      {
+        name: "Doreen Morton's family · Millaa Millaa",
+        why: "Elsa Watson's mother was taken from here at ten years old. Reaching out to descendants of the Mamu line who stayed.",
+        country: 'mamu',
+        status: 'reaching-out',
+      },
+      {
+        name: 'Warrongo language descendants · Mt Garnet',
+        why: "Alf Palmer (Marjoyie's grandfather) was the last native speaker. Rachel Cummins (Alf's granddaughter) led the language revival from 2002 — possible host for the Mt Garnet leg.",
+        country: 'warrongo',
+        status: 'reaching-out',
+      },
+      {
+        name: 'Yidinji elders · Atherton',
+        why: "Welcome-to-Country protocol for the Tableland leg. Working through Cairns Indigenous community contacts.",
+        status: 'aspiring',
+      },
+      {
+        name: "Cyndel's mother's people · Tully + Murray Upper",
+        why: "Cyndel's Stolen Generation mother came from this Country. The 2024 trip began the search; 2026 continues it.",
+        country: 'girramay',
+        status: 'reaching-out',
+      },
+      {
+        name: "Madge Thaiday's people · Tully (Girramay)",
+        why: "Aunty Dulcie Isaro's mother. The Thaiday line carries Erub + Lifou + Mer + Girramay across three generations.",
+        country: 'girramay',
+        status: 'aspiring',
+      },
+      {
+        name: "Baja Balanar's family · Kunawara station, Mt Garnet",
+        why: "Allan's mother's grandmother worked the station. Family memory points to descendants in the area — pending elder review pass with Allan to surface names.",
+        country: 'warrongo',
+        status: 'aspiring',
+      },
+    ],
     closingReflection: {
-      body: 'Pending. The page will be re-drafted from elder voice after the trip. What gets recorded here now is the framing the elders carry going in.',
+      body: 'The page is the planning. After the trip, this rewrites from elder voice — the way Mission Beach 2024 already has. The framing here is what the elders carry going in.',
       pullquote: 'Our cultural authority is recognised alongside the law.',
       attribution: 'Bwgcolman Way · community framing',
     },
     connectedEventIds: ['1918-hull-river-cyclone'],
-    notes: 'Pre-trip framing. Hero video + gallery + chapters drafted ahead of the trip; after the journey returns, replace chapters with elder voice from new transcripts. Trip-specific Tablelands family-held photographs to source via Rachel + Narelle post-trip handoff.',
+    notes: 'Pre-trip planning page. Elder quotes deliberately omitted — those belong on Mission Beach 2024 (the past trip). Locked dates + final route pending Rachel\'s workshop output (~late May 2026). After the journey returns, replace chapters with elder voice from new transcripts.',
   },
   {
     slug: 'next-bridge',
