@@ -9,6 +9,8 @@ import { Link, useParams } from 'react-router-dom'
 import { findJourneyBySlug } from '@/palm-journeys'
 import { EVENT_SLOTS, LIVING_ELDER_PINS, RIBBON_PALETTE } from '@/palm-history-timeline'
 import Lightbox, { type LightboxImage } from '@/components/Lightbox'
+import VideoHero from '@/components/VideoHero'
+import MediaGallery, { type GalleryItem } from '@/components/MediaGallery'
 
 const P = RIBBON_PALETTE
 
@@ -71,19 +73,30 @@ export default function JourneyDetailPage() {
         className="relative min-h-[80vh] flex flex-col items-center justify-center text-center px-6 py-24 mt-4 overflow-hidden"
         style={{ color: P.cream }}
       >
-        <button
-          type="button"
-          onClick={() => setLightboxIndex(0)}
-          aria-label={`Open photo: ${journey.hero.title}`}
-          className="absolute inset-0 w-full h-full cursor-zoom-in"
-        >
-          <img
-            src={journey.hero.url}
-            alt={journey.hero.title}
-            className="w-full h-full object-cover"
-            style={{ filter: 'sepia(0.4) brightness(0.42) contrast(1.05)' }}
-          />
-        </button>
+        {journey.heroVideo ? (
+          <div className="absolute inset-0">
+            <VideoHero
+              src={journey.heroVideo.src}
+              poster={journey.heroVideo.poster || journey.hero.url}
+              alt={journey.heroVideo.title}
+              filter="sepia(0.35) brightness(0.45) contrast(1.05)"
+            />
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setLightboxIndex(0)}
+            aria-label={`Open photo: ${journey.hero.title}`}
+            className="absolute inset-0 w-full h-full cursor-zoom-in"
+          >
+            <img
+              src={journey.hero.url}
+              alt={journey.hero.title}
+              className="w-full h-full object-cover"
+              style={{ filter: 'sepia(0.4) brightness(0.42) contrast(1.05)' }}
+            />
+          </button>
+        )}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -216,6 +229,18 @@ export default function JourneyDetailPage() {
           </div>
         </section>
       ))}
+
+      {/* Gallery — stills + clips from the trip */}
+      {journey.gallery && journey.gallery.length > 0 && (
+        <MediaGallery
+          items={journey.gallery as GalleryItem[]}
+          cream={P.cream}
+          ink={P.ink}
+          ochre={P.ochre}
+          eyebrow="Trip media"
+          heading="The visual record"
+        />
+      )}
 
       {/* Closing reflection */}
       {journey.closingReflection && (

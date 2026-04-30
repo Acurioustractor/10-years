@@ -29,6 +29,19 @@ export type JourneyChapter = {
   bg?: JourneyImage       // optional photo backdrop
 }
 
+export type JourneyVideo = {
+  src: string                                 // /media/clips/<file>.mp4
+  poster?: string                             // optional fallback still
+  title: string
+  year: string
+  source: string
+  license: string
+}
+
+export type JourneyGalleryItem =
+  | { kind: 'still'; url: string; title: string; year: string; source: string; license: string }
+  | { kind: 'clip';  url: string; poster?: string; title: string; year: string; source: string; license: string }
+
 export type Journey = {
   slug: string
   title: string
@@ -38,9 +51,11 @@ export type Journey = {
   yearLabel: string                           // "2024", "2026"
   location: string                            // "Mission Beach · Djiru Country"
   hero: JourneyImage
+  heroVideo?: JourneyVideo                    // optional video hero — overrides hero image when present
   whyThisPlace: string                        // 2-3 sentences
   elderSlugs: string[]                        // /elders/<slug>
   chapters: JourneyChapter[]
+  gallery?: JourneyGalleryItem[]              // mixed stills + clips, appears between chapters and closing
   closingReflection?: {
     body: string
     pullquote?: string
@@ -129,6 +144,24 @@ export const JOURNEYS: Journey[] = [
     yearLabel: '2024',
     location: 'Mission Beach · Djiru Country',
     hero: IMG.innisfailCyclone1918,
+    heroVideo: {
+      src: '/media/clips/elders-on-country.mp4',
+      poster: '/media/stills/waterfall-landscape.jpg',
+      title: 'Elders on Country',
+      year: '2024–25',
+      source: 'PICC media · Palm Island Community Company',
+      license: 'PICC consent · cultural protocol',
+    },
+    gallery: [
+      { kind: 'still', url: '/media/stills/memorial-gathering.jpg', title: 'Memorial gathering', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'still', url: '/media/stills/group-dinner.jpg', title: 'Elders together at dinner', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'still', url: '/media/stills/jetty-aerial.jpg', title: 'Jetty, aerial', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'still', url: '/media/stills/palm-sunset-pier.jpg', title: 'Palm sunset, pier', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'still', url: '/media/stills/palm-sunset-palms.jpg', title: 'Palm sunset', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'clip', url: '/media/clips/palm-island-aerial.mp4', poster: '/media/stills/jetty-aerial.jpg', title: 'Palm Island aerial', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'clip', url: '/media/clips/palm-island-sunset.mp4', poster: '/media/stills/palm-sunset-pier.jpg', title: 'Palm Island sunset', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'clip', url: '/media/clips/country-waterfall.mp4', poster: '/media/stills/waterfall.jpg', title: 'Country waterfall', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+    ],
     whyThisPlace: "In 1918 the cyclone Leonte destroyed the Hull River Aboriginal Settlement at Mission Beach. The Aboriginal people removed there from across the Far North coast and the Tablelands were transported to Palm Island in the months that followed. This is the moment Palm Island became Bwgcolman, the place where many were sent. In 2024 the PICC elders returned to Mission Beach together. Not nostalgia. A return to the place where ancestors suffered.",
     elderSlugs: ['allan-palm-island', 'winifred-obah'],
     chapters: [
@@ -182,6 +215,21 @@ export const JOURNEYS: Journey[] = [
     yearLabel: '2026',
     location: 'Atherton Tablelands · Mamu / Warrongo / Jirrbal Country',
     hero: IMG.athertonTableland1954,
+    heroVideo: {
+      src: '/media/clips/mountain-panorama.mp4',
+      poster: '/media/stills/mountain-valley.jpg',
+      title: 'Atherton Tableland · Mountain panorama',
+      year: '',
+      source: 'PICC media · Palm Island Community Company',
+      license: 'PICC consent · cultural protocol',
+    },
+    gallery: [
+      { kind: 'still', url: '/media/stills/mountain-valley.jpg', title: 'Mountain valley, Tablelands', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'still', url: '/media/stills/waterfall.jpg', title: 'Waterfall, Tablelands ranges', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'still', url: '/media/stills/waterfall-landscape.jpg', title: 'Waterfall landscape', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'clip', url: '/media/clips/country-waterfall.mp4', poster: '/media/stills/waterfall.jpg', title: 'Country waterfall', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+      { kind: 'clip', url: '/media/clips/mountain-panorama.mp4', poster: '/media/stills/mountain-valley.jpg', title: 'Mountain panorama', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
+    ],
     whyThisPlace: "The Tablelands hold the source landscape for three of Palm Island's family lines. Doreen Morton was removed from here at ten years old in the 1930s wave. Alf Palmer carried Warrongo language out of Mt Garnet. Allan's mother — Giribau, likely Jirrbal — has family memory of station work at Kunawara near Mt Garnet. The 2026 trip walks the Country these families were taken from. The trust loop with Mission Beach 2024 builds: each return prepares the next.",
     elderSlugs: ['marjoyie-burns', 'winifred-obah', 'elsa-watson', 'allan-palm-island'],
     chapters: [
@@ -215,12 +263,22 @@ export const JOURNEYS: Journey[] = [
         body: "Names the elders carry into Country. Doreen Morton — Elsa's mother — taken to Palm at ten. Alf Palmer (Jinbilnggay) — Marjoyie's grandfather, the last native speaker of Warrongo. Lizzie Palmer — Alf's sister, Marjoyie's other line. Baja Balanar — Allan's mother's grandmother, station era. Four names walking with the elders into the Tablelands.",
         bg: IMG.athertonTableland1954,
       },
+      {
+        eyebrow: 'The 20-year arc',
+        heading: 'A permanent archive of community voice',
+        body: "The Atherton trip sits inside PICC's 20-year vision — the next two decades of community-controlled infrastructure for every Palm Islander. Aged care on Palm by 2028. Delegated Authority expanded into health and justice by 2030. The voice capture sprint that this journey contributes to is the foundation: a permanent archive that grows stronger every year. The elders walking into Country are recording so the children can keep correcting.",
+        pullquote: "Decisions about Palm Island children now being made by Palm Island people.",
+        attribution: 'PICC 2024-25 Annual Report · Bwgcolman Way',
+        bg: IMG.athertonTableland1954,
+      },
     ],
     closingReflection: {
       body: 'Pending. The page will be re-drafted from elder voice after the trip. What gets recorded here now is the framing the elders carry going in.',
+      pullquote: 'Our cultural authority is recognised alongside the law.',
+      attribution: 'Bwgcolman Way · community framing',
     },
     connectedEventIds: ['1918-hull-river-cyclone'],
-    notes: 'Pre-trip framing only. After the journey, replace chapters with elder voice from new transcripts. Photos to source: Tablelands family-held imagery (with consent).',
+    notes: 'Pre-trip framing. Hero video + gallery + chapters drafted ahead of the trip; after the journey returns, replace chapters with elder voice from new transcripts. Trip-specific Tablelands family-held photographs to source via Rachel + Narelle post-trip handoff.',
   },
   {
     slug: 'next-bridge',
