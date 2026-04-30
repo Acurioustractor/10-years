@@ -959,6 +959,127 @@ export const ANCHOR_YEARS: AnchorYear[] = [
   },
 ]
 
+// ─────────────────────  Lineage  ───────────────────────────────────────────
+//
+// Backwards genealogy from each living elder. Read-only v1 — drawn from
+// existing wiki + transcripts. Empty lineage where elder review is still
+// pending. The forward-authoring (elder + family extends their own tree
+// via family-folder UI) is a separate sprint, gated on visibility controls.
+
+export type LineageRelation =
+  | 'father' | 'mother'
+  | 'paternal-grandfather' | 'paternal-grandmother'
+  | 'maternal-grandfather' | 'maternal-grandmother'
+  | 'great-grandfather' | 'great-grandmother'
+  | 'great-great-grandmother' | 'great-great-grandfather'
+  | 'sibling' | 'cousin' | 'aunt' | 'uncle' | 'great-uncle' | 'great-aunt'
+
+export type LineageConfidence = 'confirmed' | 'inferred' | 'pending-review'
+
+export type LineageNode = {
+  personSlug: string             // → PEOPLE
+  relation: LineageRelation
+  confidence: LineageConfidence
+  notes?: string
+}
+
+export type ElderLineage = {
+  elderSlug: string              // → LIVING_ELDER_PINS
+  ancestors: LineageNode[]       // ordered closest-to-furthest by generation
+  kin: LineageNode[]             // siblings, cousins, aunts/uncles
+  notes?: string                 // editorial note (gaps, pending review, etc.)
+}
+
+export const ELDER_LINEAGES: ElderLineage[] = [
+  {
+    elderSlug: 'allan-palm-island',
+    ancestors: [
+      { personSlug: 'walter-skipper-palm-island', relation: 'father', confidence: 'confirmed', notes: 'Boat-maker. Carried the Manbarra line forward.' },
+    ],
+    kin: [],
+    notes: 'Maternal line (Giribau / Jirrbal) and great-grandmother Baja Balanar (Kunawara station near Mt Garnet) named in transcripts but full lineage chain pending elder review pass with Allan.',
+  },
+  {
+    elderSlug: 'frank-anderson',
+    ancestors: [],
+    kin: [],
+    notes: 'Father / mother names + Country detail beyond Bwgcolman pending the next sit-down. Frank\'s transcripts hold his witness of 1957 but the parental-line names need a re-listen pass.',
+  },
+  {
+    elderSlug: 'marjoyie-burns',
+    ancestors: [
+      { personSlug: 'alf-palmer', relation: 'paternal-grandfather', confidence: 'confirmed', notes: 'Last native speaker of Warrongo. Recorded by linguist Tasaku Tsunoda 1971-72. Marjoyie\'s grandmother is Alf\'s sister — pending name confirmation.' },
+      { personSlug: 'lucy', relation: 'great-great-grandmother', confidence: 'confirmed', notes: 'Mother of Alf and Daisy Palmer. Killed at Blencoe Falls in family memory.' },
+    ],
+    kin: [
+      { personSlug: 'winifred-obah', relation: 'cousin', confidence: 'confirmed', notes: 'Cousin through Alf Palmer (Marjoyie\'s grandfather, Winifred\'s grand-uncle).' },
+      { personSlug: 'toby-watson', relation: 'great-uncle', confidence: 'pending-review', notes: '"Granddad" Toby Watson — taught Marjoyie language. Possible kin to Elsa Watson\'s line.' },
+    ],
+    notes: 'Marjoyie\'s grandmother (Alf Palmer\'s sister) needs a name in her own voice — currently inferred.',
+  },
+  {
+    elderSlug: 'winifred-obah',
+    ancestors: [
+      { personSlug: 'allison-obah', relation: 'paternal-grandfather', confidence: 'confirmed', notes: 'Trumpet player. Mango grower at Mount Bentley. Probable witness at the 1930 Hoffman trial — pending Tindale and AIATSIS confirmation.' },
+      { personSlug: 'daisy-palmer', relation: 'paternal-grandmother', confidence: 'confirmed', notes: 'Djirru woman taken to Yarrabah age 5. Married Allison at Yarrabah.' },
+      { personSlug: 'allison-andrew', relation: 'great-great-grandfather', confidence: 'confirmed', notes: 'South Sea Islander blackbirded from Vanuatu. "Ganji". Patriarch of the Andrew name line.' },
+      { personSlug: 'alf-palmer', relation: 'great-uncle', confidence: 'confirmed', notes: 'Brother of Daisy Palmer. The Warrongo language line.' },
+      { personSlug: 'lucy', relation: 'great-great-grandmother', confidence: 'confirmed', notes: 'Daisy and Alf\'s mother. Killed at Blencoe Falls in family memory.' },
+    ],
+    kin: [
+      { personSlug: 'marjoyie-burns', relation: 'cousin', confidence: 'confirmed', notes: 'Cousin through Alf Palmer.' },
+      { personSlug: 'elsa-watson', relation: 'cousin', confidence: 'pending-review', notes: 'Cousin link through the Watson side — pending elder review.' },
+    ],
+    notes: 'The Andrew → Obah → Palmer line carries from Vanuatu (Ganji) through Djirru Country (Lucy) into Palm Island. Winifred carries the verbal handing-down.',
+  },
+  {
+    elderSlug: 'aunty-ethel-robertson',
+    ancestors: [],
+    kin: [
+      { personSlug: 'aunty-iris-whitey', relation: 'sibling', confidence: 'confirmed', notes: 'Sister. Eldest of seventeen children, fourteen who lived.' },
+    ],
+    notes: 'South Sea Islander origin (Erromango / Manga spelling pending) and Robertson + Whitey family-line names beyond Aunty Iris pending elder review. The 1934 Halifax burial of SSI elder Uba (Trove 172783148) is a candidate ancestor-generation marker — to confirm with the family.',
+  },
+  {
+    elderSlug: 'aunty-iris-whitey',
+    ancestors: [],
+    kin: [
+      { personSlug: 'aunty-ethel-robertson', relation: 'sibling', confidence: 'confirmed' },
+    ],
+    notes: 'Same gates as Aunty Ethel.',
+  },
+  {
+    elderSlug: 'elsa-watson',
+    ancestors: [
+      { personSlug: 'doreen-morton', relation: 'mother', confidence: 'confirmed', notes: 'Mamu woman from Millaa Millaa. Removed to Palm Island at ten years old in the 1920s-30s wave. Deaf — taught family sign language.' },
+    ],
+    kin: [
+      { personSlug: 'winifred-obah', relation: 'cousin', confidence: 'pending-review', notes: 'Cousin link through the Watson side — pending elder review.' },
+    ],
+    notes: 'Doreen Morton\'s parents and removal year still pending elder review. The George Watson 1957 strike leader may be kin — pending review.',
+  },
+  {
+    elderSlug: 'cyndel-pryor',
+    ancestors: [
+      { personSlug: 'peter-pryor-junior', relation: 'father', confidence: 'confirmed', notes: 'Died 1971 when Cyndel was 13.' },
+      { personSlug: 'peter-brear', relation: 'paternal-grandfather', confidence: 'confirmed', notes: 'Lived to 95. At Hull River 1918, Yarrabah, Palm Island. Family memory holds him as the man who shot Curry.' },
+      { personSlug: 'peter-pryor-1930', relation: 'paternal-grandfather', confidence: 'inferred', notes: 'Likely the same person as Peter Brear under name variant. The 1930 Curry-shooter ruled justifiable by Justice Douglas. Pending Tindale and AIATSIS confirmation.' },
+    ],
+    kin: [],
+    notes: 'Brear / Pryor name variant — for elder confirmation with Cyndel which name the family uses. Maternal line (Stolen Generation mother) actively being researched.',
+  },
+  {
+    elderSlug: 'gurtrude-richardson',
+    ancestors: [],
+    kin: [],
+    notes: 'Parent names + Country detail pending elder review re-listen pass before public surface.',
+  },
+]
+
+export function findLineageByElder(elderSlug: string): ElderLineage | undefined {
+  return ELDER_LINEAGES.find((l) => l.elderSlug === elderSlug)
+}
+
 // ─────────────────────  Lookups  ────────────────────────────────────────────
 
 export function findPersonBySlug(slug: string): Person | undefined {

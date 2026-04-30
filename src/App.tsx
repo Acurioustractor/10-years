@@ -15,6 +15,7 @@ import ExplorePage from './pages/ExplorePage'
 import HistoryPage from './pages/HistoryPage'
 import EldersIndexPage from './pages/EldersIndexPage'
 import ElderProfilePage from './pages/ElderProfilePage'
+import ElderLineagePage from './pages/ElderLineagePage'
 import JourneyIndexPage from './pages/JourneyIndexPage'
 import JourneyDetailPage from './pages/JourneyDetailPage'
 import PeopleIndexPage from './pages/PeopleIndexPage'
@@ -65,6 +66,7 @@ export default function App() {
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/elders" element={<EldersIndexPage />} />
       <Route path="/elders/:slug" element={<ElderProfilePage />} />
+      <Route path="/elders/:slug/lineage" element={<ElderLineagePage />} />
       <Route path="/journeys" element={<JourneyIndexPage />} />
       <Route path="/journeys/:slug" element={<JourneyDetailPage />} />
       <Route path="/people" element={<PeopleIndexPage />} />

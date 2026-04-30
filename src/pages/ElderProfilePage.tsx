@@ -20,6 +20,7 @@ import {
 } from '@/palm-history-timeline'
 import { CLUSTER_CONFIGS } from '@/cluster-configs'
 import { getJourneysForElder } from '@/palm-journeys'
+import { findPlaceBySlug } from '@/palm-graph'
 import Lightbox from '@/components/Lightbox'
 
 const P = RIBBON_PALETTE
@@ -165,6 +166,29 @@ export default function ElderProfilePage() {
               <div className="mt-10">
                 <div className="text-[10px] tracking-[0.3em] uppercase opacity-50 mb-2">Country</div>
                 <div className="font-serif italic text-base opacity-80">{elder.country}</div>
+                {(() => {
+                  const graphCountrySlugs = elder.country
+                    .split(/[·,]/)
+                    .map((s) => s.trim().toLowerCase().replace(/\s+/g, '-'))
+                  const places = graphCountrySlugs
+                    .map((s) => findPlaceBySlug(s))
+                    .filter(Boolean) as Array<NonNullable<ReturnType<typeof findPlaceBySlug>>>
+                  if (places.length === 0) return null
+                  return (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {places.map((pl) => (
+                        <Link
+                          key={pl.slug}
+                          to={`/places/${pl.slug}`}
+                          className="text-[10px] tracking-widest uppercase underline-offset-4 hover:underline"
+                          style={{ color: P.ochre }}
+                        >
+                          {pl.displayName} →
+                        </Link>
+                      ))}
+                    </div>
+                  )
+                })()}
               </div>
             )}
           </div>
@@ -317,11 +341,18 @@ export default function ElderProfilePage() {
           <h2 className="font-serif font-light leading-[1.1] mb-12" style={{ fontSize: 'clamp(28px, 3.5vw, 44px)' }}>
             More transcripts and photos sit inside the family folder
           </h2>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
             <Link
-              to={`/f/${elder.clusterSlug}`}
+              to={`/elders/${elder.storytellerSlug}/lineage`}
               className="px-8 py-4 font-serif text-base hover:opacity-90 transition-opacity"
               style={{ background: P.ochre, color: P.cream }}
+            >
+              See the lineage
+            </Link>
+            <Link
+              to={`/f/${elder.clusterSlug}`}
+              className="px-8 py-4 font-serif text-base border-2 hover:opacity-90 transition-opacity"
+              style={{ borderColor: P.ochre, color: P.ochre }}
             >
               Open the family folder
             </Link>
