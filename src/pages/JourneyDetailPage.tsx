@@ -13,6 +13,7 @@ import VideoHero from '@/components/VideoHero'
 import MediaGallery, { type GalleryItem } from '@/components/MediaGallery'
 import VideoQuoteSection from '@/components/VideoQuoteSection'
 import TripMap from '@/components/TripMap'
+import LeafletTripMap from '@/components/LeafletTripMap'
 
 const P = RIBBON_PALETTE
 
@@ -173,8 +174,16 @@ export default function JourneyDetailPage() {
         </div>
       </section>
 
-      {/* Trip map — stylised SVG of route */}
-      {journey.tripMap && (
+      {/* Trip map — Leaflet (real) preferred, fall back to stylised SVG */}
+      {journey.leafletMap ? (
+        <LeafletTripMap
+          stops={journey.leafletMap.stops}
+          status={journey.leafletMap.status}
+          eyebrow={journey.leafletMap.eyebrow}
+          heading={journey.leafletMap.heading}
+          caption={journey.leafletMap.caption}
+        />
+      ) : journey.tripMap ? (
         <TripMap
           locations={journey.tripMap.locations}
           routes={journey.tripMap.routes}
@@ -186,7 +195,7 @@ export default function JourneyDetailPage() {
           heading={journey.tripMap.heading}
           caption={journey.tripMap.caption}
         />
-      )}
+      ) : null}
 
       {/* Descript embed — produced documentary */}
       {journey.descriptEmbedUrl && (

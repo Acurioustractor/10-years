@@ -95,6 +95,24 @@ export type TripMapConfig = {
   eyebrow?: string
 }
 
+export type LeafletStop = {
+  id: string
+  name: string
+  description: string
+  familyConnection?: string
+  lat: number
+  lng: number
+  placeSlug?: string
+}
+
+export type LeafletTripMapConfig = {
+  stops: LeafletStop[]
+  status: 'past' | 'planned'
+  caption?: string
+  heading?: string
+  eyebrow?: string
+}
+
 export type Journey = {
   slug: string
   title: string
@@ -113,7 +131,8 @@ export type Journey = {
   chapters: JourneyChapter[]
   elderQuotes?: ElderQuote[]                  // per-elder voice from this trip — past trips only
   videoQuotes?: VideoQuote[]                  // full-screen video panels with overlaid quotes
-  tripMap?: TripMapConfig                     // stylised SVG map of the trip route
+  tripMap?: TripMapConfig                     // stylised SVG map of the trip route (deprecated — prefer leafletMap)
+  leafletMap?: LeafletTripMapConfig           // real Leaflet map with lat/lng stops + animated playthrough
   planningNotes?: PlanningNote[]              // for planned/dreaming trips
   peopleToVisit?: PersonToVisit[]             // for planned/dreaming trips
   gallery?: JourneyGalleryItem[]              // mixed stills + clips, appears between chapters and closing
@@ -267,22 +286,48 @@ export const JOURNEYS: Journey[] = [
         attributionElderSlug: 'allan-palm-island',
       },
     ],
-    tripMap: {
+    leafletMap: {
       eyebrow: 'The route',
-      heading: 'Palm to Mission Beach, October 2025',
-      caption: 'Three days walking back to where the families were taken from. Hover any point for the family connection.',
-      locations: [
-        { id: 'palm-island', x: 78, y: 50, label: 'Palm Island', sublabel: 'Bwgcolman · the elders\' home', isOrigin: true },
-        { id: 'townsville', x: 73, y: 53, label: 'Townsville', sublabel: 'Departure point', },
-        { id: 'halifax', x: 65, y: 41, label: 'Halifax', sublabel: 'Aunty Ethel + Iris\'s family ground' },
-        { id: 'tully', x: 53, y: 33, label: 'Tully', sublabel: 'Madge Thaiday\'s Country (Girramay)' },
-        { id: 'mission-beach', x: 56, y: 30, label: 'Mission Beach', sublabel: 'The Hull River reserve site' },
-      ],
-      routes: [
-        { fromId: 'palm-island', toId: 'townsville', status: 'past', curve: { x: 76, y: 52 } },
-        { fromId: 'townsville', toId: 'halifax', status: 'past', curve: { x: 67, y: 45 } },
-        { fromId: 'halifax', toId: 'tully', status: 'past', curve: { x: 57, y: 35 } },
-        { fromId: 'tully', toId: 'mission-beach', status: 'past', curve: { x: 54, y: 31 } },
+      heading: 'Palm Island to Hull River',
+      caption: 'Three days walking back to where the families were taken from. Tap any stop or play the journey to walk it through.',
+      status: 'past',
+      stops: [
+        {
+          id: 'palm-island',
+          name: 'Palm Island',
+          description: 'The elders\' home — Bwgcolman Country. The journey begins here, departing by barge across the Coral Sea.',
+          familyConnection: 'All 8 trip elders departed from Palm — Allan, Winifred, Marjoyie, Frank, Aunty Ethel, Elsa, Cyndel, Gurtrude.',
+          lat: -18.7547,
+          lng: 146.5832,
+          placeSlug: 'palm-island',
+        },
+        {
+          id: 'lucinda',
+          name: 'Lucinda',
+          description: 'The mainland barge port. The way generations have travelled between island and mainland.',
+          familyConnection: 'The 1931 Halifax-Lucinda Point relief works confirmed South Sea Islander labour at this exact place — Aunty Ethel + Iris\'s family ground.',
+          lat: -18.5276,
+          lng: 146.3320,
+          placeSlug: 'halifax-hinchinbrook',
+        },
+        {
+          id: 'ingham',
+          name: 'Ingham',
+          description: 'Sugar country. The Halifax Camp era in living memory — sugar mill labour, South Sea Islander descent, the ground that anchored the Robertson and Whitey families.',
+          familyConnection: 'Aunty Ethel + Iris\'s line runs through here. Uba — the South Sea Islander elder buried at Halifax in 1934 — is a candidate ancestor-generation marker.',
+          lat: -18.6515,
+          lng: 146.1605,
+          placeSlug: 'halifax-hinchinbrook',
+        },
+        {
+          id: 'hull-river',
+          name: 'Hull River · Mission Beach',
+          description: 'The heart of the journey. The Hull River reserve site, destroyed by Cyclone Leonte 10 March 1918. Survivors transported to Palm Island in the months that followed — the moment Palm became Bwgcolman, the place where many were sent.',
+          familyConnection: 'Allan\'s grandparents, aunties, uncles. Daisy Palmer\'s line. Doreen Morton\'s removal pipeline. Allan: "We are on our way up to Mission Beach to uncover a scenery that would happen back in 1918."',
+          lat: -17.8736,
+          lng: 146.0997,
+          placeSlug: 'mission-beach',
+        },
       ],
     },
     chapters: [
@@ -448,57 +493,104 @@ export const JOURNEYS: Journey[] = [
         attribution: 'PICC framing · Atherton 2026 pre-trip',
       },
     ],
-    tripMap: {
+    leafletMap: {
       eyebrow: 'The planned route',
-      heading: 'Palm to the Tablelands, late 2026',
-      caption: 'Dashed lines show planned legs — final route locked once the elders confirm. Hover any point for the family connection.',
-      locations: [
-        { id: 'palm-island', x: 78, y: 50, label: 'Palm Island', sublabel: 'Bwgcolman · the elders\' home', isOrigin: true },
-        { id: 'townsville', x: 73, y: 53, label: 'Townsville', sublabel: 'Departure point' },
-        { id: 'cairns', x: 50, y: 18, label: 'Cairns', sublabel: 'Yidinji Country · arrival', isPlanned: true },
-        { id: 'atherton', x: 38, y: 22, label: 'Atherton', sublabel: 'Yidinji · Tablelands base', isPlanned: true },
-        { id: 'millaa-millaa', x: 38, y: 28, label: 'Millaa Millaa', sublabel: 'Mamu · Doreen Morton taken from here', isPlanned: true },
-        { id: 'tully', x: 53, y: 33, label: 'Tully', sublabel: 'Girramay · Madge Thaiday + Cyndel\'s mother\'s line', isPlanned: true },
-        { id: 'mt-garnet', x: 22, y: 26, label: 'Mt Garnet', sublabel: 'Warrongo · Alf Palmer + Allan\'s mother\'s station', isPlanned: true },
-      ],
-      routes: [
-        { fromId: 'palm-island', toId: 'townsville', status: 'past', curve: { x: 76, y: 52 } },
-        { fromId: 'townsville', toId: 'cairns', status: 'planned', curve: { x: 60, y: 35 } },
-        { fromId: 'cairns', toId: 'atherton', status: 'planned', curve: { x: 44, y: 18 } },
-        { fromId: 'atherton', toId: 'millaa-millaa', status: 'planned' },
-        { fromId: 'millaa-millaa', toId: 'mt-garnet', status: 'planned', curve: { x: 28, y: 30 } },
-        { fromId: 'mt-garnet', toId: 'tully', status: 'planned', curve: { x: 38, y: 32 } },
+      heading: 'Atherton Tablelands · 10-day Year 1 journey',
+      caption: 'November 2026. The first major journey of the Voices on Country project. Tap any stop to explore the planned route.',
+      status: 'planned',
+      stops: [
+        {
+          id: 'palm-island',
+          name: 'Palm Island',
+          description: 'Departure from Bwgcolman Country. All 9 PICC living elders currently in planning.',
+          familyConnection: 'Where the elders carry their lines from — the lines they walk back to.',
+          lat: -18.7547,
+          lng: 146.5832,
+          placeSlug: 'palm-island',
+        },
+        {
+          id: 'mareeba',
+          name: 'Mareeba',
+          description: 'Tablelands gateway · Muluridji Country. Year 1 mobilisation point. The first inland leg.',
+          familyConnection: 'Cross-Country protocol: welcome from the Tablelands traditional owners before the deeper inland walks.',
+          lat: -16.9970,
+          lng: 145.4239,
+        },
+        {
+          id: 'atherton',
+          name: 'Atherton',
+          description: 'Yidinji Country. Tablelands base camp for the Year 1 trip. The wider Voices on Country project anchors here.',
+          familyConnection: 'Yidinji elders welcome PICC to Country. The Tablelands hold the source landscape for three Palm Island family lines.',
+          lat: -17.2683,
+          lng: 145.4757,
+          placeSlug: 'atherton-tablelands',
+        },
+        {
+          id: 'herberton',
+          name: 'Herberton',
+          description: 'Tin-mining heritage town · Warrongo Country edge. Echoes of the 1880s rush that broke open the Warrongo families.',
+          familyConnection: 'Marjoyie\'s grandfather Alf Palmer carried Warrongo language out of this Country. The Mt Garnet station era is one valley west.',
+          lat: -17.3866,
+          lng: 145.3877,
+        },
+        {
+          id: 'ravenshoe',
+          name: 'Ravenshoe',
+          description: 'Highest town in Queensland · upper Tablelands. Forced-walk site under the Aboriginals Protection Act.',
+          familyConnection: 'Aunty Ethel\'s mother was force-walked from Halifax to Ravenshoe with police black-trackers. The weak ones falling. This is the Country her family was taken across.',
+          lat: -17.6201,
+          lng: 145.4843,
+        },
+        {
+          id: 'millaa-millaa',
+          name: 'Millaa Millaa',
+          description: 'Mamu Country · the Tableland village. Where Doreen Morton was taken from.',
+          familyConnection: 'Doreen Morton — Elsa Watson\'s mother — was removed to Palm Island at ten years old. Mamu language. Deaf — taught family sign language. The trip walks her line back.',
+          lat: -17.4992,
+          lng: 145.6135,
+          placeSlug: 'millaa-millaa',
+        },
       ],
     },
     planningNotes: [
       {
-        heading: 'The voice-capture sprint',
-        body: 'Atherton 2026 sits inside the 20-year Launchpad as part of E1 / E5 — the voice capture sprint targeting 60 voices by the celebration. The trip is one of three primary capture moments alongside the celebration ceremony and the Bwgcolman Way case study interviews.',
+        heading: 'Voices on Country · 36-month project',
+        body: 'Atherton 2026 is Year 1 of PICC\'s 36-month Voices on Country project — funded by the Indigenous Languages and Arts (ILA) Program, $600K investment, 8+ elders, 57+ language groups represented. Two major return-to-Country journeys (Atherton 2026, Central Australia 2027) plus annual exhibitions and a permanent Elders Room installation on Palm Island.',
         status: 'confirmed',
       },
       {
-        heading: 'Three Country layers, one trip',
+        heading: 'Year 1 timeline (2026–27)',
+        body: 'September 2026 — Mobilisation and Elders Room installation on Palm. November 2026 — Atherton Tablelands 10-day journey. January 2027 — 200+ photographs, 10–15 short interview videos, audio language recordings captured. March 2027 — Post-production: curated photo series, draft short films, Manbarra language word list. June 2027 — Community Exhibition 1 on Palm Island.',
+        status: 'confirmed',
+      },
+      {
+        heading: 'The route — Mareeba · Atherton · Herberton · Ravenshoe · Millaa Millaa',
+        body: 'Year 1 walks four Tableland anchor points. Mareeba as gateway. Atherton as Yidinji base. Herberton echoing the 1880s Warrongo tin-rush violence. Ravenshoe — where Aunty Ethel\'s mother was force-walked. Millaa Millaa — where Doreen Morton was taken from. Each stop has a family connection inside it.',
+        status: 'confirmed',
+      },
+      {
+        heading: 'Three Country threads, one trip',
         body: 'The Tablelands hold three connected Country threads: Mamu (Doreen Morton, Elsa\'s line), Warrongo (Alf Palmer, Marjoyie\'s line), Yidinji (Atherton itself). The trip walks each in turn — not as separate visits but as a single continuous arc.',
         status: 'confirmed',
       },
       {
-        heading: 'Date — to be locked',
-        body: 'Late 2026 — exact dates pending Rachel\'s next workshop output (~late May 2026). Likely September–November window to align with dry-season access to Mt Garnet station country.',
+        heading: 'The crew · 8+ elders',
+        body: 'All 9 PICC living elders currently in planning. Final attendance per elder confirmed closer to date — Aunty Iris pending health check at the time. Project minimum is 8+ per ILA grant scope.',
         status: 'proposed',
       },
       {
-        heading: 'The crew',
-        body: 'All 9 PICC living elders currently participating in planning. Final attendance per elder confirmed closer to date — Aunty Iris pending health check at the time.',
-        status: 'proposed',
+        heading: 'Cultural protocol · Mukurtu access controls',
+        body: 'Welcome-to-Country from Yidinji elders required at Atherton arrival. Sacred protocols at family-held sites. The resulting digital archive uses Mukurtu — the Indigenous-built platform — for tiered cultural access controls. Elders decide what gets surfaced where.',
+        status: 'confirmed',
       },
       {
-        heading: 'Cultural protocol',
-        body: 'Welcome-to-Country from Yidinji elders required at Atherton arrival. Sacred protocols at Blencoe Falls (Lucy site) — Marjoyie + Winifred lead the family-held framing. Mt Garnet station access TBD with current pastoral lessees.',
+        heading: 'Year 2 (2027–28) · Central Australia · Bloomfield family at Atnarpa',
+        body: 'September 2027 planning at the Bloomfield family\'s Atnarpa homestead. November 2027 — 10-day Central Australia journey, cross-cultural exchange with the Oonchiumpa youth program. Live exhibition at Atnarpa December 2027. Builds on the Year 1 method, deepens the inter-community connection.',
         status: 'proposed',
       },
       {
         heading: 'What gets captured',
-        body: 'Per-elder return-to-Country voice (transcripts) + landscape footage + family-held imagery (with consent). After the trip, this Atherton page rewrites from elder voice the way Mission Beach 2024 already has.',
+        body: 'Per-elder return-to-Country voice (transcripts), language recordings, photography, video. Manbarra language word list compiled by Year 1 end. After each journey returns, the trip page rewrites from elder voice — the way Mission Beach 2024 already has.',
         status: 'confirmed',
       },
     ],
