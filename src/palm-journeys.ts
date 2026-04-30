@@ -103,6 +103,10 @@ export type LeafletStop = {
   lat: number
   lng: number
   placeSlug?: string
+  photos?: string[]                // image URLs surfaced in the popup as a thumb strip
+  videoSrc?: string                // optional clip — surfaces as a play-button thumb
+  videoPoster?: string
+  elderSlugs?: string[]            // elders whose family is held at this place
 }
 
 export type LeafletTripMapConfig = {
@@ -300,6 +304,12 @@ export const JOURNEYS: Journey[] = [
           lat: -18.7547,
           lng: 146.5832,
           placeSlug: 'palm-island',
+          photos: [
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380700711-7xy54e.jpg',
+          ],
+          videoSrc: '/media/clips/palm-island-aerial.mp4',
+          videoPoster: '/media/stills/jetty-aerial.jpg',
+          elderSlugs: ['allan-palm-island', 'winifred-obah', 'marjoyie-burns', 'frank-anderson', 'aunty-ethel-robertson', 'elsa-watson', 'cyndel-pryor', 'gurtrude-richardson'],
         },
         {
           id: 'lucinda',
@@ -309,6 +319,10 @@ export const JOURNEYS: Journey[] = [
           lat: -18.5276,
           lng: 146.3320,
           placeSlug: 'halifax-hinchinbrook',
+          photos: [
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380713803-fdbq7.jpg',
+          ],
+          elderSlugs: ['aunty-ethel-robertson'],
         },
         {
           id: 'ingham',
@@ -318,6 +332,11 @@ export const JOURNEYS: Journey[] = [
           lat: -18.6515,
           lng: 146.1605,
           placeSlug: 'halifax-hinchinbrook',
+          photos: [
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380729007-kh36nv.jpg',
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380744661-a7cq6n.jpg',
+          ],
+          elderSlugs: ['aunty-ethel-robertson'],
         },
         {
           id: 'hull-river',
@@ -327,6 +346,15 @@ export const JOURNEYS: Journey[] = [
           lat: -17.8736,
           lng: 146.0997,
           placeSlug: 'mission-beach',
+          photos: [
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380761201-f9jg44.jpg',
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380779624-pqin4.jpg',
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380794739-33sdzf.jpg',
+            'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380827389-ywl6tg.jpg',
+          ],
+          videoSrc: '/media/clips/elders-on-country.mp4',
+          videoPoster: '/media/stills/waterfall-landscape.jpg',
+          elderSlugs: ['allan-palm-island', 'winifred-obah', 'elsa-watson'],
         },
       ],
     },
@@ -507,6 +535,9 @@ export const JOURNEYS: Journey[] = [
           lat: -18.7547,
           lng: 146.5832,
           placeSlug: 'palm-island',
+          videoSrc: '/media/clips/palm-island-aerial.mp4',
+          videoPoster: '/media/stills/jetty-aerial.jpg',
+          elderSlugs: ['allan-palm-island', 'winifred-obah', 'marjoyie-burns', 'frank-anderson', 'aunty-ethel-robertson', 'aunty-iris-whitey', 'elsa-watson', 'cyndel-pryor', 'gurtrude-richardson'],
         },
         {
           id: 'mareeba',
@@ -515,6 +546,7 @@ export const JOURNEYS: Journey[] = [
           familyConnection: 'Cross-Country protocol: welcome from the Tablelands traditional owners before the deeper inland walks.',
           lat: -16.9970,
           lng: 145.4239,
+          photos: ['/media/stills/mountain-valley.jpg'],
         },
         {
           id: 'atherton',
@@ -524,6 +556,8 @@ export const JOURNEYS: Journey[] = [
           lat: -17.2683,
           lng: 145.4757,
           placeSlug: 'atherton-tablelands',
+          videoSrc: '/media/clips/mountain-panorama.mp4',
+          videoPoster: '/media/stills/mountain-valley.jpg',
         },
         {
           id: 'herberton',
@@ -532,6 +566,8 @@ export const JOURNEYS: Journey[] = [
           familyConnection: 'Marjoyie\'s grandfather Alf Palmer carried Warrongo language out of this Country. The Mt Garnet station era is one valley west.',
           lat: -17.3866,
           lng: 145.3877,
+          photos: ['/media/stills/waterfall-landscape.jpg'],
+          elderSlugs: ['marjoyie-burns'],
         },
         {
           id: 'ravenshoe',
@@ -540,6 +576,10 @@ export const JOURNEYS: Journey[] = [
           familyConnection: 'Aunty Ethel\'s mother was force-walked from Halifax to Ravenshoe with police black-trackers. The weak ones falling. This is the Country her family was taken across.',
           lat: -17.6201,
           lng: 145.4843,
+          photos: ['/media/stills/waterfall.jpg'],
+          videoSrc: '/media/clips/country-waterfall.mp4',
+          videoPoster: '/media/stills/waterfall.jpg',
+          elderSlugs: ['aunty-ethel-robertson', 'aunty-iris-whitey'],
         },
         {
           id: 'millaa-millaa',
@@ -549,6 +589,8 @@ export const JOURNEYS: Journey[] = [
           lat: -17.4992,
           lng: 145.6135,
           placeSlug: 'millaa-millaa',
+          photos: ['/media/stills/waterfall-landscape.jpg', '/media/stills/mountain-valley.jpg'],
+          elderSlugs: ['elsa-watson'],
         },
       ],
     },

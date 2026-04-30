@@ -11,6 +11,7 @@ import { MapContainer, Marker, Polyline, TileLayer, useMap } from 'react-leaflet
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Link } from 'react-router-dom'
+import { LIVING_ELDER_PINS } from '@/palm-history-timeline'
 
 const OCHRE = '#B15427'
 const INK = '#1A1612'
@@ -26,6 +27,10 @@ export type LeafletTripStop = {
   lng: number
   /** /places slug for cross-link */
   placeSlug?: string
+  photos?: string[]
+  videoSrc?: string
+  videoPoster?: string
+  elderSlugs?: string[]
 }
 
 export type LeafletTripMapProps = {
@@ -199,7 +204,7 @@ export default function LeafletTripMap({
           </div>
 
           {/* Map */}
-          <div className="relative h-[460px]">
+          <div className="relative h-[640px] md:h-[720px]">
             <MapContainer
               center={[stops[0]!.lat, stops[0]!.lng]}
               zoom={9}
@@ -257,7 +262,7 @@ export default function LeafletTripMap({
 
             {/* Story panel */}
             {activeStop && (
-              <div className="absolute left-4 bottom-4 right-4 md:right-auto md:max-w-[440px] z-[400]">
+              <div className="absolute left-4 bottom-4 right-4 md:right-auto md:max-w-[520px] z-[400]">
                 <div
                   className="overflow-hidden"
                   style={{ background: '#fffef7e6', backdropFilter: 'blur(8px)', border: `1px solid ${INK}1a` }}
@@ -300,7 +305,7 @@ export default function LeafletTripMap({
                       </div>
                     </div>
                   </div>
-                  <div className="px-5 py-4">
+                  <div className="px-5 py-4 max-h-[360px] overflow-y-auto">
                     <p className="font-serif text-sm leading-relaxed">{activeStop.description}</p>
                     {activeStop.familyConnection && (
                       <p
@@ -310,10 +315,98 @@ export default function LeafletTripMap({
                         {activeStop.familyConnection}
                       </p>
                     )}
+
+                    {/* Photo strip */}
+                    {activeStop.photos && activeStop.photos.length > 0 && (
+                      <div className="mt-4 grid grid-cols-3 gap-1.5">
+                        {activeStop.photos.slice(0, 6).map((url, i) => (
+                          <div
+                            key={`${url}-${i}`}
+                            className="aspect-[4/3] overflow-hidden"
+                            style={{ background: '#0001' }}
+                          >
+                            <img
+                              src={url}
+                              alt=""
+                              loading="lazy"
+                              className="w-full h-full object-cover"
+                              style={{ filter: 'sepia(0.08)' }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Video tile */}
+                    {activeStop.videoSrc && (
+                      <div className="mt-3 relative aspect-video overflow-hidden" style={{ background: INK }}>
+                        <video
+                          src={activeStop.videoSrc}
+                          poster={activeStop.videoPoster}
+                          muted
+                          playsInline
+                          loop
+                          className="w-full h-full object-cover"
+                          style={{ filter: 'sepia(0.15)' }}
+                          onMouseEnter={(e) => e.currentTarget.play().catch(() => {})}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.pause()
+                            e.currentTarget.currentTime = 0
+                          }}
+                          onClick={(e) => {
+                            const v = e.currentTarget
+                            if (v.paused) v.play().catch(() => {}); else v.pause()
+                          }}
+                        />
+                        <div className="absolute top-2 right-2 px-1.5 py-0.5 text-[9px] tracking-widest uppercase" style={{ background: OCHRE, color: CREAM }}>
+                          Video
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Elder avatars */}
+                    {activeStop.elderSlugs && activeStop.elderSlugs.length > 0 && (
+                      <div className="mt-4 pt-3 border-t" style={{ borderColor: INK + '14' }}>
+                        <div className="text-[9px] tracking-[0.25em] uppercase opacity-50 mb-2">
+                          Elders held here
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {activeStop.elderSlugs.map((slug) => {
+                            const pin = LIVING_ELDER_PINS.find((e) => e.storytellerSlug === slug)
+                            if (!pin) return null
+                            return (
+                              <Link
+                                key={slug}
+                                to={`/elders/${slug}`}
+                                className="group flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+                                title={pin.displayName}
+                              >
+                                {pin.avatarUrl ? (
+                                  <img
+                                    src={pin.avatarUrl}
+                                    alt={pin.displayName}
+                                    className="w-7 h-7 rounded-full object-cover"
+                                    style={{ border: `1px solid ${INK}26` }}
+                                  />
+                                ) : (
+                                  <div
+                                    className="w-7 h-7 rounded-full flex items-center justify-center font-serif text-[10px]"
+                                    style={{ background: OCHRE + '26', color: OCHRE }}
+                                  >
+                                    {pin.displayName.replace(/^(Uncle|Aunty)\s+/, '').charAt(0)}
+                                  </div>
+                                )}
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+
                     {activeStop.placeSlug && (
                       <Link
                         to={`/places/${activeStop.placeSlug}`}
-                        className="inline-block mt-3 text-[10px] tracking-widest uppercase underline-offset-4 hover:underline"
+                        className="inline-block mt-4 text-[10px] tracking-widest uppercase underline-offset-4 hover:underline"
                         style={{ color: OCHRE }}
                       >
                         Open the place →
