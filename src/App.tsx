@@ -24,6 +24,7 @@ import PlacesIndexPage from './pages/PlacesIndexPage'
 import PlaceDetailPage from './pages/PlaceDetailPage'
 import YearsIndexPage from './pages/YearsIndexPage'
 import YearDetailPage from './pages/YearDetailPage'
+import VisionPage from './pages/VisionPage'
 
 // Community pages
 import CommunityHomePage from './pages/CommunityHomePage'
@@ -75,6 +76,7 @@ export default function App() {
       <Route path="/places/:slug" element={<PlaceDetailPage />} />
       <Route path="/years" element={<YearsIndexPage />} />
       <Route path="/years/:year" element={<YearDetailPage />} />
+      <Route path="/vision" element={<VisionPage />} />
 
       {/* Family shell */}
       <Route path="/f/:familySlug" element={<FamilyLayout />}>

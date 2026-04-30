@@ -42,6 +42,11 @@ export default function PublicLayout() {
             }>
               Journeys
             </NavLink>
+            <NavLink to="/vision" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Vision
+            </NavLink>
             <NavLink
               to="/join"
               className="px-4 py-1.5 rounded-full text-sm font-medium bg-ochre text-cream hover:bg-ochre/90 transition-colors"
