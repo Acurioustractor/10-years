@@ -11,11 +11,41 @@ export default function PublicLayout() {
               A living story map
             </div>
           </NavLink>
-          <nav className="flex items-center gap-4 text-sm">
-            <NavLink to="/explore" className={({ isActive }) =>
+          <nav className="flex items-center gap-3 md:gap-4 text-sm">
+            <NavLink to="/history" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              History
+            </NavLink>
+            <NavLink to="/elders" className={({ isActive }) =>
               `transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
             }>
-              Explore
+              Elders
+            </NavLink>
+            <NavLink to="/people" className={({ isActive }) =>
+              `hidden sm:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              People
+            </NavLink>
+            <NavLink to="/places" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Places
+            </NavLink>
+            <NavLink to="/years" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Years
+            </NavLink>
+            <NavLink to="/journeys" className={({ isActive }) =>
+              `hidden sm:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Journeys
+            </NavLink>
+            <NavLink to="/vision" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Vision
             </NavLink>
             <NavLink
               to="/join"

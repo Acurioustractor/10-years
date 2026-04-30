@@ -8,6 +8,9 @@ export default function CommunityLayout() {
 
   const navItems = [
     { to: base, label: 'Overview', end: true },
+    { to: `${base}/governance`, label: 'Governance' },
+    { to: `${base}/research`, label: 'Research' },
+    { to: `${base}/tree`, label: 'Tree' },
     { to: `${base}/families`, label: 'Families' },
     { to: `${base}/timeline`, label: 'Timeline' },
     { to: `${base}/goals`, label: 'Goals' },

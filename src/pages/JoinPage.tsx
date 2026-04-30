@@ -65,7 +65,11 @@ function LoginForm() {
     setLoading(false)
 
     if (result.success) {
-      navigate(`/f/${code.trim().toUpperCase()}`)
+      const stored = localStorage.getItem('10years_family_session')
+      const slug = stored
+        ? (JSON.parse(stored) as { folder?: { slug?: string } }).folder?.slug
+        : null
+      navigate(`/f/${slug || code.trim().toUpperCase()}`)
     } else {
       setError(result.error || 'Login failed')
     }
@@ -157,7 +161,7 @@ function CreateForm() {
         </p>
         <button
           type="button"
-          onClick={() => navigate(`/f/${result.accessCode}`)}
+          onClick={() => navigate(`/f/${result.slug}`)}
           className="w-full py-2.5 rounded-lg bg-ochre text-cream font-medium text-sm hover:bg-ochre/90 transition-colors"
         >
           Enter your family folder

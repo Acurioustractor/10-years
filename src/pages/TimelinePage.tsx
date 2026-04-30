@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useTimelineData } from '@/hooks/useTimelineData'
 import { useSession } from '@/contexts/SessionContext'
 import TimelineGrid from '@/components/TimelineGrid'
@@ -6,6 +7,7 @@ import CenturyTimeline from '@/components/CenturyTimeline'
 import ChaptersOverlay from '@/components/ChaptersOverlay'
 import EventPanel from '@/components/EventPanel'
 import AddEventPanel from '@/components/AddEventPanel'
+import { buildLedgerStoriesAdminUrl } from '@/services/empathyLedgerClient'
 import type { TimelineEventSummary } from '@/services/types'
 
 type RangePreset = 'century' | 'recent' | 'future'
@@ -18,6 +20,7 @@ const RANGE_PRESETS: Record<RangePreset, { label: string; from: number; to: numb
 }
 
 export default function TimelinePage() {
+  const { familySlug } = useParams<{ familySlug?: string }>()
   const { familySession } = useSession()
   const [preset, setPreset] = useState<RangePreset>('century')
   const [yearFrom, setYearFrom] = useState(RANGE_PRESETS.century.from)
@@ -26,6 +29,11 @@ export default function TimelinePage() {
   const [viewMode, setViewMode] = useState<ViewMode>('timeline')
   const [showAddEvent, setShowAddEvent] = useState(false)
   const canContribute = familySession && ['elder', 'family_rep', 'contributor'].includes(familySession.member.role)
+  const ledgerStoriesUrl = buildLedgerStoriesAdminUrl()
+  const personPath = (personId: string) =>
+    familySession
+      ? `/f/${familySlug || familySession.folder.slug}/person/${personId}`
+      : `/person/${personId}`
 
   const applyPreset = (p: RangePreset) => {
     setPreset(p)
@@ -51,6 +59,7 @@ export default function TimelinePage() {
     return (
       <ChaptersOverlay
         events={events}
+        personPath={personPath}
         onChapterChange={(_from, _to) => {
           // chapters auto-advance — no zoom in story mode
         }}
@@ -72,6 +81,16 @@ export default function TimelinePage() {
           </p>
         </div>
         <div className="flex items-center gap-3 text-sm">
+          {ledgerStoriesUrl && (
+            <a
+              href={ledgerStoriesUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-1 rounded-full text-xs font-medium text-ink/60 border border-ink/15 hover:bg-sand/20 transition-colors"
+            >
+              Edit source stories in Empathy Ledger
+            </a>
+          )}
           {canContribute && (
             <button
               type="button"
@@ -81,13 +100,15 @@ export default function TimelinePage() {
               + Add event
             </button>
           )}
-          <button
-            type="button"
-            onClick={() => setViewMode('story')}
-            className="px-3 py-1 rounded-full text-xs font-medium text-ochre border border-ochre/30 hover:bg-ochre/10 transition-colors"
-          >
-            Read the story
-          </button>
+          {familySlug === 'bloomfield-kunoth-liddle-randall' && (
+            <button
+              type="button"
+              onClick={() => setViewMode('story')}
+              className="px-3 py-1 rounded-full text-xs font-medium text-ochre border border-ochre/30 hover:bg-ochre/10 transition-colors"
+            >
+              Read the story
+            </button>
+          )}
           <div className="flex items-center gap-1 rounded-full bg-sand/40 p-1">
             {(Object.keys(RANGE_PRESETS) as RangePreset[]).map(p => (
               <button
@@ -119,6 +140,12 @@ export default function TimelinePage() {
 
       <Legend />
 
+      {ledgerStoriesUrl && (
+        <div className="mb-5 rounded-xl border border-ink/8 bg-sand/20 px-4 py-3 text-sm text-ink/65">
+          Timeline engagement happens here. Source story editing, transcript work, and storyteller admin still belong in Empathy Ledger.
+        </div>
+      )}
+
       {notConfigured && <ConfigNotice />}
       {error && !notConfigured && <ErrorNotice error={error} />}
       {loading && !notConfigured && <div className="py-10 text-center text-ink/50">Loading…</div>}
@@ -126,6 +153,7 @@ export default function TimelinePage() {
         isFullCentury ? (
           <CenturyTimeline
             events={events}
+            personPath={personPath}
             onEventClick={setSelected}
             onEraClick={handleEraZoom}
           />
