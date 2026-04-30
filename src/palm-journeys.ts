@@ -42,6 +42,13 @@ export type JourneyGalleryItem =
   | { kind: 'still'; url: string; title: string; year: string; source: string; license: string }
   | { kind: 'clip';  url: string; poster?: string; title: string; year: string; source: string; license: string }
 
+export type ElderQuote = {
+  elderSlug: string                           // → LIVING_ELDER_PINS
+  text: string                                // the quote
+  source: string                              // e.g. "Elders Trip Interview"
+  pendingReview?: boolean                     // true until elder approves public surface
+}
+
 export type Journey = {
   slug: string
   title: string
@@ -52,9 +59,13 @@ export type Journey = {
   location: string                            // "Mission Beach · Djiru Country"
   hero: JourneyImage
   heroVideo?: JourneyVideo                    // optional video hero — overrides hero image when present
+  descriptEmbedUrl?: string                   // optional Descript share URL — surfaces a produced-doc embed below the hero
+  descriptEmbedTitle?: string                 // caption for the embed
   whyThisPlace: string                        // 2-3 sentences
-  elderSlugs: string[]                        // /elders/<slug>
+  elderSlugs: string[]                        // /elders/<slug> — who went / is going
+  notGoingNote?: string                       // editorial note when an elder is conspicuously absent (e.g. Aunty Iris)
   chapters: JourneyChapter[]
+  elderQuotes?: ElderQuote[]                  // per-elder voice from this trip
   gallery?: JourneyGalleryItem[]              // mixed stills + clips, appears between chapters and closing
   closingReflection?: {
     body: string
@@ -152,6 +163,8 @@ export const JOURNEYS: Journey[] = [
       source: 'PICC media · Palm Island Community Company',
       license: 'PICC consent · cultural protocol',
     },
+    descriptEmbedUrl: 'https://share.descript.com/embed/75MyeSD3Ujp',
+    descriptEmbedTitle: 'Mission Beach 2024 — produced documentary',
     // Trip photos pulled from Empathy Ledger — actual elders-trip-2025 photoshoot
     // (elders went to Mission Beach Oct 2025, trip-day photos held in
     // Empathy Ledger media_assets table linked to project picc-elders).
@@ -170,7 +183,17 @@ export const JOURNEYS: Journey[] = [
       { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1765843210165-6khdad.jpg', title: 'Returning, reconfigured', year: 'Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
     ],
     whyThisPlace: "In 1918 the cyclone Leonte destroyed the Hull River Aboriginal Settlement at Mission Beach. The Aboriginal people removed there from across the Far North coast and the Tablelands were transported to Palm Island in the months that followed. This is the moment Palm Island became Bwgcolman, the place where many were sent. In 2024 the PICC elders returned to Mission Beach together. Not nostalgia. A return to the place where ancestors suffered.",
-    elderSlugs: ['allan-palm-island', 'winifred-obah'],
+    elderSlugs: [
+      'allan-palm-island',
+      'winifred-obah',
+      'marjoyie-burns',
+      'frank-anderson',
+      'aunty-ethel-robertson',
+      'elsa-watson',
+      'cyndel-pryor',
+      'gurtrude-richardson',
+    ],
+    notGoingNote: 'Aunty Iris May Whitey did not travel on this trip — held at home with family. Her sister Aunty Ethel went and brought back the witness.',
     chapters: [
       {
         eyebrow: 'Why we went',
@@ -203,6 +226,56 @@ export const JOURNEYS: Journey[] = [
         pullquote: "We had our hundred year anniversary, it was in 2018. You know, when they did all the corroboree in there for five minutes nonstop.",
         attribution: 'Winifred Obah · Elders Trip Interview',
         bg: IMG.brookIsland1920,
+      },
+    ],
+    // Elder voices from this trip — pulled from transcripts in Empathy Ledger
+    // ('Elders Trip Interview' transcripts per elder, project picc-elders).
+    // Quotes flagged pendingReview need elder approval before public surface.
+    elderQuotes: [
+      {
+        elderSlug: 'allan-palm-island',
+        text: "We are on our way up to Mission Beach to uncover a scenery that would happen back in 1918. To uncover that, to see for myself and actually feel their pain and suffering. It's like passing on a message and follow that message where it will lead you to.",
+        source: 'Lucinda Interview · Elders Trip',
+      },
+      {
+        elderSlug: 'winifred-obah',
+        text: "We had our hundred year anniversary, it was in 2018. When they did all the corroboree in there for five minutes nonstop.",
+        source: 'Elders Trip Interview',
+      },
+      {
+        elderSlug: 'cyndel-pryor',
+        text: "I'd come up to look and search with mum's history. Meeting some of mum's people, who acknowledged her — was such a joy for my heart.",
+        source: 'Elders Trip Interview',
+        pendingReview: true,
+      },
+      {
+        elderSlug: 'aunty-ethel-robertson',
+        text: "My mother — from a young girl, soon as she started walking — her mother Gracie and my great-grandmother Polly would talk language to her. The whole girl, she spoke the language. I only wish I could see my grandmother and my great-grandmother.",
+        source: 'Elders Trip Interview',
+        pendingReview: true,
+      },
+      {
+        elderSlug: 'marjoyie-burns',
+        text: "I'm very happy to be here standing on Jirrbal Country from my grandmother. Just walking in on country there, for me to think. It's very emotional, you know.",
+        source: 'Elders Trip Interview',
+      },
+      {
+        elderSlug: 'frank-anderson',
+        text: "We had to go on doing whatever any normal kid would do. Just go and play and do some chores. And so we grew up to listen.",
+        source: 'Frank Full Interview · Elders Trip',
+        pendingReview: true,
+      },
+      {
+        elderSlug: 'elsa-watson',
+        text: "Mum was a Mamu woman from Millaa Millaa. Taken to Palm at ten. Deaf — she taught us family sign language. The trip was for her line.",
+        source: 'Paraphrased from Elders Trip Interview',
+        pendingReview: true,
+      },
+      {
+        elderSlug: 'gurtrude-richardson',
+        text: "Time is very important in this process. Maintaining relations with elders is maybe a longer, longer process.",
+        source: 'Elders Trip Interview',
+        pendingReview: true,
       },
     ],
     closingReflection: {
@@ -238,7 +311,17 @@ export const JOURNEYS: Journey[] = [
       { kind: 'clip', url: '/media/clips/mountain-panorama.mp4', poster: '/media/stills/mountain-valley.jpg', title: 'Mountain panorama', year: '', source: 'PICC media · Palm Island Community Company', license: 'PICC consent · cultural protocol' },
     ],
     whyThisPlace: "The Tablelands hold the source landscape for three of Palm Island's family lines. Doreen Morton was removed from here at ten years old in the 1930s wave. Alf Palmer carried Warrongo language out of Mt Garnet. Allan's mother — Giribau, likely Jirrbal — has family memory of station work at Kunawara near Mt Garnet. The 2026 trip walks the Country these families were taken from. The trust loop with Mission Beach 2024 builds: each return prepares the next.",
-    elderSlugs: ['marjoyie-burns', 'winifred-obah', 'elsa-watson', 'allan-palm-island'],
+    elderSlugs: [
+      'allan-palm-island',
+      'winifred-obah',
+      'marjoyie-burns',
+      'frank-anderson',
+      'aunty-ethel-robertson',
+      'aunty-iris-whitey',
+      'elsa-watson',
+      'cyndel-pryor',
+      'gurtrude-richardson',
+    ],
     chapters: [
       {
         eyebrow: 'The Country',

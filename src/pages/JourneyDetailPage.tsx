@@ -163,8 +163,35 @@ export default function JourneyDetailPage() {
             Why this place
           </div>
           <p className="font-serif text-lg md:text-xl leading-[1.7] opacity-90">{journey.whyThisPlace}</p>
+          {journey.notGoingNote && (
+            <p className="font-serif italic text-sm leading-relaxed opacity-70 mt-6 pt-6 border-t" style={{ borderColor: hexToRgba(P.ink, 0.1) }}>
+              {journey.notGoingNote}
+            </p>
+          )}
         </div>
       </section>
+
+      {/* Descript embed — produced documentary */}
+      {journey.descriptEmbedUrl && (
+        <section className="py-16 px-6" style={{ background: P.ink }}>
+          <div className="max-w-5xl mx-auto">
+            {journey.descriptEmbedTitle && (
+              <div className="text-[11px] tracking-[0.3em] uppercase mb-6 text-center" style={{ color: P.amber }}>
+                {journey.descriptEmbedTitle}
+              </div>
+            )}
+            <div className="aspect-video bg-black overflow-hidden">
+              <iframe
+                src={journey.descriptEmbedUrl}
+                title={journey.descriptEmbedTitle || 'Journey documentary'}
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Chapters */}
       {journey.chapters.map((chapter, idx) => (
@@ -229,6 +256,76 @@ export default function JourneyDetailPage() {
           </div>
         </section>
       ))}
+
+      {/* Per-elder voices from this trip */}
+      {journey.elderQuotes && journey.elderQuotes.length > 0 && (
+        <section className="py-24 px-6" style={{ background: P.cream }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="text-[11px] tracking-[0.3em] uppercase mb-4" style={{ color: P.ochre }}>
+                Voices from this trip
+              </div>
+              <h2 className="font-serif font-light leading-[1.05]" style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}>
+                What each elder brought back
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12">
+              {journey.elderQuotes.map((eq) => {
+                const elderPin = LIVING_ELDER_PINS.find((e) => e.storytellerSlug === eq.elderSlug)
+                if (!elderPin) return null
+                return (
+                  <Link
+                    key={eq.elderSlug}
+                    to={`/elders/${eq.elderSlug}`}
+                    className="group flex flex-col hover:opacity-95 transition-opacity"
+                  >
+                    <div className="flex items-center gap-4 mb-5">
+                      {elderPin.avatarUrl ? (
+                        <img
+                          src={elderPin.avatarUrl}
+                          alt={elderPin.displayName}
+                          className="w-16 h-16 rounded-full object-cover shrink-0"
+                          style={{ filter: 'sepia(0.05) saturate(0.95)' }}
+                        />
+                      ) : (
+                        <div
+                          className="w-16 h-16 rounded-full flex items-center justify-center font-serif text-xl shrink-0"
+                          style={{ background: hexToRgba(P.ochre, 0.1), color: P.ochre }}
+                        >
+                          {elderPin.displayName.replace(/^(Uncle|Aunty)\s+/, '').charAt(0)}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <div className="font-serif text-base leading-tight">{elderPin.displayName}</div>
+                        <div className="text-[10px] tracking-[0.2em] uppercase opacity-50 mt-1" style={{ color: P.ochre }}>
+                          {elderPin.cultural}
+                        </div>
+                      </div>
+                    </div>
+                    <blockquote
+                      className="font-serif italic font-light leading-[1.4] border-l-2 pl-4"
+                      style={{ fontSize: 'clamp(16px, 1.2vw, 18px)', borderColor: hexToRgba(P.ochre, 0.4) }}
+                    >
+                      &ldquo;{eq.text}&rdquo;
+                    </blockquote>
+                    <div className="mt-3 flex items-baseline justify-between flex-wrap gap-2">
+                      <div className="text-[10px] tracking-widest uppercase opacity-50">{eq.source}</div>
+                      {eq.pendingReview && (
+                        <div
+                          className="text-[10px] tracking-widest uppercase px-2 py-0.5"
+                          style={{ background: hexToRgba(P.amber, 0.15), color: P.ochre }}
+                        >
+                          Pending elder review
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Gallery — stills + clips from the trip */}
       {journey.gallery && journey.gallery.length > 0 && (
