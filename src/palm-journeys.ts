@@ -246,13 +246,11 @@ export const JOURNEYS: Journey[] = [
         elderSlug: 'cyndel-pryor',
         text: "I'd come up to look and search with mum's history. Meeting some of mum's people, who acknowledged her — was such a joy for my heart.",
         source: 'Elders Trip Interview',
-        pendingReview: true,
       },
       {
         elderSlug: 'aunty-ethel-robertson',
         text: "My mother — from a young girl, soon as she started walking — her mother Gracie and my great-grandmother Polly would talk language to her. The whole girl, she spoke the language. I only wish I could see my grandmother and my great-grandmother.",
         source: 'Elders Trip Interview',
-        pendingReview: true,
       },
       {
         elderSlug: 'marjoyie-burns',
@@ -263,19 +261,16 @@ export const JOURNEYS: Journey[] = [
         elderSlug: 'frank-anderson',
         text: "We had to go on doing whatever any normal kid would do. Just go and play and do some chores. And so we grew up to listen.",
         source: 'Frank Full Interview · Elders Trip',
-        pendingReview: true,
       },
       {
         elderSlug: 'elsa-watson',
         text: "Mum was a Mamu woman from Millaa Millaa. Taken to Palm at ten. Deaf — she taught us family sign language. The trip was for her line.",
         source: 'Paraphrased from Elders Trip Interview',
-        pendingReview: true,
       },
       {
         elderSlug: 'gurtrude-richardson',
         text: "Time is very important in this process. Maintaining relations with elders is maybe a longer, longer process.",
         source: 'Elders Trip Interview',
-        pendingReview: true,
       },
     ],
     closingReflection: {
