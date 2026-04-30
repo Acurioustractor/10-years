@@ -11,9 +11,9 @@ export default function PublicLayout() {
               A living story map
             </div>
           </NavLink>
-          <nav className="flex items-center gap-3 md:gap-5 text-sm">
+          <nav className="flex items-center gap-3 md:gap-4 text-sm">
             <NavLink to="/history" className={({ isActive }) =>
-              `hidden sm:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
             }>
               History
             </NavLink>
@@ -22,15 +22,25 @@ export default function PublicLayout() {
             }>
               Elders
             </NavLink>
+            <NavLink to="/people" className={({ isActive }) =>
+              `hidden sm:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              People
+            </NavLink>
+            <NavLink to="/places" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Places
+            </NavLink>
+            <NavLink to="/years" className={({ isActive }) =>
+              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
+            }>
+              Years
+            </NavLink>
             <NavLink to="/journeys" className={({ isActive }) =>
               `hidden sm:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
             }>
               Journeys
-            </NavLink>
-            <NavLink to="/explore" className={({ isActive }) =>
-              `hidden md:inline-block transition-colors ${isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'}`
-            }>
-              Explore
             </NavLink>
             <NavLink
               to="/join"

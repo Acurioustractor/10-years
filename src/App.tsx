@@ -17,6 +17,12 @@ import EldersIndexPage from './pages/EldersIndexPage'
 import ElderProfilePage from './pages/ElderProfilePage'
 import JourneyIndexPage from './pages/JourneyIndexPage'
 import JourneyDetailPage from './pages/JourneyDetailPage'
+import PeopleIndexPage from './pages/PeopleIndexPage'
+import PersonDetailPage from './pages/PersonDetailPage'
+import PlacesIndexPage from './pages/PlacesIndexPage'
+import PlaceDetailPage from './pages/PlaceDetailPage'
+import YearsIndexPage from './pages/YearsIndexPage'
+import YearDetailPage from './pages/YearDetailPage'
 
 // Community pages
 import CommunityHomePage from './pages/CommunityHomePage'
@@ -61,6 +67,12 @@ export default function App() {
       <Route path="/elders/:slug" element={<ElderProfilePage />} />
       <Route path="/journeys" element={<JourneyIndexPage />} />
       <Route path="/journeys/:slug" element={<JourneyDetailPage />} />
+      <Route path="/people" element={<PeopleIndexPage />} />
+      <Route path="/people/:slug" element={<PersonDetailPage />} />
+      <Route path="/places" element={<PlacesIndexPage />} />
+      <Route path="/places/:slug" element={<PlaceDetailPage />} />
+      <Route path="/years" element={<YearsIndexPage />} />
+      <Route path="/years/:year" element={<YearDetailPage />} />
 
       {/* Family shell */}
       <Route path="/f/:familySlug" element={<FamilyLayout />}>
