@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { NavLink, Outlet, Navigate, useParams } from 'react-router-dom'
+import { NavLink, Outlet, Navigate, useLocation, useParams } from 'react-router-dom'
 import { useSession } from '@/contexts/SessionContext'
+import { CLUSTER_CONFIGS } from '@/cluster-configs'
 
 export default function FamilyLayout() {
-  const { familyCode } = useParams<{ familyCode: string }>()
+  const { familySlug } = useParams<{ familySlug: string }>()
+  const location = useLocation()
   const { mode, familySession, logout } = useSession()
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -12,10 +14,21 @@ export default function FamilyLayout() {
     return <Navigate to="/join" replace />
   }
 
-  const familyName = familySession?.folder.name || 'Family'
-  const memberName = familySession?.member.displayName || ''
-  const role = familySession?.member.role || 'viewer'
-  const base = `/f/${familyCode}`
+  // Allow read access to any sibling cluster in the same community.
+  // Only redirect when the URL slug is unknown (stale link / typo).
+  const isKnownSibling = familySlug ? Boolean(CLUSTER_CONFIGS[familySlug]) : false
+  if (familySession?.folder.slug && familySlug && familySlug !== familySession.folder.slug && !isKnownSibling) {
+    const suffix = location.pathname.replace(`/f/${familySlug}`, '')
+    return <Navigate to={`/f/${familySession.folder.slug}${suffix}`} replace />
+  }
+
+  // When viewing a sibling cluster, header should reflect the URL cluster, not the session folder.
+  const viewingSibling = isKnownSibling && familySlug && familySlug !== familySession?.folder.slug
+  const siblingName = viewingSibling && familySlug ? CLUSTER_CONFIGS[familySlug].name.join(' · ') : null
+  const familyName = siblingName || familySession?.folder.name || 'Family'
+  const memberName = viewingSibling ? '' : familySession?.member.displayName || ''
+  const role = viewingSibling ? 'visiting' : familySession?.member.role || 'viewer'
+  const base = `/f/${familySlug || familySession?.folder.slug || ''}`
 
   const navItems = [
     { to: base, label: 'Home', end: true },
@@ -71,6 +84,9 @@ export default function FamilyLayout() {
               </NavLink>
             ))}
             {(role === 'elder' || role === 'family_rep') && (
+              <NavLink to={`${base}/governance`} className={navCls}>Governance</NavLink>
+            )}
+            {(role === 'elder' || role === 'family_rep') && (
               <NavLink to={`${base}/settings`} className={navCls}>Settings</NavLink>
             )}
             <button onClick={logout} className="text-xs text-ink/40 hover:text-ink/60 ml-2">
@@ -87,6 +103,11 @@ export default function FamilyLayout() {
                 {item.label}
               </NavLink>
             ))}
+            {(role === 'elder' || role === 'family_rep') && (
+              <NavLink to={`${base}/governance`} className={mobileNavCls} onClick={() => setMenuOpen(false)}>
+                Governance
+              </NavLink>
+            )}
             {(role === 'elder' || role === 'family_rep') && (
               <NavLink to={`${base}/settings`} className={mobileNavCls} onClick={() => setMenuOpen(false)}>
                 Settings

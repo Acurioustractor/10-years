@@ -46,9 +46,10 @@ interface Props {
   events?: TimelineEventSummary[]
   onChapterChange?: (from: number, to: number) => void
   onExit?: () => void
+  personPath?: (personId: string) => string
 }
 
-export default function ChaptersOverlay({ events = [], onChapterChange, onExit }: Props) {
+export default function ChaptersOverlay({ events = [], onChapterChange, onExit, personPath }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(true)
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -196,7 +197,7 @@ export default function ChaptersOverlay({ events = [], onChapterChange, onExit }
                                     {ev.people.slice(0, 3).map(p => (
                                       <Link
                                         key={p.id}
-                                        to={`/person/${p.id}`}
+                                        to={personPath ? personPath(p.id) : `/person/${p.id}`}
                                         className="h-4 w-4 rounded-full bg-sand border border-cream text-[6px] flex items-center justify-center font-medium text-desert hover:scale-110 transition-transform"
                                         title={p.displayName}
                                       >

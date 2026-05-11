@@ -56,7 +56,7 @@ export function useTimelineData(yearFrom: number, yearTo: number): TimelineData 
             role: member.role,
             location: null,
             isActive: !member.isAncestor,
-            storyCount: 0,
+            storyCount: member.storyCount ?? 0,
             createdAt: '',
           }))
           setPeople(familyPeople)

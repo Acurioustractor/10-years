@@ -39,6 +39,27 @@ export default function EventPanel({ event, onClose }: Props) {
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-5">
+        {/* Hero image — event image first, fall back to first subject's portrait */}
+        {(() => {
+          const hero = event.heroImage
+          const fallbackPerson = !hero ? event.people.find(p => p.avatarUrl) : null
+          if (!hero && !fallbackPerson) return null
+          const url = hero?.largeUrl || hero?.url || hero?.thumbnailUrl || fallbackPerson?.avatarUrl || ''
+          const caption = hero?.caption || hero?.title || (fallbackPerson ? `Portrait of ${fallbackPerson.displayName}` : '')
+          const attribution = hero?.attributionText || (fallbackPerson ? "— from this storyteller's record" : '')
+          return (
+            <figure className="rounded-2xl overflow-hidden bg-ink/5 -mt-1">
+              <img src={url} alt={hero?.altText || caption || ''} className="w-full max-h-72 object-cover" />
+              <figcaption className="px-4 py-3 text-xs text-ink/60 leading-relaxed">
+                <span className="block text-ink/75">{caption}</span>
+                {attribution && <span className="block mt-1 text-ink/45">{attribution}</span>}
+                {hero?.sourceUrl && (
+                  <a href={hero.sourceUrl} target="_blank" rel="noreferrer" className="block mt-1 text-ochre hover:text-ink">View source ↗</a>
+                )}
+              </figcaption>
+            </figure>
+          )
+        })()}
         {event.description && (
           <p className="text-ink/80 leading-relaxed">{event.description}</p>
         )}

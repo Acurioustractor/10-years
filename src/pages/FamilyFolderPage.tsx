@@ -75,7 +75,7 @@ function OverviewTab({ peopleCount }: { peopleCount: number }) {
         <StepCard
           number={1}
           title="Create a family folder"
-          description="A family elder or organiser starts a folder. No org needed — just a family name and the first few people. The folder belongs to the family, not an institution."
+          description="A family Elder or organiser starts a folder. No org needed — just a family name and the first few people. The folder belongs to the family, not an institution."
           color="desert"
         />
         <StepCard

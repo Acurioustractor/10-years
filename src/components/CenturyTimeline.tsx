@@ -7,9 +7,10 @@ interface Props {
   events: TimelineEventSummary[]
   onEventClick?: (event: TimelineEventSummary) => void
   onEraClick?: (from: number, to: number) => void
+  personPath?: (personId: string) => string
 }
 
-export default function CenturyTimeline({ events, onEventClick, onEraClick }: Props) {
+export default function CenturyTimeline({ events, onEventClick, onEraClick, personPath }: Props) {
   const [expandedEra, setExpandedEra] = useState<string | null>(null)
   const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
 
@@ -126,6 +127,7 @@ export default function CenturyTimeline({ events, onEventClick, onEraClick }: Pr
                       isHovered={hoveredEvent === ev.id}
                       onHover={setHoveredEvent}
                       onClick={onEventClick}
+                      personPath={personPath}
                     />
                   ))}
                   {!showAll && (
@@ -155,6 +157,7 @@ function EventRow({
   isHovered,
   onHover,
   onClick,
+  personPath,
 }: {
   event: TimelineEventSummary
   era: Era
@@ -162,6 +165,7 @@ function EventRow({
   isHovered: boolean
   onHover: (id: string | null) => void
   onClick?: (event: TimelineEventSummary) => void
+  personPath?: (personId: string) => string
 }) {
   const [expanded, setExpanded] = useState(false)
 
@@ -216,7 +220,7 @@ function EventRow({
             {event.people.slice(0, 4).map((p) => (
               <Link
                 key={`${p.id}-${event.id}`}
-                to={`/person/${p.id}`}
+                to={personPath ? personPath(p.id) : `/person/${p.id}`}
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-sand/60 text-desert hover:bg-sand transition-colors"
               >

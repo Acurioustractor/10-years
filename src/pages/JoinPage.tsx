@@ -65,7 +65,11 @@ function LoginForm() {
     setLoading(false)
 
     if (result.success) {
-      navigate(`/f/${code.trim().toUpperCase()}`)
+      const stored = localStorage.getItem('10years_family_session')
+      const slug = stored
+        ? (JSON.parse(stored) as { folder?: { slug?: string } }).folder?.slug
+        : null
+      navigate(`/f/${slug || code.trim().toUpperCase()}`)
     } else {
       setError(result.error || 'Login failed')
     }
@@ -82,7 +86,7 @@ function LoginForm() {
           placeholder="e.g. BLOOM-2024"
           className="w-full px-4 py-2.5 rounded-lg border border-ink/15 bg-cream text-ink placeholder:text-ink/30 focus:outline-none focus:ring-2 focus:ring-ochre/30 focus:border-ochre/40"
         />
-        <p className="text-[11px] text-ink/40 mt-1">Your family elder or admin will give you this code</p>
+        <p className="text-[11px] text-ink/40 mt-1">Your family Elder or admin will give you this code</p>
       </div>
       <div>
         <label className="block text-xs uppercase tracking-widest text-ink/50 mb-1.5">Your name</label>
@@ -157,7 +161,7 @@ function CreateForm() {
         </p>
         <button
           type="button"
-          onClick={() => navigate(`/f/${result.accessCode}`)}
+          onClick={() => navigate(`/f/${result.slug}`)}
           className="w-full py-2.5 rounded-lg bg-ochre text-cream font-medium text-sm hover:bg-ochre/90 transition-colors"
         >
           Enter your family folder
@@ -194,7 +198,7 @@ function CreateForm() {
           type="text"
           value={adminName}
           onChange={e => setAdminName(e.target.value)}
-          placeholder="You'll be the first elder"
+          placeholder="You'll be the first Elder"
           className="w-full px-4 py-2.5 rounded-lg border border-ink/15 bg-cream text-ink placeholder:text-ink/30 focus:outline-none focus:ring-2 focus:ring-ochre/30 focus:border-ochre/40"
         />
       </div>

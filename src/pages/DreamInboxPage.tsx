@@ -1,3 +1,4 @@
+import CrossAppGuideCard from '@/components/CrossAppGuideCard'
 import { useConnections } from '@/hooks/useConnections'
 import type { Connection, ConnectionStatus } from '@/services/types'
 
@@ -18,6 +19,23 @@ export default function DreamInboxPage() {
           People with dreams waiting for the right introduction.
         </p>
       </header>
+
+      <div className="mb-8">
+        <CrossAppGuideCard
+          title="Edit source stories there. Move dream support here."
+          description="The dream inbox is the action layer for support and introductions, not the source-record editor. Use Empathy Ledger to change storyteller records, transcript-backed stories, or source evidence. Use 10 Years to track which dreams need help moving."
+          editingItems={[
+            'Storyteller records, transcript evidence, stories, and photos belong in Empathy Ledger.',
+            'If the source story or person record is wrong, fix it there before acting on the dream here.',
+          ]}
+          engagementItems={[
+            'Use the dream inbox here to see which aspirations need a connector, mentor, or next step.',
+            'Keep the support workflow here while the source truth stays in Empathy Ledger.',
+          ]}
+          ledgerPath="/admin"
+          ledgerLabel="Open Empathy Ledger admin"
+        />
+      </div>
 
       {notConfigured && <Notice title="Not configured yet" body="Add the Empathy Ledger API key to .env.local and restart." />}
       {error && !notConfigured && <Notice tone="red" title="Could not load." body={error.message} />}
