@@ -202,7 +202,7 @@ export default function FamilyHomePage() {
         </section>
       )}
 
-      {/* Other elders — voices in this family */}
+      {/* Other Elders — voices in this family */}
       {otherElders.length > 0 && (
         <section className="mb-12">
           <div className="flex items-baseline justify-between mb-5">
@@ -369,7 +369,7 @@ export default function FamilyHomePage() {
                     )}
                     {!canReviewFamilyKinship && !canReviewFamilyLinks && (
                       <div className="text-xs text-ink/55">
-                        You can see the family state here, but only elders or family reps can approve the pending items.
+                        You can see the family state here, but only Elders or family reps can approve the pending items.
                       </div>
                     )}
                   </div>
@@ -516,7 +516,7 @@ export default function FamilyHomePage() {
                       <div className="text-sm font-medium text-ink truncate">{member.displayName}</div>
                       <div className="text-xs text-ink/45 mt-1">{formatRoleLabel(member.role)}</div>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        {member.isElder && <MiniPill tone="eucalypt">elder</MiniPill>}
+                        {member.isElder && <MiniPill tone="eucalypt">Elder</MiniPill>}
                         {member.isAncestor && <MiniPill tone="desert">ancestor</MiniPill>}
                         {!member.isAncestor && !member.isElder && <MiniPill tone="ochre">living</MiniPill>}
                       </div>
@@ -569,7 +569,7 @@ export default function FamilyHomePage() {
             </>
           ) : (
             <div className="rounded-xl border border-ink/8 bg-sand/20 p-4 text-sm text-ink/65 leading-relaxed">
-              Family keepers hold this layer. Elders approve family truth, and family reps or elders approve community link handshakes.
+              Family keepers hold this layer. Elders approve family truth, and family reps or Elders approve community link handshakes.
             </div>
           )}
 
@@ -653,7 +653,7 @@ export default function FamilyHomePage() {
 
       </div>
 
-      {/* Access code reminder for elders — quiet, at the very bottom */}
+      {/* Access code reminder for Elders — quiet, at the very bottom */}
       {(role === 'elder' || role === 'family_rep') && (
         <div className="max-w-3xl mx-auto mt-12 pt-6 border-t border-ink/8 text-xs text-ink/50">
           <span className="text-ochre">Family code:</span> share to invite more family →{' '}
@@ -770,5 +770,6 @@ function MiniPill({
 }
 
 function formatRoleLabel(role: string) {
+  if (role === 'elder') return 'Elder'
   return role.replace('_', ' ')
 }

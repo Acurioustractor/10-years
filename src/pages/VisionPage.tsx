@@ -56,7 +56,7 @@ export default function VisionPage() {
             <span className="block italic opacity-85 mt-3">one people.</span>
           </h1>
           <p className="font-serif italic max-w-2xl mx-auto text-lg md:text-xl leading-relaxed opacity-85 mt-8">
-            How the elders lead. How the families decide. How the children inherit. The Palm Island
+            How the Elders lead. How the families decide. How the children inherit. The Palm Island
             Community Company carrying its own authority — recognised alongside the law.
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function VisionPage() {
               </div>
               <h3 className="font-serif text-xl leading-tight mb-3">Aged care on Palm</h3>
               <p className="font-serif italic text-sm leading-relaxed opacity-80">
-                Community-run, on-Country aged care so the elders never have to leave home for the last years.
+                Community-run, on-Country aged care so the Elders never have to leave home for the last years.
               </p>
             </div>
             <div className="p-6" style={{ background: hexToRgba(P.ochre, 0.06), border: `1px solid ${hexToRgba(P.ink, 0.08)}` }}>
@@ -183,18 +183,18 @@ export default function VisionPage() {
               </div>
               <h3 className="font-serif text-xl leading-tight mb-3">A permanent archive of community voice</h3>
               <p className="font-serif italic text-sm leading-relaxed opacity-80">
-                That grows stronger every year. The elders walking into Country are recording so the children can keep correcting.
+                That grows stronger every year. The Elders walking into Country are recording so the children can keep correcting.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── 5. How elders participate ──────────────────────────── */}
+      {/* ─── 5. How Elders participate ──────────────────────────── */}
       <section className="px-6 py-24" style={{ background: P.cream }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-[11px] tracking-[0.3em] uppercase mb-6 text-center" style={{ color: P.ochre }}>
-            How the elders participate
+            How the Elders participate
           </div>
           <h2
             className="font-serif font-light leading-[1.1] mb-12 text-center"
@@ -203,7 +203,7 @@ export default function VisionPage() {
             Voice, photographs, journeys, lineage
           </h2>
           <p className="font-serif italic max-w-2xl mx-auto text-lg leading-[1.7] opacity-85 text-center mb-16">
-            Each elder holds a line. Each line holds a Country. Each Country holds a story. The platform
+            Each Elder holds a line. Each line holds a Country. Each Country holds a story. The platform
             surfaces the parts the family approves — voice quotes, transcripts, photographs, the
             backwards lineage. The handover to the children happens when the family says it does.
           </p>
@@ -256,7 +256,7 @@ export default function VisionPage() {
           </h2>
           <p className="font-serif italic text-lg md:text-xl leading-[1.6] opacity-85 mb-12">
             The platform isn't an archive that closes. It's a draft the families keep correcting. The
-            elders walk back to Country. The trips bring back voice. The voice goes into the platform.
+            Elders walk back to Country. The trips bring back voice. The voice goes into the platform.
             The children take it from there.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -272,7 +272,7 @@ export default function VisionPage() {
               className="px-8 py-4 font-serif text-base border-2 hover:opacity-90 transition-opacity"
               style={{ borderColor: P.amber, color: P.amber }}
             >
-              Meet the elders
+              Meet the Elders
             </Link>
           </div>
         </div>

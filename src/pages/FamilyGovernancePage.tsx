@@ -144,7 +144,7 @@ export default function FamilyGovernancePage() {
         <div className="text-xs uppercase tracking-widest text-ochre">Family governance</div>
         <h1 className="font-serif text-3xl md:text-4xl text-ink mt-2">Approvals, community links, and family truth</h1>
         <p className="text-ink/60 mt-2 max-w-3xl">
-          This page holds the decision layer for {detail.folder.name}. Family elders approve family truth. Family reps and elders can approve community link handshakes.
+          This page holds the decision layer for {detail.folder.name}. Family Elders approve family truth. Family reps and Elders can approve community link handshakes.
         </p>
       </header>
 
@@ -161,8 +161,8 @@ export default function FamilyGovernancePage() {
             <div className="text-xs uppercase tracking-widest text-eucalypt">Governance model</div>
             <h2 className="font-serif text-2xl text-ink mt-2">What belongs in family governance</h2>
             <div className="space-y-2 mt-3 text-sm text-ink/65">
-              <div>Family truth: elders approve kinship and lineage decisions inside the family.</div>
-              <div>Community handshakes: family reps and elders approve whether the family joins a community layer.</div>
+              <div>Family truth: Elders approve kinship and lineage decisions inside the family.</div>
+              <div>Community handshakes: family reps and Elders approve whether the family joins a community layer.</div>
               <div>Access and workspace roles: handled separately in family settings.</div>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function FamilyGovernancePage() {
 
         {!canManage && (
           <div className="mt-6 rounded-xl border border-ochre/20 bg-ochre/[0.05] px-4 py-4 text-sm text-ink/70">
-            Only family elders can approve kinship, and only family elders or family reps can approve community link requests.
+            Only family Elders can approve kinship, and only family Elders or family reps can approve community link requests.
           </div>
         )}
       </section>
@@ -235,7 +235,7 @@ export default function FamilyGovernancePage() {
                       {formatRoleLabel(member.role)}
                     </MiniPill>
                     {member.isElder && member.role !== 'elder' && (
-                      <MiniPill tone="eucalypt">elder</MiniPill>
+                      <MiniPill tone="eucalypt">Elder</MiniPill>
                     )}
                   </div>
                 </div>
@@ -272,7 +272,7 @@ export default function FamilyGovernancePage() {
           <div>
             <h2 className="font-serif text-2xl text-ink">Governance queue</h2>
             <p className="text-sm text-ink/60 mt-1">
-              Family elders approve kinship inside the family. Family reps and elders approve community link requests.
+              Family Elders approve kinship inside the family. Family reps and Elders approve community link requests.
             </p>
           </div>
           {governanceLoading && <div className="text-xs text-ink/40">Refreshing queue…</div>}
@@ -286,13 +286,13 @@ export default function FamilyGovernancePage() {
             </div>
             <QueueBadge
               value={canReviewFamilyKinship ? pendingFamilyKinship.length : 0}
-              label={canReviewFamilyKinship ? 'awaiting this family' : 'elder access required'}
+              label={canReviewFamilyKinship ? 'awaiting this family' : 'Elder access required'}
             />
           </div>
 
           {!canReviewFamilyKinship ? (
             <p className="text-sm text-ink/55">
-              Only family elders can approve kinship into the family truth layer.
+              Only family Elders can approve kinship into the family truth layer.
             </p>
           ) : pendingFamilyKinship.length === 0 ? (
             <p className="text-sm text-ink/50">No kinship proposals are waiting on this family right now.</p>
@@ -356,7 +356,7 @@ export default function FamilyGovernancePage() {
 
           {!canReviewFamilyLinks ? (
             <p className="text-sm text-ink/55">
-              Family reps and elders can approve community link requests for this family.
+              Family reps and Elders can approve community link requests for this family.
             </p>
           ) : familyCommunityLinks.length === 0 ? (
             <p className="text-sm text-ink/50">This family has no community links yet.</p>
@@ -506,5 +506,6 @@ function formatShortDate(value: string) {
 }
 
 function formatRoleLabel(role: string) {
+  if (role === 'elder') return 'Elder'
   return role.replace('_', ' ')
 }

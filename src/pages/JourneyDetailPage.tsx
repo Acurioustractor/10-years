@@ -57,6 +57,8 @@ export default function JourneyDetailPage() {
 
   const statusLabel =
     journey.status === 'past' ? 'Already walked' : journey.status === 'planned' ? 'Planned' : 'Held open'
+  const descriptViewUrl = journey.descriptEmbedUrl?.replace('/embed/', '/view/')
+  const descriptThumbnailUrl = journey.descriptThumbnailUrl || journey.heroVideo?.poster || journey.hero.url
 
   return (
     <div style={{ background: P.cream, color: P.ink }} className="min-h-screen">
@@ -197,8 +199,8 @@ export default function JourneyDetailPage() {
         />
       ) : null}
 
-      {/* Descript embed — produced documentary */}
-      {journey.descriptEmbedUrl && (
+      {/* Descript documentary */}
+      {descriptViewUrl && (
         <section className="py-16 px-6" style={{ background: P.ink }}>
           <div className="max-w-5xl mx-auto">
             {journey.descriptEmbedTitle && (
@@ -206,14 +208,38 @@ export default function JourneyDetailPage() {
                 {journey.descriptEmbedTitle}
               </div>
             )}
-            <div className="aspect-video bg-black overflow-hidden">
-              <iframe
-                src={journey.descriptEmbedUrl}
-                title={journey.descriptEmbedTitle || 'Journey documentary'}
-                allow="autoplay; fullscreen"
-                allowFullScreen
-                className="w-full h-full border-0"
+            <a
+              href={descriptViewUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open ${journey.descriptEmbedTitle || 'journey documentary'} on Descript`}
+              className="group relative block aspect-video overflow-hidden bg-black"
+            >
+              <img
+                src={descriptThumbnailUrl}
+                alt={journey.descriptEmbedTitle || 'Journey documentary'}
+                className="h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-95"
               />
+              <div className="absolute inset-0 bg-black/25 transition group-hover:bg-black/10" />
+              <div
+                className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/55 bg-black/45 text-white shadow-2xl transition group-hover:scale-105 group-hover:bg-black/65"
+                aria-hidden="true"
+              >
+                <span
+                  className="ml-1 block h-0 w-0 border-y-[12px] border-l-[18px] border-y-transparent border-l-white"
+                />
+              </div>
+            </a>
+            <div className="mt-5 text-center">
+              <a
+                href={descriptViewUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[11px] tracking-[0.25em] uppercase underline-offset-4 hover:underline"
+                style={{ color: P.amber }}
+              >
+                Open full video
+              </a>
             </div>
           </div>
         </section>
@@ -313,7 +339,7 @@ export default function JourneyDetailPage() {
                 Voices from this trip
               </div>
               <h2 className="font-serif font-light leading-[1.05]" style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}>
-                What each elder brought back
+                What each Elder brought back
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12">
@@ -362,7 +388,7 @@ export default function JourneyDetailPage() {
                           className="text-[10px] tracking-widest uppercase px-2 py-0.5"
                           style={{ background: hexToRgba(P.amber, 0.15), color: P.ochre }}
                         >
-                          Pending elder review
+                          Pending Elder review
                         </div>
                       )}
                     </div>

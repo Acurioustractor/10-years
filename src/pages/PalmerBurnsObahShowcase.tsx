@@ -450,7 +450,7 @@ function SacredPanel({ ancestor, sacred, cream, bg }: {
         </>
       )}
       <div className="relative z-10 w-full">
-      <div className="text-[11px] tracking-[0.3em] uppercase mb-12 opacity-60">Sacred · with elder consent</div>
+      <div className="text-[11px] tracking-[0.3em] uppercase mb-12 opacity-60">Sacred · with Elder consent</div>
       {!revealed ? (
         <button
           onClick={() => setRevealed(true)}

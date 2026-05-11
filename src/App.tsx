@@ -61,22 +61,20 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/history" element={<HistoryPage />} />
+        <Route path="/elders" element={<EldersIndexPage />} />
+        <Route path="/elders/:slug" element={<ElderProfilePage />} />
+        <Route path="/elders/:slug/lineage" element={<ElderLineagePage />} />
+        <Route path="/journeys" element={<JourneyIndexPage />} />
+        <Route path="/journeys/:slug" element={<JourneyDetailPage />} />
+        <Route path="/people" element={<PeopleIndexPage />} />
+        <Route path="/people/:slug" element={<PersonDetailPage />} />
+        <Route path="/places" element={<PlacesIndexPage />} />
+        <Route path="/places/:slug" element={<PlaceDetailPage />} />
+        <Route path="/years" element={<YearsIndexPage />} />
+        <Route path="/years/:year" element={<YearDetailPage />} />
+        <Route path="/vision" element={<VisionPage />} />
       </Route>
-
-      {/* Full-bleed standalone — escapes PublicLayout chrome */}
-      <Route path="/history" element={<HistoryPage />} />
-      <Route path="/elders" element={<EldersIndexPage />} />
-      <Route path="/elders/:slug" element={<ElderProfilePage />} />
-      <Route path="/elders/:slug/lineage" element={<ElderLineagePage />} />
-      <Route path="/journeys" element={<JourneyIndexPage />} />
-      <Route path="/journeys/:slug" element={<JourneyDetailPage />} />
-      <Route path="/people" element={<PeopleIndexPage />} />
-      <Route path="/people/:slug" element={<PersonDetailPage />} />
-      <Route path="/places" element={<PlacesIndexPage />} />
-      <Route path="/places/:slug" element={<PlaceDetailPage />} />
-      <Route path="/years" element={<YearsIndexPage />} />
-      <Route path="/years/:year" element={<YearDetailPage />} />
-      <Route path="/vision" element={<VisionPage />} />
 
       {/* Family shell */}
       <Route path="/f/:familySlug" element={<FamilyLayout />}>

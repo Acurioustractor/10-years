@@ -35,7 +35,7 @@ export default function YearDetailPage() {
       <div className="min-h-screen flex flex-col items-center justify-center px-6 py-24" style={{ background: P.cream, color: P.ink }}>
         <h1 className="font-serif text-3xl mb-4">Year not anchored yet</h1>
         <p className="font-serif italic opacity-70 mb-8">
-          {yearStr} is not a populated year in the graph. Years grow as the wiki and elder review surface
+          {yearStr} is not a populated year in the graph. Years grow as the wiki and Elder review surface
           more.
         </p>
         <Link to="/years" className="text-sm tracking-widest uppercase underline-offset-4 hover:underline" style={{ color: P.ochre }}>
@@ -184,7 +184,7 @@ export default function YearDetailPage() {
                 >
                   <div className="font-serif text-base leading-tight mb-1">{person.displayName}</div>
                   <div className="text-[10px] tracking-[0.2em] uppercase opacity-50" style={{ color: P.ochre }}>
-                    {person.status === 'living-elder' ? 'Living elder' : person.status === 'historical-figure' ? 'Historical figure' : person.status === 'ancestor' ? 'Ancestor' : person.status}
+                    {person.status === 'living-elder' ? 'Living Elder' : person.status === 'historical-figure' ? 'Historical figure' : person.status === 'ancestor' ? 'Ancestor' : person.status}
                   </div>
                 </Link>
               ))}

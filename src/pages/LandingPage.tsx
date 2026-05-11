@@ -152,13 +152,13 @@ export default function LandingPage() {
             className="font-serif font-light leading-[0.98] mb-8"
             style={{ fontSize: 'clamp(40px, 6.5vw, 96px)' }}
           >
-            Listening to the elders.
+            Listening to the Elders.
             <span className="block italic opacity-80 mt-3">Holding the history.</span>
             <span className="block opacity-90 mt-3">Walking back to Country.</span>
           </h1>
           <p className="font-serif italic max-w-2xl mx-auto text-lg md:text-xl leading-relaxed opacity-80 mt-10">
             A storytelling platform built with Indigenous communities. This is the Palm Island instance —
-            Bwgcolman elders carrying their families' voices forward.
+            Bwgcolman Elders carrying their families' voices forward.
           </p>
           <div className="mt-12 text-xs opacity-50 tracking-widest uppercase">↓ Scroll</div>
         </div>
@@ -203,7 +203,7 @@ export default function LandingPage() {
                   {voice.attribution}
                 </div>
                 <div className="text-[10px] tracking-wider uppercase opacity-50 group-hover:opacity-80">
-                  Open the elder's page →
+                  Open the Elder's page →
                 </div>
               </figcaption>
             </figure>
@@ -248,7 +248,7 @@ export default function LandingPage() {
             />
             <RoomTile
               to="/elders"
-              eyebrow="The elders"
+              eyebrow="The Elders"
               title="The nine carrying the lines"
               body="Each holds a Country. Each holds a family. Tap a portrait to enter."
               bg={EVENT_SLOTS[5]!.bg}
@@ -292,7 +292,7 @@ export default function LandingPage() {
           </p>
           <p className="font-serif italic text-lg leading-[1.7] opacity-80 mb-8">
             This instance is the Palm Island Community Company. The voices, photos, history, and journeys
-            on this site belong to the Bwgcolman elders and their families. Cultural protocol is mandatory.
+            on this site belong to the Bwgcolman Elders and their families. Cultural protocol is mandatory.
             Sovereignty stays with the families.
           </p>
           <p className="font-serif italic text-base leading-relaxed opacity-70">

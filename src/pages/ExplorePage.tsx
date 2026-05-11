@@ -199,7 +199,7 @@ export default function ExplorePage() {
           tone="ochre"
           count={communitiesByStage.governance}
           title="Governance ready"
-          description="Community elders or admins are in place, but shared family links are not active yet."
+          description="Community Elders or admins are in place, but shared family links are not active yet."
         />
         <StageSummaryCard
           tone="ink"
@@ -388,7 +388,7 @@ export default function ExplorePage() {
                             label={c.adminCount === 1 ? 'community steward' : 'community stewards'}
                           />
                           <div className="rounded-lg border border-ochre/15 bg-ochre/[0.05] px-3 py-2 text-xs text-ink/55">
-                            The governance layer is ready. The shared tree will appear here once families and elders approve active links.
+                            The governance layer is ready. The shared tree will appear here once families and Elders approve active links.
                           </div>
                         </div>
                       ) : (

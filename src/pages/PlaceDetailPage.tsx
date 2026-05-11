@@ -115,7 +115,7 @@ export default function PlaceDetailPage() {
                 >
                   <div className="font-serif text-base leading-tight mb-1">{person.displayName}</div>
                   <div className="text-[10px] tracking-[0.2em] uppercase opacity-50" style={{ color: P.ochre }}>
-                    {person.status === 'living-elder' ? 'Living elder' : person.status === 'historical-figure' ? 'Historical figure' : person.status === 'ancestor' ? 'Ancestor' : person.status}
+                    {person.status === 'living-elder' ? 'Living Elder' : person.status === 'historical-figure' ? 'Historical figure' : person.status === 'ancestor' ? 'Ancestor' : person.status}
                   </div>
                 </Link>
               ))}

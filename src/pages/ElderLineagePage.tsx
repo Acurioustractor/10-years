@@ -54,7 +54,7 @@ const RELATION_LABEL: Record<LineageRelation, string> = {
 const CONFIDENCE_LABEL: Record<LineageConfidence, string> = {
   confirmed: 'Confirmed in transcript',
   inferred: 'Inferred — pending source confirmation',
-  'pending-review': 'Pending elder review',
+  'pending-review': 'Pending Elder review',
 }
 
 const CONFIDENCE_TONE: Record<LineageConfidence, string> = {
@@ -73,7 +73,7 @@ export default function ElderLineagePage() {
       <div className="min-h-screen flex flex-col items-center justify-center px-6 py-24" style={{ background: P.cream, color: P.ink }}>
         <h1 className="font-serif text-3xl mb-4">Elder not found</h1>
         <Link to="/elders" className="text-sm tracking-widest uppercase underline-offset-4 hover:underline" style={{ color: P.ochre }}>
-          ← Back to all elders
+          ← Back to all Elders
         </Link>
       </div>
     )
@@ -105,7 +105,7 @@ export default function ElderLineagePage() {
         </h1>
         <p className="font-serif italic max-w-2xl mx-auto text-lg leading-relaxed opacity-80">
           What we know so far. The line is held by the family — this page surfaces the names that have
-          been spoken on transcript or sourced from the wiki, marked by confidence. The elder review pass
+          been spoken on transcript or sourced from the wiki, marked by confidence. The Elder review pass
           fills in the gaps.
         </p>
       </section>
@@ -122,7 +122,7 @@ export default function ElderLineagePage() {
               className="absolute left-[19px] top-2 bottom-2 w-px"
               style={{ background: hexToRgba(P.ochre, 0.25) }}
             />
-            <LineageEntry node={{ personSlug: elder.storytellerSlug, relation: 'father', confidence: 'confirmed' }} isElder displayLabel="The elder" />
+            <LineageEntry node={{ personSlug: elder.storytellerSlug, relation: 'father', confidence: 'confirmed' }} isElder displayLabel="The Elder" />
             {lineage.ancestors.map((node, i) => (
               <LineageEntry key={i} node={node} />
             ))}
@@ -154,7 +154,7 @@ export default function ElderLineagePage() {
           </div>
           <p className="font-serif italic text-lg leading-relaxed opacity-80">
             {elder.displayName}'s lineage hasn't been surfaced yet. Parent names, Country detail, and
-            connections to other PICC families sit in the wiki research-loop and the next elder sit-down.
+            connections to other PICC families sit in the wiki research-loop and the next Elder sit-down.
             The line is held — the surface comes when the family is ready.
           </p>
         </section>
@@ -175,7 +175,7 @@ export default function ElderLineagePage() {
         <div className="max-w-3xl mx-auto text-center">
           <p className="font-serif italic text-base leading-relaxed opacity-70 mb-8">
             The line is yours. The family decides what's named, what's held, what's surfaced.
-            This page grows when the elders say it grows.
+            This page grows when the Elders say it grows.
           </p>
           <Link
             to={`/elders/${elder.storytellerSlug}`}

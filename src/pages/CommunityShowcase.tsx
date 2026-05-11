@@ -27,8 +27,8 @@ const COMMUNITY_CONFIGS: Record<string, CommunityConfig> = {
     slug: 'palm-island',
     name: 'Palm Island',
     countryName: 'Bwgcolman',
-    subtitle: 'Many tribes, one people. Forty-six nations forcibly brought to a single island reserve from 1914. Today, ten elders carry the stories.',
-    openingStatement: 'Seven families. Ten elders. Each holds what is theirs. Open one to begin.',
+    subtitle: 'Many tribes, one people. Forty-six nations forcibly brought to a single island reserve from 1914. Today, ten Elders carry the stories.',
+    openingStatement: 'Seven families. Ten Elders. Each holds what is theirs. Open one to begin.',
     palette: { ink: '#1A2418', cream: '#F4EDE0', ochre: '#C9824B', amber: '#E8C496', sand: '#E8DCC4', quoteSection: '#2A3D26' },
     heroBg: {
       url: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Local_church_%28St_George%27s_Anglican%29_on_Palm_Island%2C_Queensland%2C_circa_1932.jpg',

@@ -302,7 +302,7 @@ export default function CommunityHomePage() {
                 <div className="text-xs uppercase tracking-widest text-ochre">Research packet</div>
                 <h3 className="font-serif text-2xl text-ink mt-3">{cluster.label}</h3>
                 <div className="text-xs text-ink/45 mt-2">
-                  {cluster.anchorElders.length} anchor elders · {cluster.transcriptHits.length} transcript hits · {cluster.repoHits.length} corpus hits
+                  {cluster.anchorElders.length} anchor Elders · {cluster.transcriptHits.length} transcript hits · {cluster.repoHits.length} corpus hits
                 </div>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {cluster.coreSurnames.slice(0, 4).map(item => (
@@ -327,7 +327,7 @@ export default function CommunityHomePage() {
           ]}
           engagementItems={[
             'Use 10 Years for community overview, linked families, shared tree, timeline, goals, and community governance.',
-            'Community elders and admins approve what becomes community-visible here.',
+            'Community Elders and admins approve what becomes community-visible here.',
           ]}
         />
       </div>
@@ -344,7 +344,7 @@ export default function CommunityHomePage() {
             </p>
             {detail.meta && (
               <p className="text-xs text-ink/50 mt-3 leading-relaxed">
-                Linked people come from active family lineage. Community keepers are the elders and admins who govern what becomes community-visible.
+                Linked people come from active family lineage. Community keepers are the Elders and admins who govern what becomes community-visible.
               </p>
             )}
           </div>
@@ -426,7 +426,7 @@ export default function CommunityHomePage() {
           <div className="text-xs uppercase tracking-widest text-ochre">Shared layer</div>
           <p className="text-sm text-ink/70 mt-2 leading-relaxed">
             This community has governance in place, but no family links are active yet. Family trees still live inside
-            their family folders; this community page only fills in once families and community elders approve shared visibility.
+            their family folders; this community page only fills in once families and community Elders approve shared visibility.
           </p>
         </div>
       )}
@@ -513,7 +513,7 @@ export default function CommunityHomePage() {
                           {formatRoleLabel(member.role)}
                         </MiniPill>
                         {member.isElder && member.role !== 'elder' && (
-                          <MiniPill tone="eucalypt">elder</MiniPill>
+                          <MiniPill tone="eucalypt">Elder</MiniPill>
                         )}
                       </div>
                     </div>
@@ -614,8 +614,8 @@ export default function CommunityHomePage() {
                   <div className="font-serif text-2xl text-ink mt-2">{pendingCommunityKinship.length}</div>
                   <div className="text-sm text-ink/60 mt-1">
                     {canReviewCommunityKinship
-                      ? pendingCommunityKinship.length === 1 ? 'elder review is waiting' : 'elder reviews are waiting'
-                      : 'elder review is held on the governance page'}
+                      ? pendingCommunityKinship.length === 1 ? 'Elder review is waiting' : 'Elder reviews are waiting'
+                      : 'Elder review is held on the governance page'}
                   </div>
                 </div>
               </div>
@@ -626,7 +626,7 @@ export default function CommunityHomePage() {
             </>
           ) : (
             <div className="rounded-xl border border-ink/8 bg-sand/20 p-4 text-sm text-ink/65 leading-relaxed">
-              Community keepers hold this layer. They approve family links and, where required, elder-reviewed kinship before more knowledge becomes community-visible.
+              Community keepers hold this layer. They approve family links and, where required, Elder-reviewed kinship before more knowledge becomes community-visible.
             </div>
           )}
 
@@ -682,7 +682,7 @@ export default function CommunityHomePage() {
         <h3 className="font-serif text-xl text-ink mb-3">About this community</h3>
         <p className="text-ink/70 leading-relaxed">
           {detail.community.name} brings together linked family folders while keeping family truth governed by each family.
-          The community layer only carries what families approve upward and what community elders approve as shared knowledge.
+          The community layer only carries what families approve upward and what community Elders approve as shared knowledge.
         </p>
         {detail.stats.familyCount === 0 && (
           <div className="mt-4 p-4 bg-sand/40 rounded-lg">
@@ -758,5 +758,6 @@ function MiniPill({
 }
 
 function formatRoleLabel(role: string) {
+  if (role === 'elder') return 'Elder'
   return role.replace('_', ' ')
 }

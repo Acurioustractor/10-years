@@ -286,10 +286,10 @@ export default function CommunityFamiliesPage() {
                 <span>This request is in progress. The families list only shows links after both approvals are complete.</span>
               )}
               {currentFamilyLink.status === 'rejected' && (
-                <span>This link request was rejected. At the moment, reopening it needs help from the relevant elders or admins.</span>
+                <span>This link request was rejected. At the moment, reopening it needs help from the relevant Elders or admins.</span>
               )}
               {currentFamilyLink.status === 'revoked' && (
-                <span>This link was previously active and has been revoked. Re-establishing it currently needs elder or admin support.</span>
+                <span>This link was previously active and has been revoked. Re-establishing it currently needs Elder or admin support.</span>
               )}
             </div>
           </div>
@@ -318,7 +318,7 @@ export default function CommunityFamiliesPage() {
               </div>
             ) : (
               <p className="text-xs text-ink/50 mt-3">
-                Only family elders or family reps can request a community link from the family side.
+                Only family Elders or family reps can request a community link from the family side.
               </p>
             )}
           </div>

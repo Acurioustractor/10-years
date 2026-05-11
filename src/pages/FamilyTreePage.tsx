@@ -10,7 +10,7 @@ type ViewMode = 'tree' | 'cards'
 
 export default function FamilyTreePage() {
   const { familySlug } = useParams<{ familySlug?: string }>()
-  const { graph, loading, error, notConfigured } = useKinship()
+  const { graph, loading, error, notConfigured } = useKinship(familySlug)
   const { familySession } = useSession()
   const [viewMode, setViewMode] = useState<ViewMode>('tree')
 
@@ -86,7 +86,7 @@ export default function FamilyTreePage() {
         <div className="py-20 text-center">
           <p className="font-serif text-2xl text-ink mb-2">No kinship recorded yet.</p>
           <p className="text-ink/60">
-            Once relations are seeded, each family group appears here with its elders first.
+            Once relations are seeded, each family group appears here with its Elders first.
           </p>
         </div>
       )}

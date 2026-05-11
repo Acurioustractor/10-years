@@ -21,7 +21,7 @@ function hexToRgba(hex: string, alpha: number) {
 }
 
 const STATUS_LABELS: Record<PersonStatus, string> = {
-  'living-elder': 'Living elders',
+  'living-elder': 'Living Elders',
   living: 'Living family',
   ancestor: 'Ancestors',
   'historical-figure': 'Historical figures',
@@ -30,7 +30,7 @@ const STATUS_LABELS: Record<PersonStatus, string> = {
 
 const FILTERS: Array<{ id: PersonStatus | 'all'; label: string }> = [
   { id: 'all', label: 'All' },
-  { id: 'living-elder', label: 'Living elders' },
+  { id: 'living-elder', label: 'Living Elders' },
   { id: 'ancestor', label: 'Ancestors' },
   { id: 'living', label: 'Living family' },
   { id: 'historical-figure', label: 'Historical figures' },
@@ -64,7 +64,7 @@ export default function PeopleIndexPage() {
           The people
         </h1>
         <p className="font-serif italic max-w-2xl mx-auto text-lg md:text-xl leading-relaxed opacity-80">
-          {PEOPLE.length} people held in the Palm Island story so far. Living elders, ancestors, witnesses,
+          {PEOPLE.length} people held in the Palm Island story so far. Living Elders, ancestors, witnesses,
           and the colonial actors whose decisions shaped the families. Each name links to what we know.
         </p>
       </section>

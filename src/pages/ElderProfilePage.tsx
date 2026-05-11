@@ -100,9 +100,9 @@ export default function ElderProfilePage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6 py-24" style={{ background: P.cream, color: P.ink }}>
         <h1 className="font-serif text-3xl mb-4">Elder not found</h1>
-        <p className="font-serif italic opacity-70 mb-8">No elder matches "{slug}".</p>
+        <p className="font-serif italic opacity-70 mb-8">No Elder matches "{slug}".</p>
         <Link to="/elders" className="text-sm tracking-widest uppercase underline-offset-4 hover:underline" style={{ color: P.ochre }}>
-          ← Back to all elders
+          ← Back to all Elders
         </Link>
       </div>
     )
@@ -117,7 +117,7 @@ export default function ElderProfilePage() {
           className="text-xs tracking-widest uppercase opacity-60 hover:opacity-100 transition-opacity"
           style={{ color: P.ochre }}
         >
-          ← All elders
+          ← All Elders
         </Link>
       </div>
 
@@ -365,7 +365,7 @@ export default function ElderProfilePage() {
             </Link>
           </div>
           <div className="mt-12 text-[10px] tracking-[0.3em] uppercase opacity-50">
-            Open elder-review threads sit in the wiki before public publish
+            Open Elder-review threads sit in the wiki before public publish
           </div>
         </div>
       </section>

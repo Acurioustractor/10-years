@@ -43,7 +43,7 @@ export default function JourneyIndexPage() {
           The journeys
         </h1>
         <p className="font-serif italic max-w-2xl mx-auto text-lg md:text-xl leading-relaxed opacity-80">
-          The elders walking back to the Country their families were taken from. Each return is a chapter
+          The Elders walking back to the Country their families were taken from. Each return is a chapter
           of one long arc. Each trip prepares the next.
         </p>
       </section>
@@ -158,7 +158,7 @@ function JourneyCard({ journey }: { journey: Journey }) {
             )}
           </div>
           <div className="text-xs tracking-wider uppercase opacity-60">
-            {elders.length} elder{elders.length === 1 ? '' : 's'}
+            {elders.length} Elder{elders.length === 1 ? '' : 's'}
           </div>
         </div>
       )}

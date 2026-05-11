@@ -54,7 +54,7 @@ function confidenceClass(confidence: CommunityResearchPersonDetailResponse['pers
 function leadKindLabel(kind: CommunityResearchPersonDetailResponse['person']['leadKinds'][number]) {
   switch (kind) {
     case 'anchor_elder':
-      return 'Anchor elder'
+      return 'Anchor Elder'
     case 'storyteller_match':
       return 'Storyteller match'
     case 'named_relation':

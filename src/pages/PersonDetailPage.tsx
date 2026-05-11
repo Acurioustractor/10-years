@@ -26,7 +26,7 @@ function hexToRgba(hex: string, alpha: number) {
 }
 
 const STATUS_LABEL: Record<Person['status'], string> = {
-  'living-elder': 'Living elder',
+  'living-elder': 'Living Elder',
   living: 'Living family',
   ancestor: 'Ancestor',
   'historical-figure': 'Historical figure',
@@ -142,7 +142,7 @@ export default function PersonDetailPage() {
                 className="inline-block mt-8 px-6 py-3 font-serif text-sm hover:opacity-90 transition-opacity"
                 style={{ background: P.ochre, color: P.cream }}
               >
-                Open the elder profile →
+                Open the Elder profile →
               </Link>
             )}
           </div>

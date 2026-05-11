@@ -78,7 +78,7 @@ function stageLabel(stage: 'start_here' | 'history' | 'governance' | 'family-his
 function personLeadKindLabel(kind: CommunityResearchLead['personLeads'][number]['leadKind']) {
   switch (kind) {
     case 'anchor_elder':
-      return 'Anchor elder'
+      return 'Anchor Elder'
     case 'storyteller_match':
       return 'Storyteller match'
     case 'named_relation':
@@ -545,7 +545,7 @@ export default function CommunityResearchPage() {
         <section className="rounded-[28px] border border-ochre/25 bg-white/80 p-5 md:p-6 mb-8">
           <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-6">
             <div className="max-w-3xl">
-              <div className="text-xs uppercase tracking-widest text-ochre">First elder review packet</div>
+              <div className="text-xs uppercase tracking-widest text-ochre">First Elder review packet</div>
               <h2 className="font-serif text-3xl text-ink mt-3">Start with {firstReviewCluster.label}</h2>
               <p className="text-sm text-ink/65 leading-relaxed mt-3">
                 This is the first practical family-building step: stage the people as research people, review each source-backed claim,
@@ -822,7 +822,7 @@ export default function CommunityResearchPage() {
               <div className="rounded-xl border border-eucalypt/20 bg-eucalypt/10 p-3">
                 <div className="text-[11px] uppercase tracking-[0.18em] text-eucalypt">Can do now</div>
                 <p className="text-sm text-ink/70 leading-relaxed mt-2">
-                  Add these names to the research queue and prepare the elder questions with exact source excerpts.
+                  Add these names to the research queue and prepare the Elder questions with exact source excerpts.
                 </p>
               </div>
               <div className="rounded-xl border border-ink/8 bg-sand/20 p-3">
@@ -1334,7 +1334,7 @@ export default function CommunityResearchPage() {
           <input
             value={search}
             onChange={event => setSearch(event.target.value)}
-            placeholder="Search surnames, elders, or relation leads"
+            placeholder="Search surnames, Elders, or relation leads"
             className="w-full md:w-80 rounded-full border border-ink/10 bg-white/80 px-4 py-2.5 text-sm text-ink outline-none focus:border-eucalypt"
           />
         </div>
@@ -1348,7 +1348,7 @@ export default function CommunityResearchPage() {
           <section className="rounded-2xl border border-ink/10 bg-cream/80 px-6 py-8 text-center">
             <h3 className="font-serif text-2xl text-ink">No matching research packet</h3>
             <p className="text-sm text-ink/60 max-w-2xl mx-auto mt-3 leading-relaxed">
-              Try another surname, elder name, or relation lead.
+              Try another surname, Elder name, or relation lead.
             </p>
           </section>
         ) : (
@@ -1385,7 +1385,7 @@ export default function CommunityResearchPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 min-w-[240px]">
-                  <StatCard label="Anchor elders" value={cluster.anchorElders.length} />
+                  <StatCard label="Anchor Elders" value={cluster.anchorElders.length} />
                   <StatCard label="Relation leads" value={cluster.relationLeads.length} />
                   <StatCard label="Transcript hits" value={cluster.transcriptHits.length} />
                   <StatCard label="Corpus hits" value={cluster.repoHits.length} />
@@ -1464,7 +1464,7 @@ export default function CommunityResearchPage() {
                       <div className="text-xs uppercase tracking-widest text-ochre">People to follow next</div>
                       <p className="text-sm text-ink/60 leading-relaxed mt-2">
                         Use these person leads after reading the source base for this family. This is the bridge from Palm history into likely people,
-                        before you decide whether transcript review, storyteller cleanup, or elder confirmation is the next move.
+                        before you decide whether transcript review, storyteller cleanup, or Elder confirmation is the next move.
                       </p>
                     </div>
                     <div className="min-w-[140px]">
@@ -1616,7 +1616,7 @@ export default function CommunityResearchPage() {
                 </div>
 
                 <div className="rounded-2xl border border-ink/8 bg-sand/20 p-4">
-                  <div className="text-xs uppercase tracking-widest text-eucalypt">Anchor elders</div>
+                  <div className="text-xs uppercase tracking-widest text-eucalypt">Anchor Elders</div>
                   <div className="space-y-3 mt-4">
                     {cluster.anchorElders.map(elder => (
                       <div key={`${cluster.id}-${elder.displayName}`} className="rounded-2xl border border-ink/8 bg-cream/70 p-3">
@@ -1687,7 +1687,7 @@ export default function CommunityResearchPage() {
                             <div className="flex items-start justify-between gap-4">
                               <div className="text-sm text-ink/70">
                                 {person.displayName}
-                                <span className="text-ink/40"> · {person.storyCount} stories{person.isElder ? ' · elder' : ''}</span>
+                                <span className="text-ink/40"> · {person.storyCount} stories{person.isElder ? ' · Elder' : ''}</span>
                               </div>
                             </div>
                             <div className="flex flex-wrap gap-2 mt-3">

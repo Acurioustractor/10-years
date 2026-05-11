@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { useSession } from '@/contexts/SessionContext'
 import { getCommunityFamilyLinks, getFamilyFolder } from '@/services/empathyLedgerClient'
 import type { BgSource, ClusterConfig } from '@/cluster-configs'
-import { findElderInAttribution } from '@/palm-history-timeline'
+import { findElderInAttribution, LIVING_ELDER_PINS } from '@/palm-history-timeline'
 import Lightbox from '@/components/Lightbox'
 import PhotoStrip from '@/components/PhotoStrip'
 
@@ -51,14 +51,62 @@ export default function ClusterShowcase({ config }: { config: ClusterConfig }) {
     return () => { cancelled = true }
   }, [config.slug, familySession])
 
+  const pinnedMembers = useMemo<Member[]>(() =>
+    LIVING_ELDER_PINS
+      .filter(pin => pin.clusterSlug === config.slug)
+      .map(pin => ({
+        storytellerId: pin.storytellerSlug,
+        displayName: pin.displayName,
+        avatarUrl: pin.avatarUrl || null,
+        isElder: true,
+        isAncestor: false,
+        bio: pin.bio,
+        birthYear: pin.birthYear,
+        birthPlace: pin.country,
+        culturalBackground: pin.cultural ? pin.cultural.split(' · ') : undefined,
+      })),
+    [config.slug]
+  )
+
+  const displayMembers = useMemo(() => {
+    const result = new Map<string, Member>()
+    const normalise = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+    const findPinned = (member: Member) => pinnedMembers.find(pin => {
+      const liveName = normalise(member.displayName)
+      const pinName = normalise(pin.displayName)
+      return liveName.includes(pinName) || pinName.includes(liveName)
+    })
+
+    for (const pinned of pinnedMembers) {
+      result.set(normalise(pinned.displayName), pinned)
+    }
+
+    for (const member of members) {
+      const pinned = findPinned(member)
+      result.set(normalise(pinned?.displayName || member.displayName), {
+        ...pinned,
+        ...member,
+        avatarUrl: member.avatarUrl || pinned?.avatarUrl || null,
+        bio: member.bio || pinned?.bio || null,
+        birthYear: member.birthYear || pinned?.birthYear,
+        birthPlace: member.birthPlace || pinned?.birthPlace,
+        culturalBackground: member.culturalBackground?.length
+          ? member.culturalBackground
+          : pinned?.culturalBackground,
+      })
+    }
+
+    return [...result.values()]
+  }, [members, pinnedMembers])
+
   // Helpers
-  const find = (substr: string) => members.find(m => m.displayName.includes(substr))
+  const find = (substr: string) => displayMembers.find(m => m.displayName.includes(substr))
   const elders = useMemo(() =>
     config.elderOrder.map(s => find(s)).filter(Boolean) as Member[],
-    [members, config])
+    [displayMembers, config])
   const ancestors = useMemo(() =>
     config.ancestorOrder.map(s => find(s)).filter(m => m && m.isAncestor) as Member[],
-    [members, config])
+    [displayMembers, config])
   const sacredAncestor = config.sacredAncestorMatch ? find(config.sacredAncestorMatch) : null
 
   // Image library used in the photo strip — heroBg + countryBg + bridgeBg + ancestor bgs
@@ -395,7 +443,7 @@ function SacredPanel({ ancestor, sacred, cream, bg }: { ancestor: Member; sacred
         </>
       )}
       <div className="relative z-10 w-full">
-        <div className="text-[11px] tracking-[0.3em] uppercase mb-12 opacity-60">Sacred · with elder consent</div>
+        <div className="text-[11px] tracking-[0.3em] uppercase mb-12 opacity-60">Sacred · with Elder consent</div>
         {!revealed ? (
           <button onClick={() => setRevealed(true)} className="px-8 py-4 border border-cream/40 hover:border-cream/80 transition-colors text-cream text-sm tracking-widest uppercase max-w-md" style={{ color: cream }}>
             A massacre carried in this family.

@@ -569,7 +569,7 @@ export default function CommunityTreePage() {
         <p className="text-ink/60 mt-2 max-w-3xl">
           {legacyGraphMode
             ? 'This community view is being assembled from linked family trees because the community overlay schema has not been migrated in the live database yet.'
-            : 'This is the shared community tree: only people and kinship links approved by families and community elders appear here.'}
+            : 'This is the shared community tree: only people and kinship links approved by families and community Elders appear here.'}
         </p>
         <p className="text-sm text-ink/50 mt-3 max-w-3xl">
           Linked families and people on this page come from family lineage. Community keepers are a separate governance layer shown on the overview page.
@@ -813,7 +813,7 @@ export default function CommunityTreePage() {
           <div className="rounded-xl border border-ink/10 bg-cream p-8 text-center">
             <h2 className="font-serif text-2xl text-ink mb-2">No shared kinship has been approved yet</h2>
             <p className="text-ink/60 max-w-2xl mx-auto">
-              Families can already be linked into this community, but the community tree stays empty until shared kinship is approved through the elder review flow.
+              Families can already be linked into this community, but the community tree stays empty until shared kinship is approved through the Elder review flow.
             </p>
           </div>
 
@@ -854,7 +854,7 @@ export default function CommunityTreePage() {
                 <div className="text-xs uppercase tracking-widest text-ochre">Reading guide</div>
                 <h2 className="font-serif text-2xl text-ink">How to read this shared tree</h2>
                 <p className="text-sm text-ink/60 mt-2 max-w-3xl">
-                  This page only shows kinship that families and community elders have approved for community visibility.
+                  This page only shows kinship that families and community Elders have approved for community visibility.
                 </p>
               </div>
               {activeFilterLabel && (
@@ -878,7 +878,7 @@ export default function CommunityTreePage() {
                   />
                   <GuideCard
                     title="Elder"
-                    body="Lineage people marked as elders are highlighted first inside each family cluster."
+                    body="Lineage people marked as Elders are highlighted first inside each family cluster."
                   />
                   <GuideCard
                     title="Still private"
@@ -1008,7 +1008,7 @@ export default function CommunityTreePage() {
                       <div className="text-xs uppercase tracking-widest text-ochre">Family</div>
                       <h3 className="font-serif text-xl text-ink">{cluster.familyName}</h3>
                       <div className="text-xs text-ink/50 mt-1">
-                        {cluster.people.length} shared people · {cluster.elderCount} elder{cluster.elderCount === 1 ? '' : 's'} · {cluster.relationCount} visible links
+                        {cluster.people.length} shared people · {cluster.elderCount} Elder{cluster.elderCount === 1 ? '' : 's'} · {cluster.relationCount} visible links
                       </div>
                     </div>
                     <div className="flex items-center gap-3">

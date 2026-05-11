@@ -127,8 +127,9 @@ export type Journey = {
   location: string                            // "Mission Beach · Djiru Country"
   hero: JourneyImage
   heroVideo?: JourneyVideo                    // optional video hero — overrides hero image when present
-  descriptEmbedUrl?: string                   // optional Descript share URL — surfaces a produced-doc embed below the hero
-  descriptEmbedTitle?: string                 // caption for the embed
+  descriptEmbedUrl?: string                   // optional Descript share URL — surfaces a produced-doc link below the hero
+  descriptEmbedTitle?: string                 // caption for the produced video
+  descriptThumbnailUrl?: string               // thumbnail for the Descript video link
   whyThisPlace: string                        // 2-3 sentences
   elderSlugs: string[]                        // /elders/<slug> — who went / is going
   notGoingNote?: string                       // editorial note when an elder is conspicuously absent (e.g. Aunty Iris)
@@ -236,26 +237,27 @@ export const JOURNEYS: Journey[] = [
       source: 'PICC media · Palm Island Community Company',
       license: 'PICC consent · cultural protocol',
     },
-    descriptEmbedUrl: 'https://share.descript.com/embed/75MyeSD3Ujp',
-    descriptEmbedTitle: 'Mission Beach 2024 — produced documentary',
+    descriptEmbedUrl: 'https://share.descript.com/view/75MyeSD3Ujp',
+    descriptEmbedTitle: 'Final Elder Trip Video',
+    descriptThumbnailUrl: 'https://d1d3n03t5zntha.cloudfront.net/c08973e3-da8b-411a-a97a-121798e5e8d8/media_stream-008963c4111b467a91f3c8b4d622ff8f.jpg',
     // Trip photos pulled from Empathy Ledger — actual elders-trip-2025 photoshoot
     // (elders went to Mission Beach Oct 2025, trip-day photos held in
     // Empathy Ledger media_assets table linked to project picc-elders).
     gallery: [
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380700711-7xy54e.jpg', title: 'Day one — arrival', year: '15 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380713803-fdbq7.jpg', title: 'On Country', year: '15 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380729007-kh36nv.jpg', title: 'The walk back', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380744661-a7cq6n.jpg', title: 'Hull River reserve site', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380761201-f9jg44.jpg', title: 'Standing where the families were', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380779624-pqin4.jpg', title: 'Country, holding it all', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380794739-33sdzf.jpg', title: 'Voice on the land', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380810781-zef07k.jpg', title: 'Together on Country', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380827389-ywl6tg.jpg', title: 'Looking out', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380843256-gqf2kr.jpg', title: 'Day three — closing', year: '17 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380859270-8i5j3.jpg', title: 'What we carry home', year: '17 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
-      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1765843210165-6khdad.jpg', title: 'Returning, reconfigured', year: 'Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380700711-7xy54e.jpg', title: 'Day one — arrival', year: '15 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380713803-fdbq7.jpg', title: 'On Country', year: '15 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380729007-kh36nv.jpg', title: 'The walk back', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380744661-a7cq6n.jpg', title: 'Hull River reserve site', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380761201-f9jg44.jpg', title: 'Standing where the families were', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380779624-pqin4.jpg', title: 'Country, holding it all', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380794739-33sdzf.jpg', title: 'Voice on the land', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380810781-zef07k.jpg', title: 'Together on Country', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380827389-ywl6tg.jpg', title: 'Looking out', year: '16 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380843256-gqf2kr.jpg', title: 'Day three — closing', year: '17 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1764380859270-8i5j3.jpg', title: 'What we carry home', year: '17 Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
+      { kind: 'still', url: 'https://uaxhjzqrdotoahjnxmbj.supabase.co/storage/v1/object/public/story-media/1765843210165-6khdad.jpg', title: 'Returning, reconfigured', year: 'Oct 2025', source: 'PICC photography · Mission Beach trip', license: 'PICC consent · Elder-approved' },
     ],
-    whyThisPlace: "In 1918 the cyclone Leonte destroyed the Hull River Aboriginal Settlement at Mission Beach. The Aboriginal people removed there from across the Far North coast and the Tablelands were transported to Palm Island in the months that followed. This is the moment Palm Island became Bwgcolman, the place where many were sent. In 2024 the PICC elders returned to Mission Beach together. Not nostalgia. A return to the place where ancestors suffered.",
+    whyThisPlace: "In 1918 the cyclone Leonte destroyed the Hull River Aboriginal Settlement at Mission Beach. The Aboriginal people removed there from across the Far North coast and the Tablelands were transported to Palm Island in the months that followed. This is the moment Palm Island became Bwgcolman, the place where many were sent. In 2024 the PICC Elders returned to Mission Beach together. Not nostalgia. A return to the place where ancestors suffered.",
     elderSlugs: [
       'allan-palm-island',
       'winifred-obah',
@@ -299,8 +301,8 @@ export const JOURNEYS: Journey[] = [
         {
           id: 'palm-island',
           name: 'Palm Island',
-          description: 'The elders\' home — Bwgcolman Country. The journey begins here, departing by barge across the Coral Sea.',
-          familyConnection: 'All 8 trip elders departed from Palm — Allan, Winifred, Marjoyie, Frank, Aunty Ethel, Elsa, Cyndel, Gurtrude.',
+          description: 'The Elders\' home — Bwgcolman Country. The journey begins here, departing by barge across the Coral Sea.',
+          familyConnection: 'All 8 trip Elders departed from Palm — Allan, Winifred, Marjoyie, Frank, Aunty Ethel, Elsa, Cyndel, Gurtrude.',
           lat: -18.7547,
           lng: 146.5832,
           placeSlug: 'palm-island',
@@ -328,7 +330,7 @@ export const JOURNEYS: Journey[] = [
           id: 'ingham',
           name: 'Ingham',
           description: 'Sugar country. The Halifax Camp era in living memory — sugar mill labour, South Sea Islander descent, the ground that anchored the Robertson and Whitey families.',
-          familyConnection: 'Aunty Ethel + Iris\'s line runs through here. Uba — the South Sea Islander elder buried at Halifax in 1934 — is a candidate ancestor-generation marker.',
+          familyConnection: 'Aunty Ethel + Iris\'s line runs through here. Uba — the South Sea Islander Elder buried at Halifax in 1934 — is a candidate ancestor-generation marker.',
           lat: -18.6515,
           lng: 146.1605,
           placeSlug: 'halifax-hinchinbrook',
@@ -433,12 +435,12 @@ export const JOURNEYS: Journey[] = [
       },
       {
         elderSlug: 'gurtrude-richardson',
-        text: "Time is very important in this process. Maintaining relations with elders is maybe a longer, longer process.",
+        text: "Time is very important in this process. Maintaining relations with Elders is maybe a longer, longer process.",
         source: 'Elders Trip Interview',
       },
     ],
     closingReflection: {
-      body: 'The elders came home from Mission Beach holding what they went there to hold. Not closure. A continuation. The next walk is already named.',
+      body: 'The Elders came home from Mission Beach holding what they went there to hold. Not closure. A continuation. The next walk is already named.',
       pullquote: "It's like passing on a message and follow that message where it will lead you to.",
       attribution: 'Allan Palm Island',
     },
@@ -491,25 +493,25 @@ export const JOURNEYS: Journey[] = [
       {
         eyebrow: 'What we walk back toward',
         heading: "Returning before the trip",
-        body: "Several PICC elders have already returned to Country in earlier years — Marjoyie to Warrongo, Winifred to her ancestor places. They describe a body recognition that arrives before the mind catches up. Atherton 2026 holds this same threshold for Elsa returning to Mamu Country, for the others walking forward into where the ancestors were taken from. The voice from those earlier returns is held on the Mission Beach 2024 page; this trip will record its own.",
+        body: "Several PICC Elders have already returned to Country in earlier years — Marjoyie to Warrongo, Winifred to her ancestor places. They describe a body recognition that arrives before the mind catches up. Atherton 2026 holds this same threshold for Elsa returning to Mamu Country, for the others walking forward into where the ancestors were taken from. The voice from those earlier returns is held on the Mission Beach 2024 page; this trip will record its own.",
         bg: IMG.blencoeFalls2022,
       },
       {
-        eyebrow: 'Names the elders carry',
+        eyebrow: 'Names the Elders carry',
         heading: 'Doreen, Alf, Lizzie, Baja',
-        body: "Names walking with the elders into the Tablelands. Doreen Morton — Elsa's mother — taken to Palm at ten. Alf Palmer (Jinbilnggay) — Marjoyie's grandfather, the last native speaker of Warrongo. Lizzie Palmer — Alf's sister, Marjoyie's other line. Baja Balanar — Allan's mother's grandmother, the Kunawara station era. Madge Thaiday — Aunty Dulcie's mother, Girramay from Tully. Each name a line into Country.",
+        body: "Names walking with the Elders into the Tablelands. Doreen Morton — Elsa's mother — taken to Palm at ten. Alf Palmer (Jinbilnggay) — Marjoyie's grandfather, the last native speaker of Warrongo. Lizzie Palmer — Alf's sister, Marjoyie's other line. Baja Balanar — Allan's mother's grandmother, the Kunawara station era. Madge Thaiday — Aunty Dulcie's mother, Girramay from Tully. Each name a line into Country.",
         bg: IMG.millaaMillaaFalls,
       },
       {
         eyebrow: 'What we hope to find',
         heading: 'Country first, voice second',
-        body: 'The elders walk in to feel the ground before they tell its story. Welcome-to-Country protocols at Atherton, sacred protocols at Blencoe Falls (the Lucy site, family-held), permission protocols on Mt Garnet station Country. Voice gets recorded only after the welcome.',
+        body: 'The Elders walk in to feel the ground before they tell its story. Welcome-to-Country protocols at Atherton, sacred protocols at Blencoe Falls (the Lucy site, family-held), permission protocols on Mt Garnet station Country. Voice gets recorded only after the welcome.',
         bg: IMG.athertonTableland1954,
       },
       {
         eyebrow: 'The 20-year arc',
         heading: 'A permanent archive of community voice',
-        body: "The Atherton trip sits inside PICC's 20-year vision — the next two decades of community-controlled infrastructure for every Palm Islander. Aged care on Palm by 2028. Delegated Authority expanded into health and justice by 2030. The voice capture sprint that this journey contributes to is the foundation: a permanent archive that grows stronger every year. The elders walking into Country are recording so the children can keep correcting.",
+        body: "The Atherton trip sits inside PICC's 20-year vision — the next two decades of community-controlled infrastructure for every Palm Islander. Aged care on Palm by 2028. Delegated Authority expanded into health and justice by 2030. The voice capture sprint that this journey contributes to is the foundation: a permanent archive that grows stronger every year. The Elders walking into Country are recording so the children can keep correcting.",
         bg: IMG.athertonTableland1954,
       },
     ],
@@ -530,8 +532,8 @@ export const JOURNEYS: Journey[] = [
         {
           id: 'palm-island',
           name: 'Palm Island',
-          description: 'Departure from Bwgcolman Country. All 9 PICC living elders currently in planning.',
-          familyConnection: 'Where the elders carry their lines from — the lines they walk back to.',
+          description: 'Departure from Bwgcolman Country. All 9 PICC living Elders currently in planning.',
+          familyConnection: 'Where the Elders carry their lines from — the lines they walk back to.',
           lat: -18.7547,
           lng: 146.5832,
           placeSlug: 'palm-island',
@@ -552,7 +554,7 @@ export const JOURNEYS: Journey[] = [
           id: 'atherton',
           name: 'Atherton',
           description: 'Yidinji Country. Tablelands base camp for the Year 1 trip. The wider Voices on Country project anchors here.',
-          familyConnection: 'Yidinji elders welcome PICC to Country. The Tablelands hold the source landscape for three Palm Island family lines.',
+          familyConnection: 'Yidinji Elders welcome PICC to Country. The Tablelands hold the source landscape for three Palm Island family lines.',
           lat: -17.2683,
           lng: 145.4757,
           placeSlug: 'atherton-tablelands',
@@ -597,7 +599,7 @@ export const JOURNEYS: Journey[] = [
     planningNotes: [
       {
         heading: 'Voices on Country · 36-month project',
-        body: 'Atherton 2026 is Year 1 of PICC\'s 36-month Voices on Country project — funded by the Indigenous Languages and Arts (ILA) Program, $600K investment, 8+ elders, 57+ language groups represented. Two major return-to-Country journeys (Atherton 2026, Central Australia 2027) plus annual exhibitions and a permanent Elders Room installation on Palm Island.',
+        body: 'Atherton 2026 is Year 1 of PICC\'s 36-month Voices on Country project — funded by the Indigenous Languages and Arts (ILA) Program, $600K investment, 8+ Elders, 57+ language groups represented. Two major return-to-Country journeys (Atherton 2026, Central Australia 2027) plus annual exhibitions and a permanent Elders Room installation on Palm Island.',
         status: 'confirmed',
       },
       {
@@ -616,13 +618,13 @@ export const JOURNEYS: Journey[] = [
         status: 'confirmed',
       },
       {
-        heading: 'The crew · 8+ elders',
-        body: 'All 9 PICC living elders currently in planning. Final attendance per elder confirmed closer to date — Aunty Iris pending health check at the time. Project minimum is 8+ per ILA grant scope.',
+        heading: 'The crew · 8+ Elders',
+        body: 'All 9 PICC living Elders currently in planning. Final attendance per Elder confirmed closer to date — Aunty Iris pending health check at the time. Project minimum is 8+ per ILA grant scope.',
         status: 'proposed',
       },
       {
         heading: 'Cultural protocol · Mukurtu access controls',
-        body: 'Welcome-to-Country from Yidinji elders required at Atherton arrival. Sacred protocols at family-held sites. The resulting digital archive uses Mukurtu — the Indigenous-built platform — for tiered cultural access controls. Elders decide what gets surfaced where.',
+        body: 'Welcome-to-Country from Yidinji Elders required at Atherton arrival. Sacred protocols at family-held sites. The resulting digital archive uses Mukurtu — the Indigenous-built platform — for tiered cultural access controls. Elders decide what gets surfaced where.',
         status: 'confirmed',
       },
       {
@@ -632,7 +634,7 @@ export const JOURNEYS: Journey[] = [
       },
       {
         heading: 'What gets captured',
-        body: 'Per-elder return-to-Country voice (transcripts), language recordings, photography, video. Manbarra language word list compiled by Year 1 end. After each journey returns, the trip page rewrites from elder voice — the way Mission Beach 2024 already has.',
+        body: 'Per-Elder return-to-Country voice (transcripts), language recordings, photography, video. Manbarra language word list compiled by Year 1 end. After each journey returns, the trip page rewrites from Elder voice — the way Mission Beach 2024 already has.',
         status: 'confirmed',
       },
     ],
@@ -650,7 +652,7 @@ export const JOURNEYS: Journey[] = [
         status: 'reaching-out',
       },
       {
-        name: 'Yidinji elders · Atherton',
+        name: 'Yidinji Elders · Atherton',
         why: "Welcome-to-Country protocol for the Tableland leg. Working through Cairns Indigenous community contacts.",
         status: 'aspiring',
       },
@@ -668,32 +670,32 @@ export const JOURNEYS: Journey[] = [
       },
       {
         name: "Baja Balanar's family · Kunawara station, Mt Garnet",
-        why: "Allan's mother's grandmother worked the station. Family memory points to descendants in the area — pending elder review pass with Allan to surface names.",
+        why: "Allan's mother's grandmother worked the station. Family memory points to descendants in the area — pending Elder review pass with Allan to surface names.",
         country: 'warrongo',
         status: 'aspiring',
       },
     ],
     closingReflection: {
-      body: 'The page is the planning. After the trip, this rewrites from elder voice — the way Mission Beach 2024 already has. The framing here is what the elders carry going in.',
+      body: 'The page is the planning. After the trip, this rewrites from Elder voice — the way Mission Beach 2024 already has. The framing here is what the Elders carry going in.',
       pullquote: 'Our cultural authority is recognised alongside the law.',
       attribution: 'Bwgcolman Way · community framing',
     },
     connectedEventIds: ['1918-hull-river-cyclone'],
-    notes: 'Pre-trip planning page. Elder quotes deliberately omitted — those belong on Mission Beach 2024 (the past trip). Locked dates + final route pending Rachel\'s workshop output (~late May 2026). After the journey returns, replace chapters with elder voice from new transcripts.',
+    notes: 'Pre-trip planning page. Elder quotes deliberately omitted — those belong on Mission Beach 2024 (the past trip). Locked dates + final route pending Rachel\'s workshop output (~late May 2026). After the journey returns, replace chapters with Elder voice from new transcripts.',
   },
   {
     slug: 'next-bridge',
     title: 'Where we go next',
-    subtitle: "What the elders want to see — held open as the families decide.",
+    subtitle: "What the Elders want to see — held open as the families decide.",
     status: 'dreaming',
-    date: 'When the elders decide',
+    date: 'When the Elders decide',
     yearLabel: '...',
     location: 'TBD',
     hero: IMG.palmHappyMoments1935,
-    whyThisPlace: "Each journey prepares the next. After Mission Beach 2024 came Atherton 2026. After the Tablelands, the next bridge is the elders' to name. The page is here as a placeholder so the families know the door stays open.",
+    whyThisPlace: "Each journey prepares the next. After Mission Beach 2024 came Atherton 2026. After the Tablelands, the next bridge is the Elders' to name. The page is here as a placeholder so the families know the door stays open.",
     elderSlugs: [],
     chapters: [],
-    notes: 'Placeholder. Live-edit page that Ben + Rachel + Narelle update with the elders. Will surface candidates as they emerge: Cherbourg / Woorabinda for the Magnificent Seven exile; the South Sea Islander Erromango / Manga origins for Aunty Ethel; Bowen / Birri-gubba Country for Cyndel.',
+    notes: 'Placeholder. Live-edit page that Ben + Rachel + Narelle update with the Elders. Will surface candidates as they emerge: Cherbourg / Woorabinda for the Magnificent Seven exile; the South Sea Islander Erromango / Manga origins for Aunty Ethel; Bowen / Birri-gubba Country for Cyndel.',
   },
 ]
 

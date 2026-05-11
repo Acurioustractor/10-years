@@ -156,7 +156,7 @@ export default function FamilySettingsPage() {
         <section className="rounded-2xl border border-ink/10 bg-cream/80 p-6">
           <h2 className="font-serif text-2xl text-ink">Family keeper access required</h2>
           <p className="text-sm text-ink/60 mt-3 max-w-2xl leading-relaxed">
-            Only family elders or family reps can manage folder access here. You can still use the rest of the family space,
+            Only family Elders or family reps can manage folder access here. You can still use the rest of the family space,
             but access and governance settings are held by the family keepers.
           </p>
           <div className="mt-5">
@@ -281,7 +281,7 @@ export default function FamilySettingsPage() {
                           <MiniPill tone={member.role === 'elder' || member.role === 'family_rep' ? 'eucalypt' : 'ochre'}>
                             {formatRoleLabel(member.role)}
                           </MiniPill>
-                          {member.isElder && member.role !== 'elder' && <MiniPill tone="eucalypt">elder</MiniPill>}
+                          {member.isElder && member.role !== 'elder' && <MiniPill tone="eucalypt">Elder</MiniPill>}
                           {member.isAncestor && <MiniPill tone="desert">ancestor</MiniPill>}
                           {isSelf && <MiniPill tone="ink">you</MiniPill>}
                         </div>

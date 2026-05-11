@@ -120,7 +120,7 @@ export default function TimelineRibbon() {
             <span className="block italic opacity-80 mt-2">in one scroll</span>
           </h1>
           <p className="font-serif italic opacity-80 max-w-2xl text-lg md:text-xl leading-relaxed mx-auto mt-8">
-            From Lucy at Blencoe Falls in the 1880s to the elders alive today. Year by year. The events, the
+            From Lucy at Blencoe Falls in the 1880s to the Elders alive today. Year by year. The events, the
             voices, the families that hold them.
           </p>
           <div className="mt-12 text-xs opacity-50 tracking-widest uppercase">↓ Scroll</div>
@@ -305,7 +305,7 @@ function DecadePanel({
         {elders.length > 0 && (
           <div className="mt-16 pt-10 border-t" style={{ borderColor: hexToRgba(P.cream, 0.15) }}>
             <div className="text-[10px] tracking-[0.3em] uppercase opacity-50 mb-6">
-              Living elders of this era
+              Living Elders of this era
             </div>
             <div className="flex flex-wrap items-start justify-center gap-6 md:gap-10">
               {elders.map((e) => {
@@ -442,7 +442,7 @@ function EventPanel({
           return (
             <div className="mt-8 pt-8 border-t" style={{ borderColor: hexToRgba(P.cream, 0.15) }}>
               <div className="text-[10px] tracking-[0.3em] uppercase opacity-50 mb-4">
-                The elders walked back here
+                The Elders walked back here
               </div>
               <div className="flex flex-col gap-2">
                 {journeys.map((j) => (
@@ -491,10 +491,10 @@ function TodayGallery({
             className="font-serif font-light leading-[1.05] mb-6"
             style={{ fontSize: 'clamp(40px, 6vw, 80px)' }}
           >
-            The elders carrying it now
+            The Elders carrying it now
           </h2>
           <p className="font-serif italic max-w-2xl mx-auto text-lg md:text-xl leading-relaxed opacity-80">
-            Each elder holds a family folder. Tap a name to enter. The folders are theirs to fill, theirs to
+            Each Elder holds a family folder. Tap a name to enter. The folders are theirs to fill, theirs to
             share, theirs to keep.
           </p>
         </div>
@@ -545,8 +545,8 @@ function TodayGallery({
         <div className="mt-24 pt-12 border-t text-center" style={{ borderColor: hexToRgba(P.ink, 0.1) }}>
           <div className="text-[10px] tracking-[0.3em] uppercase opacity-50 mb-3">A note on what's here</div>
           <p className="font-serif italic max-w-2xl mx-auto text-sm leading-relaxed opacity-70">
-            This page recycles photos from the wiki and the cluster pages. Not every elder's birth year is
-            transcript-confirmed; some are dated to the decade. Open threads are tracked in the wiki for elder
+            This page recycles photos from the wiki and the cluster pages. Not every Elder's birth year is
+            transcript-confirmed; some are dated to the decade. Open threads are tracked in the wiki for Elder
             review before public surface. The history is a draft the families keep correcting.
           </p>
         </div>

@@ -265,7 +265,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'The line through Alf',
         heading: 'My grandmother and her brother',
-        body: "Alf Palmer (Jinbilnggay) was the last native speaker of Warrongo. Marjoyie's grandfather, and Winifred's grand-uncle. The two PICC elders are cousins through this line. Both grew up hearing the language hold what the archives could not.",
+        body: "Alf Palmer (Jinbilnggay) was the last native speaker of Warrongo. Marjoyie's grandfather, and Winifred's grand-uncle. The two PICC Elders are cousins through this line. Both grew up hearing the language hold what the archives could not.",
         pullquote: "My personal connection is through my grandmother and her brother Alf Palmer. So they sent people to my grandma up to Yuba. And then, yeah, everyone was all scattered and brown.",
         attribution: 'Marjoyie Burns · Elders Trip Interview',
         bg: BG.mtGarnet1901,
@@ -281,7 +281,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'The thread to Allan',
         heading: 'Two clusters, one Country',
-        body: "Allan Palm Island's mother is Giribau (likely Jirrbal). Her mother and grandmother worked at Kunawara station near Mt Garnet — the same Country Alf Palmer carried as the last Warrongo speaker. The Palmer/Burns/Obah cluster and the Allan Palm Island cluster are connected through the Mt Garnet pastoral station era. Two PICC elders, one ancestral landscape on the maternal side. For the elders to confirm.",
+        body: "Allan Palm Island's mother is Giribau (likely Jirrbal). Her mother and grandmother worked at Kunawara station near Mt Garnet — the same Country Alf Palmer carried as the last Warrongo speaker. The Palmer/Burns/Obah cluster and the Allan Palm Island cluster are connected through the Mt Garnet pastoral station era. Two PICC Elders, one ancestral landscape on the maternal side. For the Elders to confirm.",
         pullquote: "Where I come from, I got my mother, my mother is a Giribau. My mother and grandmother, they all worked at the station. They worked at a station called Kunawara.",
         attribution: 'Allan Palm Island · Painting Interview',
         bg: BG.mtGarnet1901,
@@ -305,7 +305,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Archive lead',
         heading: 'Ellison Obah, 1930',
-        body: "On 5 May 1930 the Townsville Police Court heard the trial of Assistant Superintendent Thomas Hoffman, charged with procuring the murder of Superintendent Robert Curry. One of the witnesses was Ellison Obah, Aboriginal resident of Palm Island. Ellison testified that Hoffman offered £1 to anyone who would shoot Curry. Spelling variants of the Obah surname in Winifred's transcripts include Allison Ober, Alice, Ellison. Pending Tindale 1938 + AIATSIS confirmation. For elder review.",
+        body: "On 5 May 1930 the Townsville Police Court heard the trial of Assistant Superintendent Thomas Hoffman, charged with procuring the murder of Superintendent Robert Curry. One of the witnesses was Ellison Obah, Aboriginal resident of Palm Island. Ellison testified that Hoffman offered £1 to anyone who would shoot Curry. Spelling variants of the Obah surname in Winifred's transcripts include Allison Ober, Alice, Ellison. Pending Tindale 1938 + AIATSIS confirmation. For Elder review.",
         pullquote: "I will give anyone £1 to get Curry, and I will stand the responsibility.",
         attribution: 'Hoffman, as testified by Ellison Obah · The Telegraph (Brisbane) 5 May 1930 · Trove article 55363945',
         bg: BG.palmIsland1928,
@@ -313,7 +313,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Naming',
         heading: 'Marjoyie. Obah.',
-        body: "Both elders spelled their own names on camera. The wiki and the database had drifted toward older spellings the families never used for themselves. Marjoyie spelled M-A-R-J-O-Y-I-E, not Marjorie. Winifred spelled OBAH, not Obar or Oba. The cluster's anti-fabrication line begins here, with the names the families chose.",
+        body: "Both Elders spelled their own names on camera. The wiki and the database had drifted toward older spellings the families never used for themselves. Marjoyie spelled M-A-R-J-O-Y-I-E, not Marjorie. Winifred spelled OBAH, not Obar or Oba. The cluster's anti-fabrication line begins here, with the names the families chose.",
         pullquote: "My name is Marjorie Burns. To spell it is M A R. J-O-Y-I-E. Cool. Burns, B-U-R-N-S.",
         attribution: 'Marjoyie Burns · Elders Trip Interview',
         bg: BG.brassBand1931,
@@ -427,7 +427,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Archive lead',
         heading: 'Halifax Camp · 1927',
-        body: "By 1927 Palm Island settlement had organised its residents into camps named for their place of origin: Halifax Camp, Babinda Camp, Cooktown, Clump Point, Sundown (for Cloncurry people). Halifax Camp was the home of the Halifax-born families. Tom Curly (Mga), Aunty Ethel and Aunty Iris's father, was born in Halifax and brought to Palm Island in the 1919 wave. The Halifax Camp existed as a named place when he arrived. Pending Tindale 1938 + AIATSIS confirmation. For elder review.",
+        body: "By 1927 Palm Island settlement had organised its residents into camps named for their place of origin: Halifax Camp, Babinda Camp, Cooktown, Clump Point, Sundown (for Cloncurry people). Halifax Camp was the home of the Halifax-born families. Tom Curly (Mga), Aunty Ethel and Aunty Iris's father, was born in Halifax and brought to Palm Island in the 1919 wave. The Halifax Camp existed as a named place when he arrived. Pending Tindale 1938 + AIATSIS confirmation. For Elder review.",
         pullquote: "Tommy was regarded as a sort of doctor... he had earned the enmity of a tribe known as the Halifax Camp.",
         attribution: 'Court report on Palm Island settlement camps · December 1927 · Trove article 149876441',
         bg: BG.palmIsland1928,
@@ -435,7 +435,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Naming',
         heading: 'Whitey. Robertson.',
-        body: "Both elders spelled their own names on camera. The 1930 Trove citation 182581966 had floated 'Whiteley' as a possible settler-derived spelling. The elders' own self-spelling settles it: Iris is W-H-I-T-E-Y, six letters, Aboriginal surname. Ethel is R-O-B-E-R-T-S-O-N, not Robinson. The cluster's anti-fabrication line begins with the names the family chose.",
+        body: "Both Elders spelled their own names on camera. The 1930 Trove citation 182581966 had floated 'Whiteley' as a possible settler-derived spelling. The Elders' own self-spelling settles it: Iris is W-H-I-T-E-Y, six letters, Aboriginal surname. Ethel is R-O-B-E-R-T-S-O-N, not Robinson. The cluster's anti-fabrication line begins with the names the family chose.",
         pullquote: "I'm Iris May Whitey. W-H-I-T-E-Y.",
         attribution: 'Aunty Iris May Whitey · Ferdies (joint) Interview',
         bg: BG.brassBand1931,
@@ -475,7 +475,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'The matriline',
         heading: 'Gracie and Polly, the nine languages',
-        body: "Through Gracie (the mother) and Polly (the great-grandmother), nine languages were carried in the matrilineal line. The whole girl could speak nine. Whether 'nine' is literal-count or figurative-many is for the elders to clarify; what is on transcript is the line carried.",
+        body: "Through Gracie (the mother) and Polly (the great-grandmother), nine languages were carried in the matrilineal line. The whole girl could speak nine. Whether 'nine' is literal-count or figurative-many is for the Elders to clarify; what is on transcript is the line carried.",
         pullquote: "Her mother Gracie and my great-grandmother Polly would talk language to her, you know, and the whole girl, she spoke the nine language.",
         attribution: 'Aunty Ethel Taylor Robertson · Elders Trip Interview',
         bg: BG.dancers1931,
@@ -507,7 +507,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'The eighties pub',
         heading: 'Stories the kids came down to ask',
-        body: "Aunty Ethel managed the Palm Island pub through the 1980s. The kids of the settlement used to come down — like grownups, she says — and ask her the stories. Her own framing, her own elder voice, decades before the elders' advisory existed.",
+        body: "Aunty Ethel managed the Palm Island pub through the 1980s. The kids of the settlement used to come down — like grownups, she says — and ask her the stories. Her own framing, her own Elder voice, decades before the Elders' advisory existed.",
         pullquote: "When I was managing the pub back in the eighties, the kids used to come down and like grownups, they used to ask me the stories.",
         attribution: 'Aunty Ethel Taylor Robertson · Ferdies Interview',
         bg: BG.brassBand1931,
@@ -570,7 +570,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
     },
     bridge: {
       title: 'The line through Walter',
-      body: "Allan's father, Walter Palm Island, was known as 'Skipper'. Allan's transcripts confirm Walter as boat-maker — 'Dad always made boats.' Family memory also holds him as the one who saved people in his boat, an operator between Palm Island and the mainland; the captain framing is family memory, held alongside the maker on transcript. Walter taught Allan to draw with charcoal and paper as a young boy. He named one of his sons Walter Jr after himself, who along with eldest brother Reg walked ahead of Allan. The grandfather is held in the surviving photograph. Specific name on the grandfather is for the elders to confirm.",
+      body: "Allan's father, Walter Palm Island, was known as 'Skipper'. Allan's transcripts confirm Walter as boat-maker — 'Dad always made boats.' Family memory also holds him as the one who saved people in his boat, an operator between Palm Island and the mainland; the captain framing is family memory, held alongside the maker on transcript. Walter taught Allan to draw with charcoal and paper as a young boy. He named one of his sons Walter Jr after himself, who along with eldest brother Reg walked ahead of Allan. The grandfather is held in the surviving photograph. Specific name on the grandfather is for the Elders to confirm.",
       avatarMatches: ['Allan'],
     },
     chapters: [
@@ -593,7 +593,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Return to Country',
         heading: 'The Mission Beach pilgrimage',
-        body: "In 2024 the PICC elders returned together to Mission Beach — the place Allan's family was sent during the 1918 cyclone era. Allan's father Walter (Skipper) had told him the story before Allan went. The trip was not nostalgia. It was a return to the place where ancestors suffered, to feel it firsthand and carry the message back to the next generation.",
+        body: "In 2024 the PICC Elders returned together to Mission Beach — the place Allan's family was sent during the 1918 cyclone era. Allan's father Walter (Skipper) had told him the story before Allan went. The trip was not nostalgia. It was a return to the place where ancestors suffered, to feel it firsthand and carry the message back to the next generation.",
         pullquote: "We are on our way up to Mission Beach to uncover a scenery that would happen back in 1918. To uncover that, to see for myself and actually feel their pain and suffering. It's like passing on a message and follow that message where it will lead you to.",
         attribution: 'Allan Palm Island · Lucinda Interview (Elders Trip)',
         bg: BG.palmIslandScene147,
@@ -609,7 +609,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Carrying the message',
         heading: 'Build something for them',
-        body: "Allan describes the elders group's purpose. Not nostalgia, not adventure. Open doors for the next generation.",
+        body: "Allan describes the Elders group's purpose. Not nostalgia, not adventure. Open doors for the next generation.",
         pullquote: "Build something for 'em. Next generation, open doors, create jobs. It's like passing on a message and follow that message where it will lead you to. And you know what that really mean to yourself and your family.",
         attribution: 'Allan Palm Island · Elders Trip Interview',
         bg: BG.brassBand1931,
@@ -641,7 +641,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Mother',
         heading: 'Bajabala Station, near Blencoe Falls',
-        body: "Allan's mother is Giribau (likely Jirrbal). Her grandmother is named Baja Balanar. Her people lived at the station that was first called Kunawara, then Kirama, then Bajabala — 'two rivers meet'. The station is near Blencoe Falls, in Warrongo Country. The same Blencoe Falls where Lucy, Alf Palmer's mother, was killed — documented by Tsunoda 2012, p. 39 — in the post-1880 frontier era after tin was discovered in the Wild river area. Allan's maternal line and the Palmer/Burns/Obah cluster trace to the same Country. For elder review.",
+        body: "Allan's mother is Giribau (likely Jirrbal). Her grandmother is named Baja Balanar. Her people lived at the station that was first called Kunawara, then Kirama, then Bajabala — 'two rivers meet'. The station is near Blencoe Falls, in Warrongo Country. The same Blencoe Falls where Lucy, Alf Palmer's mother, was killed — documented by Tsunoda 2012, p. 39 — in the post-1880 frontier era after tin was discovered in the Wild river area. Allan's maternal line and the Palmer/Burns/Obah cluster trace to the same Country. For Elder review.",
         pullquote: "My mother, my mother's dad, grandmother, grandmother, she said that Baja Balanar changed it to Kirama Station, changing to Bajabala Station, which means 'two rivers meet'. And it's almost not far from where the Blinko Falls are. They went up there, Mount Garnet area, that side. That's where the Blinko Falls, that's where Warrung Country.",
         attribution: 'Allan Palm Island · Uncle Alan Interview',
         bg: BG.blencoeFalls2022,
@@ -665,7 +665,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'A respected brother',
         heading: 'Peter Pryor, who shot Curry',
-        body: "Allan calls Peter Pryor 'our brother' — using the kinship term Manbarra elders extend to those who carried the community's resistance. He acknowledges Peter Pryor as the Aboriginal man who shot Curry in 1930 (confirmed in Trove article 4084734, see Pryor/Brear cluster). The story is still respected and celebrated on Palm Island today. The connection back to Cyndel Pryor's cluster is through this respected ancestor. For elder review.",
+        body: "Allan calls Peter Pryor 'our brother' — using the kinship term Manbarra Elders extend to those who carried the community's resistance. He acknowledges Peter Pryor as the Aboriginal man who shot Curry in 1930 (confirmed in Trove article 4084734, see Pryor/Brear cluster). The story is still respected and celebrated on Palm Island today. The connection back to Cyndel Pryor's cluster is through this respected ancestor. For Elder review.",
         pullquote: "You also have the memories of our brother, Peter Fry, who would tell the stories of having shot Curry. And that's a respect for that's the story, his stories, and it's still celebrated today. And respected.",
         attribution: 'Allan Palm Island · Uncle Alan Interview',
         bg: BG.palmIsland1928,
@@ -697,7 +697,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Ten siblings',
         heading: 'Four brothers, five sisters',
-        body: "Allan grew up in a family of ten. Reg the eldest. Walter Jr (named after their dad Walter 'Skipper') the second elder brother. Stu. Allan. Sisters Annie, Chrissy, Peggy, Judy, and one more whose name is for the elders to confirm.",
+        body: "Allan grew up in a family of ten. Reg the eldest. Walter Jr (named after their dad Walter 'Skipper') the second elder brother. Stu. Allan. Sisters Annie, Chrissy, Peggy, Judy, and one more whose name is for the Elders to confirm.",
         pullquote: "I got Annie, Chrissy, Peggy, Judy, and Stu. And four, five sisters I think. We grew up to listen and taught how to be respected.",
         attribution: 'Allan Palm Island · Elders Trip Interview',
         bg: BG.uncleAllan10,
@@ -729,7 +729,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'An open thread',
         heading: 'From Palm UP TO Hull River',
-        body: "Allan's transcripts hold a memory contrary to the standard one-way Hull-River-to-Palm narrative. Twice in transcript he says his family went FROM Palm UP TO Hull River, into the cyclone era — not as survivors, but as people sent there. Three-generation oral chain (his father Walter heard it from his own father). The detail is for the elders to confirm, but the line as Allan tells it is on the record.",
+        body: "Allan's transcripts hold a memory contrary to the standard one-way Hull-River-to-Palm narrative. Twice in transcript he says his family went FROM Palm UP TO Hull River, into the cyclone era — not as survivors, but as people sent there. Three-generation oral chain (his father Walter heard it from his own father). The detail is for the Elders to confirm, but the line as Allan tells it is on the record.",
         pullquote: "Most of my family was sent up there too. Also, they were sent from Palm to go up to Whole River Eastern Beach and I don't know whether most of them came back. I guess we cause some malaria and sickness plus cyclone.",
         attribution: 'Allan Palm Island · Elders Trip Interview',
         bg: BG.palmIsland1928,
@@ -749,7 +749,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
   'anderson': {
     slug: 'anderson',
     name: ['Anderson'],
-    subtitle: "Brought to Palm Island in 1945. The oldest in the elders group. He lived through the 1957 Magnificent Seven strike at age seventeen.",
+    subtitle: "Brought to Palm Island in 1945. The oldest in the Elders group. He lived through the 1957 Magnificent Seven strike at age seventeen.",
     countryName: 'Ingham · Innisfail',
     countryDescription: 'Sugar cane country. Frank\'s family came from Ingham. Tommy Anderson and his family (possible Frank ancestors) were forcibly removed from Innisfail to Palm Island in 1926.',
     countryFooter: 'From the cane fields to the dormitory',
@@ -784,7 +784,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Archive lead',
         heading: 'Innisfail to Palm Island, traffic both ways',
-        body: "On 22 March 1943 a Cairns newspaper reported a 'native policeman' arriving from Palm Island at Innisfail and leaving the next day to escort another Aboriginal man back to the settlement. The Innisfail-to-Palm Island corridor was active in the era when Frank was a boy. The Tommy Anderson family removal of 1926 (Innisfail → Palm) is documented in QSA correspondence registers — possibly Frank's paternal line. Pending Tindale 1938 + AIATSIS confirmation. For elder review.",
+        body: "On 22 March 1943 a Cairns newspaper reported a 'native policeman' arriving from Palm Island at Innisfail and leaving the next day to escort another Aboriginal man back to the settlement. The Innisfail-to-Palm Island corridor was active in the era when Frank was a boy. The Tommy Anderson family removal of 1926 (Innisfail → Palm) is documented in QSA correspondence registers — possibly Frank's paternal line. Pending Tindale 1938 + AIATSIS confirmation. For Elder review.",
         pullquote: "A native policeman arrived on Saturday at Innisfail from Palm Island, and left again on Sunday escorting another aboriginal.",
         attribution: 'Cairns Post · 22 March 1943 · Trove article 212232552',
         bg: BG.victoriaMillIngham1935,
@@ -848,7 +848,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Brand new life',
         heading: 'Sober, eighty-five, the oldest in the room',
-        body: "Frank gave up drink in 2012 and smoking in 2017. He is the oldest man in the elders group. He uses the words 'brand new life' for what came after. The line he draws between then and now is the same line he draws between drinking and seeing. He sees now.",
+        body: "Frank gave up drink in 2012 and smoking in 2017. He is the oldest man in the Elders group. He uses the words 'brand new life' for what came after. The line he draws between then and now is the same line he draws between drinking and seeing. He sees now.",
         pullquote: "This all seems like a brand new life. Well, the life I was living out, he was drinking, you know? Yes. It stands sober all the time. You see everything, know where you're going. It's good.",
         attribution: 'Uncle Frank Daniel Anderson · Elders Trip Interview',
         bg: BG.brassBand1931,
@@ -880,7 +880,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Freedom Park',
         heading: 'We just sit there till 12',
-        body: "Goonyun's PCYC and Back to Bush work brings the kids out to Freedom Park after eight at night. Fire on the ground. Talk about anything. Look at the stars. Until midnight. The cultural-care that runs alongside Frank's elder voice in this cluster — older man's witness, younger man's craft.",
+        body: "Goonyun's PCYC and Back to Bush work brings the kids out to Freedom Park after eight at night. Fire on the ground. Talk about anything. Look at the stars. Until midnight. The cultural-care that runs alongside Frank's Elder voice in this cluster — older man's witness, younger man's craft.",
         pullquote: "After work here, 'cause we finish at eight, um, we take the kids out on the, for Freedom Park and we just make a fire and we just sit there till 12. That's cool. Yeah. And we just yell about anything really. Look at the stars or something.",
         attribution: 'Goonyun Anderson · Goonyun Anderson Interview',
         bg: BG.palmIsland1928,
@@ -927,7 +927,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'The Jirrbal thread',
         heading: 'Mamu, Warrongo, the same family of languages',
-        body: "Mamu is one of eight tribes in the Jirrbal (Dyirbal) language group. Warrongo is another. So is Allan Palm Island's mother's people. Three PICC elders — Elsa, Marjoyie, and Allan — share maternal lineage through this Tablelands-and-stations Country. The Tablelands tribes were broken up and scattered, but the language family holds them together.",
+        body: "Mamu is one of eight tribes in the Jirrbal (Dyirbal) language group. Warrongo is another. So is Allan Palm Island's mother's people. Three PICC Elders — Elsa, Marjoyie, and Allan — share maternal lineage through this Tablelands-and-stations Country. The Tablelands tribes were broken up and scattered, but the language family holds them together.",
         pullquote: "If you don't have good relationship, you're not gonna make good decisions. If you have that good trust and relationship with one another, you can be silly together and make strong decisions.",
         attribution: 'Elsa Watson · Elders Trip Interview',
         bg: BG.athertonTableland1954,
@@ -935,7 +935,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Archive lead',
         heading: 'A Mamu woman buried at Millaa Millaa, 1937',
-        body: "On 14 August 1937 a Millaa Millaa newspaper protested the burial of an Aboriginal woman in shocking circumstances. Her husband had to ask townspeople for materials to make a coffin. Her body was carried by lorry from the camp to a creek-side grave dug by other Aboriginal people. The Mamu Country generation Doreen Morton was born into. Pending Tindale 1938 + AIATSIS confirmation. For elder review.",
+        body: "On 14 August 1937 a Millaa Millaa newspaper protested the burial of an Aboriginal woman in shocking circumstances. Her husband had to ask townspeople for materials to make a coffin. Her body was carried by lorry from the camp to a creek-side grave dug by other Aboriginal people. The Mamu Country generation Doreen Morton was born into. Pending Tindale 1938 + AIATSIS confirmation. For Elder review.",
         pullquote: "There exists an Act for the Protection of Aboriginals. How does it apply here, and who is responsible for such a state of affairs.",
         attribution: 'Cairns Post · 4 September 1937 · Trove article 289310365',
         bg: BG.millaaMillaaFalls,
@@ -959,7 +959,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Sign',
         heading: 'She had to learn, and then she taught us',
-        body: "Doreen was deaf. She learned sign language and taught it to her children so the family could speak with her. The line of cultural transmission ran sideways through Doreen's hands rather than down through her voice. (Elsa uses a period idiom for deafness in transcript that may be revised by family for any further public surface — pending elder direction.)",
+        body: "Doreen was deaf. She learned sign language and taught it to her children so the family could speak with her. The line of cultural transmission ran sideways through Doreen's hands rather than down through her voice. (Elsa uses a period idiom for deafness in transcript that may be revised by family for any further public surface — pending Elder direction.)",
         pullquote: "Because mum was deaf and dumb, she had to learn sign language and then she taught us.",
         attribution: 'Elsa Watson · Elders Trip Interview',
         bg: BG.dancers1931,
@@ -975,7 +975,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Cross-cluster kinship',
         heading: 'Winnie is my cousin',
-        body: "Elsa names a direct kinship link between two PICC elder clusters. Her biological father's side is Watson; her cousin on that side is Winifred (Winnie) Obah of the Palmer · Burns · Obah cluster. The Watson and Obah clusters are formally connected through this living-elder cousin tie.",
+        body: "Elsa names a direct kinship link between two PICC Elder clusters. Her biological father's side is Watson; her cousin on that side is Winifred (Winnie) Obah of the Palmer · Burns · Obah cluster. The Watson and Obah clusters are formally connected through this living Elder cousin tie.",
         pullquote: "Winnie is my cousin. Winnie is my cousin on my biological father's side.",
         attribution: 'Elsa Watson · Elders Trip Interview',
         bg: BG.palmIsland1928,
@@ -991,8 +991,8 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'The vision',
         heading: 'A history-based thing for Palm, not a museum',
-        body: "Elsa names what she would build. Not a museum. A place for sharing stories. The platform thesis stated by an elder in her own words.",
-        pullquote: "I think might place more in the elders group if we have our own little section area and have like — unlike a museum, but like a history based thing. You know, all of Palm come and they like sharing basis.",
+        body: "Elsa names what she would build. Not a museum. A place for sharing stories. The platform thesis stated by an Elder in her own words.",
+        pullquote: "I think might place more in the Elders group if we have our own little section area and have like — unlike a museum, but like a history based thing. You know, all of Palm come and they like sharing basis.",
         attribution: 'Elsa Watson · Elders Trip Interview',
         bg: BG.brassBand1931,
       },
@@ -1045,7 +1045,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Archive lead',
         heading: 'Peter Pryor, 1930',
-        body: "On 2 May 1930 the Townsville Police Court committed Peter Pryor — described in court records as a 'half-caste' Aboriginal man on Palm Island — for trial on a charge of murdering Superintendent Robert Curry. Hoffman and Pattison were charged with procuring him. This is a probable ancestor of Cyndel's father Peter Pryor Junior. Pending Tindale 1938 + AIATSIS confirmation. For elder review.",
+        body: "On 2 May 1930 the Townsville Police Court committed Peter Pryor — described in court records as a 'half-caste' Aboriginal man on Palm Island — for trial on a charge of murdering Superintendent Robert Curry. Hoffman and Pattison were charged with procuring him. This is a probable ancestor of Cyndel's father Peter Pryor Junior. Pending Tindale 1938 + AIATSIS confirmation. For Elder review.",
         pullquote: "Peter Pryor, a half-caste, was committed for trial on a charge of having murdered Robert Curry, superintendent of the Palm Island aborigine settlement.",
         attribution: 'The Brisbane Courier · 2 May 1930 · Trove article 4084734',
         bg: BG.palmIsland1928,
@@ -1053,7 +1053,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Allan honours him',
         heading: 'Our brother, Peter',
-        body: "On the Allan Palm Island cluster, Allan calls Peter Pryor 'our brother' and tells the story of Peter shooting Curry as one that is still respected and celebrated on Palm Island today. The two clusters are connected through this respected ancestor. For elder review with both Cyndel and Allan.",
+        body: "On the Allan Palm Island cluster, Allan calls Peter Pryor 'our brother' and tells the story of Peter shooting Curry as one that is still respected and celebrated on Palm Island today. The two clusters are connected through this respected ancestor. For Elder review with both Cyndel and Allan.",
         pullquote: "You also have the memories of our brother, Peter Fry, who would tell the stories of having shot Curry. And that's a respect for that's the story, his stories, and it's still celebrated today. And respected.",
         attribution: 'Allan Palm Island · Uncle Alan Interview',
         bg: BG.palmIsland1928,
@@ -1085,7 +1085,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'A name-variant question',
         heading: 'Brear and Pryor, one ancestor or two?',
-        body: "Del's father is Peter Pryor Junior — which by family naming convention requires a Peter Pryor Senior. Del calls her grandfather Peter Brear; Trove records a Peter Pryor at the same 1930 Curry incident he was at. The most parsimonious read: Brear and Pryor are name variants for the same paternal grandfather. If true, the cluster's 'rare maternal Brear' framing is wrong, and the actual rare-surname half of the cluster is the maternal grandfather, never named in transcript. For elder review with Del before any cluster-tree change.",
+        body: "Del's father is Peter Pryor Junior — which by family naming convention requires a Peter Pryor Senior. Del calls her grandfather Peter Brear; Trove records a Peter Pryor at the same 1930 Curry incident he was at. The most parsimonious read: Brear and Pryor are name variants for the same paternal grandfather. If true, the cluster's 'rare maternal Brear' framing is wrong, and the actual rare-surname half of the cluster is the maternal grandfather, never named in transcript. For Elder review with Del before any cluster-tree change.",
         pullquote: "He was actually ordered because Mr. Curry was going berserk on the island.",
         attribution: 'Cyndel Louise Pryor, on her grandfather · Elders Trip Interview',
         bg: BG.palmIsland1928,
@@ -1141,7 +1141,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Murray Falls',
         heading: 'I felt the presence of mum',
-        body: "On the elders' trip, Del walked the Country her mother had been kept from. At Murray Falls and other places, she felt her mother's spirit. The headline of the trip for her — the moment the search met Country.",
+        body: "On the Elders' trip, Del walked the Country her mother had been kept from. At Murray Falls and other places, she felt her mother's spirit. The headline of the trip for her — the moment the search met Country.",
         pullquote: "When I went up to Murray Falls and different areas that we've come to, I have felt the presence of mum, the spirit of mum.",
         attribution: 'Cyndel Louise Pryor · Elders Trip Interview',
         bg: BG.bowenRiverHotel,
@@ -1162,7 +1162,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
     name: ['Richardson'],
     subtitle: "Gurtrude Grace Richardson. Cluster identity confirmed without conflict. The family's deeper lineage waits to be drawn.",
     countryName: 'Palm Island · Bwgcolman',
-    countryDescription: 'The Richardson line is currently held by Gurtrude alone. Her transcripts mention parents named Dorothy and "Geo". The recording was rough. Tuesday\'s elder review is the right place to confirm.',
+    countryDescription: 'The Richardson line is currently held by Gurtrude alone. Her transcripts mention parents named Dorothy and "Geo". The recording was rough. Tuesday\'s Elder review is the right place to confirm.',
     countryFooter: 'A line waiting to be filled in',
     palette: { ink: '#241F2C', cream: '#EEE8DC', ochre: '#7A5894', amber: '#A88BC1', sand: '#D9D2E0', sacred: '#0E0F0D', quoteSection: '#2E263A' },
     heroBg: BG.palmIsland1928,
@@ -1180,7 +1180,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
     ancestorOrder: [],
     bridge: {
       title: 'Richardson, a line still being drawn',
-      body: 'The Richardson cluster currently holds Gurtrude alone. Her transcripts mention "my mother Iona" and a father whose name sounds like "Geo" or "George". The audio quality made transcription unreliable. Tuesday\'s elder review will fill in what the AI could not.',
+      body: 'The Richardson cluster currently holds Gurtrude alone. Her transcripts mention "my mother Iona" and a father whose name sounds like "Geo" or "George". The audio quality made transcription unreliable. Tuesday\'s Elder review will fill in what the AI could not.',
       avatarMatches: ['Gurtrude'],
     },
     chapters: [
@@ -1195,7 +1195,7 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       {
         eyebrow: 'Research log',
         heading: 'What we have, what we need',
-        body: "The Richardson cluster currently holds Gurtrude alone. Her transcripts mention parents named 'Iona' (mother) and 'Geo' or 'George' (father). The audio quality made transcription unreliable. Trove returns no specific Richardson + Palm Island matches in early-20th-century newspapers, which is normal for Aboriginal people on Palm in that era. The next paths are Tindale 1938 fieldwork notes (SA Museum), AIATSIS Family History Unit, and Tuesday's elder review with Gurtrude herself.",
+        body: "The Richardson cluster currently holds Gurtrude alone. Her transcripts mention parents named 'Iona' (mother) and 'Geo' or 'George' (father). The audio quality made transcription unreliable. Trove returns no specific Richardson + Palm Island matches in early-20th-century newspapers, which is normal for Aboriginal people on Palm in that era. The next paths are Tindale 1938 fieldwork notes (SA Museum), AIATSIS Family History Unit, and Tuesday's Elder review with Gurtrude herself.",
         pullquote: "The kids on Palm Island today carry what we carried.",
         attribution: 'Gurtrude Grace Richardson · Elders Trip Interview',
         bg: BG.palmIsland1928,
@@ -1210,8 +1210,8 @@ export const CLUSTER_CONFIGS: Record<string, ClusterConfig> = {
       },
       {
         eyebrow: 'Three years',
-        heading: 'In the elders\' group',
-        body: "Gurtrude joined the PICC elders' group three years before the 2024 trip. The chapter she names of her own life as part of the cluster's working memory.",
+        heading: 'In the Elders\' group',
+        body: "Gurtrude joined the PICC Elders' group three years before the 2024 trip. The chapter she names of her own life as part of the cluster's working memory.",
         pullquote: "About three years ago.",
         attribution: 'Gurtrude Grace Richardson · Elders Trip Interview',
         bg: BG.brassBand1931,

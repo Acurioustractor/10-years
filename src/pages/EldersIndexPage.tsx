@@ -30,10 +30,10 @@ export default function EldersIndexPage() {
           className="font-serif font-light leading-[1.05] mb-8"
           style={{ fontSize: 'clamp(48px, 7vw, 96px)' }}
         >
-          The elders
+          The Elders
         </h1>
         <p className="font-serif italic max-w-2xl mx-auto text-lg md:text-xl leading-relaxed opacity-80">
-          Nine living elders carrying the lines. Tap any one to enter their page — voice, photos,
+          Nine living Elders carrying the lines. Tap any one to enter their page — voice, photos,
           Country, family, the events that hold them.
         </p>
       </section>
@@ -101,8 +101,8 @@ export default function EldersIndexPage() {
             About these pages
           </div>
           <p className="font-serif italic text-sm leading-relaxed opacity-70">
-            Each elder page surfaces the voice quotes, events, and Country we have on record. Open
-            threads (name variants, cousin links, parent names) sit in the wiki for elder review
+            Each Elder page surfaces the voice quotes, events, and Country we have on record. Open
+            threads (name variants, cousin links, parent names) sit in the wiki for Elder review
             before public publish. The history is a draft the families keep correcting.
           </p>
         </div>

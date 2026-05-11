@@ -304,9 +304,9 @@ export default function CommunityGovernancePage() {
             <div className="text-xs uppercase tracking-widest text-ochre">Governance model</div>
             <h2 className="font-serif text-2xl text-ink mt-2">What community keepers actually govern</h2>
             <div className="space-y-2 mt-3 text-sm text-ink/65">
-              <div>Keepers: elders and admins holding the community governance layer.</div>
+              <div>Keepers: Elders and admins holding the community governance layer.</div>
               <div>Family links: the handshake that lets a family participate in the community layer.</div>
-              <div>Shared kinship: what families and elders approve upward into community visibility.</div>
+              <div>Shared kinship: what families and Elders approve upward into community visibility.</div>
             </div>
             {detail.meta?.keepersDefinition && (
               <p className="text-xs text-ink/45 mt-4 leading-relaxed">
@@ -333,7 +333,7 @@ export default function CommunityGovernancePage() {
 
         {!canReviewCommunityLinks && !canReviewCommunityKinship && (
           <div className="mt-6 rounded-xl border border-ochre/20 bg-ochre/[0.05] px-4 py-4 text-sm text-ink/70">
-            Only community elders can approve shared kinship, and only community elders or community admins can approve family links.
+            Only community Elders can approve shared kinship, and only community Elders or community admins can approve family links.
             Sign in through a family folder that is represented in this community if you need to act on the queue.
           </div>
         )}
@@ -376,7 +376,7 @@ export default function CommunityGovernancePage() {
                           {formatRoleLabel(member.role)}
                         </MiniPill>
                         {member.isElder && member.role !== 'elder' && (
-                          <MiniPill tone="eucalypt">elder</MiniPill>
+                          <MiniPill tone="eucalypt">Elder</MiniPill>
                         )}
                       </div>
                     </div>
@@ -404,7 +404,7 @@ export default function CommunityGovernancePage() {
               {detail.stats.totalPeople} lineage {detail.stats.totalPeople === 1 ? 'person is' : 'people are'} represented through those linked families.
             </div>
             <div className="rounded-xl border border-ink/8 bg-sand/20 p-4">
-              Shared kinship still only becomes community-visible after family approvals and, where required, elder approval here.
+              Shared kinship still only becomes community-visible after family approvals and, where required, Elder approval here.
             </div>
           </div>
         </div>
@@ -415,7 +415,7 @@ export default function CommunityGovernancePage() {
           <div>
             <h2 className="font-serif text-2xl text-ink">Governance queue</h2>
             <p className="text-sm text-ink/60 mt-1">
-              Community elders govern what becomes community-visible. Community admins and elders approve family links.
+              Community Elders govern what becomes community-visible. Community admins and Elders approve family links.
             </p>
           </div>
           {governanceLoading && <div className="text-xs text-ink/40">Refreshing queue…</div>}
@@ -435,7 +435,7 @@ export default function CommunityGovernancePage() {
 
           {!canReviewCommunityLinks ? (
             <p className="text-sm text-ink/55">
-              Family link approvals are visible to community admins and elders. You can still open the family list to see which handshakes are already active.
+              Family link approvals are visible to community admins and Elders. You can still open the family list to see which handshakes are already active.
             </p>
           ) : communityLinks.length === 0 ? (
             <p className="text-sm text-ink/50">No families have requested or established community links yet.</p>
@@ -492,20 +492,20 @@ export default function CommunityGovernancePage() {
           <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
             <div>
               <div className="text-xs uppercase tracking-widest text-ochre">Shared kinship</div>
-              <h3 className="font-serif text-xl text-ink">Ready for elder review</h3>
+              <h3 className="font-serif text-xl text-ink">Ready for Elder review</h3>
             </div>
             <QueueBadge
               value={canReviewCommunityKinship ? pendingCommunityKinship.length : 0}
-              label={canReviewCommunityKinship ? 'awaiting elder' : 'elder access required'}
+              label={canReviewCommunityKinship ? 'awaiting Elder' : 'Elder access required'}
             />
           </div>
 
           {!canReviewCommunityKinship ? (
             <p className="text-sm text-ink/55">
-              Only community elders can approve kinship into the shared community layer.
+              Only community Elders can approve kinship into the shared community layer.
             </p>
           ) : pendingCommunityKinship.length === 0 ? (
-            <p className="text-sm text-ink/50">No kinship proposals are ready for community elder review right now.</p>
+            <p className="text-sm text-ink/50">No kinship proposals are ready for community Elder review right now.</p>
           ) : (
             <div className="space-y-3">
               {pendingCommunityKinship.map(proposal => (
@@ -639,6 +639,7 @@ function ActionButton({
 function formatRoleLabel(role: string) {
   if (role === 'community_admin') return 'Community admin'
   if (role === 'family_rep') return 'Family rep'
+  if (role === 'elder') return 'Elder'
   return role.replace('_', ' ')
 }
 
